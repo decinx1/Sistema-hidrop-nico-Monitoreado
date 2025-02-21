@@ -5,9 +5,9 @@ from mysql.connector import Error
 def conectar_bd():
     try:
         conexion = mysql.connector.connect(
-            host="localhost",      # Cambia si usas otro host
-            user="root",     # Tu usuario de MySQL
-            password="", # Tu contraseña de MySQL
+            host="localhost",      # Nombre del host
+            user="root",           # Usuario de MySQL
+            password="",           # Contraseña de MySQL 
             database="acuaponia"   # Nombre de la base de datos
         )
         
