@@ -7,6 +7,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = loadUi("home.ui")  # carga la interfaz de usuario desde el archivo .ui
     button_group = QButtonGroup(window)
+    window.btnHome.setChecked(True)
     # Establecemos que el grupo sea exclusivo: sólo un botón puede estar checkeado a la vez
     button_group.setExclusive(True)
     
