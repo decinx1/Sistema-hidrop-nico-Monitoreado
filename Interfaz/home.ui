@@ -2,254 +2,81 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <!-- Hoja de estilo global para la ventana -->
-  <property name="styleSheet">
-   <string notr="true">
-QWidget {
-    background-color: #FDFDFD;
-    color: #121212;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-QPushButton {
-    background-color: #00AEEF;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-weight: bold;
-}
-
-QPushButton:hover {
-    background-color: #0095D9;
-}
-
-QPushButton:pressed {
-    background-color: #007CB5;
-}
-
-QLabel {
-    color: #121212;
-    font-size: 14px;
-}
-
-QLineEdit {
-    background-color: #ffffff;
-    border: 1px solid #A1E6F2;
-    border-radius: 4px;
-    padding: 4px;
-    color: #121212;
-}
-
-QComboBox {
-    background-color: #ffffff;
-    border: 1px solid #00AEEF;
-    border-radius: 4px;
-    padding: 4px;
-    color: #121212;
-}
-   </string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>821</width>
-    <height>496</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>10</y>
-      <width>761</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <!-- Botón Home -->
-    <widget class="QPushButton" name="HomeButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>221</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Home</string>
-     </property>
-     <property name="icon">
-      <iconset>iconos/casita.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>24</width>
-       <height>24</height>
-      </size>
-     </property>
-    </widget>
-    <!-- Botón Datos -->
-    <widget class="QPushButton" name="DatosButton">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>20</y>
-       <width>221</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Datos</string>
-     </property>
-     <property name="icon">
-      <iconset>iconos/grafica.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>24</width>
-       <height>24</height>
-      </size>
-     </property>
-    </widget>
-    <!-- Botón Historial -->
-    <widget class="QPushButton" name="HistorialButton">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>20</y>
-       <width>221</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Historial</string>
-     </property>
-     <property name="icon">
-      <iconset>iconos/historial.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>24</width>
-       <height>24</height>
-      </size>
-     </property>
-    </widget>
-   </widget>
-   <!-- Frame de ejemplo con estilo ya incluido -->
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>130</y>
-      <width>211</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">
-QFrame {
-    background-color: #3498db;
-    border: 2px solid #2980b9;
-    border-radius: 5px;
-}
-     </string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-   </widget>
-   <!-- Otros frames de ejemplo -->
-   <widget class="QFrame" name="frame_2">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>130</y>
-      <width>211</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">
-QFrame {
-    background-color: #3498db;
-    border: 2px solid #2980b9;
-    border-radius: 5px;
-}
-     </string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-   </widget>
-   <widget class="QFrame" name="frame_3">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>300</y>
-      <width>211</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">
-QFrame {
-    background-color: #3498db;
-    border: 2px solid #2980b9;
-    border-radius: 5px;
-}
-     </string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-   </widget>
-   <widget class="QFrame" name="frame_4">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>300</y>
-      <width>211</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">
-QFrame {
-    background-color: #3498db;
-    border: 2px solid #2980b9;
-    border-radius: 5px;
-}
-     </string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="btnHome">
+         <property name="text">
+          <string>Home</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnDatos">
+         <property name="text">
+          <string>Datos</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnHistorial">
+         <property name="text">
+          <string>Historial</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="temp_Grafico" native="true">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QGraphicsView" name="pH_Grafico"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGraphicsView" name="graphicsView_2"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGraphicsView" name="ultrasonico_Grafica"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGraphicsView" name="CE_Grafica"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>821</width>
+     <width>800</width>
      <height>22</height>
     </rect>
    </property>
