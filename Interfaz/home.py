@@ -8,14 +8,12 @@ if __name__ == "__main__":
     window = loadUi("home.ui")  # carga la interfaz de usuario desde el archivo .ui
     button_group = QButtonGroup(window)
     window.btnHome.setChecked(True)
-    # Establecemos que el grupo sea exclusivo: sólo un botón puede estar checkeado a la vez
     button_group.setExclusive(True)
-    
     # Agregamos los botones al grupo
     button_group.addButton(window.btnHome)
     button_group.addButton(window.btnDatos)
     button_group.addButton(window.btnHistorial)
     window.setWindowTitle("HydroTech")  # establece el título de la ventana
-    #window.setWindowIcon(QIcon("Iconos/icono.ico"))  # Establece el icono de la ventana
+    window.setWindowIcon(QIcon("Iconos/icono.ico"))  # Establece el icono de la ventana
     window.showMaximized()
     sys.exit(app.exec())

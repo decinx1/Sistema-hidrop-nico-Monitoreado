@@ -2,6 +2,7 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <!-- Configuración de tamaño y título -->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,10 +12,59 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>HydroTech</string>
   </property>
+  <!-- Hoja de estilo integrada -->
+  <property name="styleSheet">
+   <string notr="true">
+/* Fondo general de la ventana */
+QWidget {
+    background-color: #F4FFFA; /* Verde-menta muy claro */
+    font-family: "Segoe UI", sans-serif;
+    color: #333333;
+}
+
+/* Estilos para los botones (sin estado, hover, pressed y checked) */
+QPushButton {
+    background-color: #2ECC71; /* Verde vivo */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: bold;
+    margin: 4px;
+}
+
+QPushButton:hover {
+    background-color: #27AE60; /* Verde un poco más oscuro */
+}
+
+QPushButton:pressed {
+    background-color: #229954; /* Verde aún más oscuro */
+}
+
+QPushButton:checked {
+    background-color: #1ABC9C; /* Turquesa para el botón seleccionado */
+}
+
+/* Estilo para los QGraphicsView (espacio para gráficas) */
+QGraphicsView {
+    background-color: #FFFFFF;        /* Fondo blanco */
+    border: 1px solid #CCCCCC;        /* Borde gris suave */
+    border-radius: 6px;               /* Bordes redondeados */
+    margin: 6px;                     /* Separación para simular una “sombra” */
+}
+
+/* Menú y barra de estado */
+QMenuBar, QStatusBar {
+    background-color: #E8F8F5;
+}
+   </string>
+  </property>
+  <!-- Contenido de la ventana -->
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <!-- Primera sección: fila de botones (sidebar superior) -->
     <item>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
@@ -51,6 +101,7 @@
       </layout>
      </widget>
     </item>
+    <!-- Segunda sección: área de gráficas organizada en cuadrícula -->
     <item>
      <widget class="QWidget" name="temp_Grafico" native="true">
       <layout class="QGridLayout" name="gridLayout">
@@ -60,17 +111,18 @@
        <item row="0" column="1">
         <widget class="QGraphicsView" name="graphicsView_2"/>
        </item>
-       <item row="1" column="1">
-        <widget class="QGraphicsView" name="ultrasonico_Grafica"/>
-       </item>
        <item row="1" column="0">
         <widget class="QGraphicsView" name="CE_Grafica"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGraphicsView" name="ultrasonico_Grafica"/>
        </item>
       </layout>
      </widget>
     </item>
    </layout>
   </widget>
+  <!-- Menú superior -->
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -81,6 +133,7 @@
     </rect>
    </property>
   </widget>
+  <!-- Barra de estado inferior -->
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
