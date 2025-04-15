@@ -6,7 +6,7 @@ from datetime import date as DateToday
 class CalendarWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        loadUi("calendar.ui", self)
+        loadUi("calendar.ui", self) #Lllamado del archivo .ui que da qt designer
 
         self.configureCalendar()
 
