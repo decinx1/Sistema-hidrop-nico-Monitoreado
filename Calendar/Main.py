@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from Calendar import CalendarWindow  # Asegúrate de que el nombre coincida con tu archivo
+from Calendar import CalendarWindow  # Importacion del hisotrial 'calendar'
 
 def main():
     app = QApplication(sys.argv)
