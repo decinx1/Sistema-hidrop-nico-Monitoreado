@@ -64,43 +64,6 @@ QMenuBar, QStatusBar {
   <!-- Contenido de la ventana -->
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
-    <!-- Primera sección: fila de botones (sidebar superior) -->
-    <item>
-     <widget class="QWidget" name="widget" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="btnHome">
-         <property name="text">
-          <string>Home</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnDatos">
-         <property name="text">
-          <string>Datos</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnHistorial">
-         <property name="text">
-          <string>Historial</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <!-- Segunda sección: área de gráficas organizada en cuadrícula -->
     <item>
      <widget class="QWidget" name="temp_Grafico" native="true">
@@ -109,7 +72,7 @@ QMenuBar, QStatusBar {
         <widget class="QGraphicsView" name="pH_Grafico"/>
        </item>
        <item row="0" column="1">
-        <widget class="QGraphicsView" name="graphicsView_2"/>
+        <widget class="QGraphicsView" name="temp_Grafica"/>
        </item>
        <item row="1" column="0">
         <widget class="QGraphicsView" name="CE_Grafica"/>
