@@ -1,25 +1,40 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QButtonGroup
 from PyQt6.uic import loadUi
+from Interfaz.home import HomeWindow  # Asegúrate de que el path sea correcto
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        super(MainWindow, self).__init__()
-        loadUi("Interfaz/home.ui", self)
+        super().__init__()
 
-        # Cargar los botones desde botonesHead.ui
-        self.load_buttons()
+        # Crear widget central con layout vertical
+        central_widget = QWidget()
+        layout = QVBoxLayout(central_widget)
 
-    def load_buttons(self):
-        # Cargar el diseño de botones desde botonesHead.ui
+        # Cargar botones (parte superior)
         botones_widget = QWidget()
         loadUi("Interfaz/botonesHead.ui", botones_widget)
+        layout.addWidget(botones_widget)
 
-        # Añadir el diseño de botones al layout principal
-        central_layout = self.centralwidget.layout()
-        central_layout.insertWidget(0, botones_widget)  # Insertar en la parte superior
+        # Crear un grupo de botones para que sean mutuamente excluyentes
+        self.button_group = QButtonGroup(self)
+        self.button_group.addButton(botones_widget.findChild(QWidget, "btnHome"))
+        self.button_group.addButton(botones_widget.findChild(QWidget, "btnDatos"))
+        self.button_group.addButton(botones_widget.findChild(QWidget, "btnHistorial"))
+
+        # Seleccionar el botón "Home" por defecto
+        btn_home = botones_widget.findChild(QWidget, "btnHome")
+        btn_home.setChecked(True)
+
+        # Cargar vista de gráficas (parte inferior)
+        home_view = HomeWindow()
+        layout.addWidget(home_view)
+
+        # Establecer como widget central
+        self.setCentralWidget(central_widget)
+        self.setWindowTitle("HydroTech")
 
 if __name__ == "__main__":
     app = QApplication([])
     window = MainWindow()
-    window.show()
+    window.showMaximized()
     app.exec()
