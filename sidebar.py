@@ -3,23 +3,23 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QSizePolicy, QToolButton, QLabel
 )
-from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtGui import QIcon, QPixmap, QPalette, QColor
 from PyQt6.QtCore import (
     QSize, QPropertyAnimation, QEasingCurve,
     pyqtSignal, Qt
 )
 
 class Sidebar(QWidget):
-    """Sidebar retráctil con logo, menú y botón de salida."""
+    """Sidebar retráctil con logo, botones de menú y botón de salida."""
     toggled = pyqtSignal(bool)
 
     def __init__(
         self,
         icon_folder: str = None,
-        menu_items: list[tuple[str,str]] = None,
+        menu_items: list[tuple[str, str]] = None,
         expanded_width: int = 200,
         collapsed_width: int = 50,
-        animation_duration: int = 200,
+        animation_duration: int = 300,
         logo_filename: str = "logo.png",
         parent=None
     ):
@@ -34,40 +34,19 @@ class Sidebar(QWidget):
 
         self.setFixedWidth(self._w_exp)
 
-        # Estilo directo aplicado sin depender de objectName
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #CFECEC;  /* azul pastel */
-            }
-            QPushButton {
-                background-color: transparent;
-                color: #2E2E2E;
-                border: none;
-                text-align: left;
-                padding-left: 12px;
-            }
-            QPushButton:hover {
-                background-color: #B2D8D8;  /* azul más intenso al pasar */
-            }
-            QPushButton:checked {
-                background-color: #A0CFCF;  /* azul cuando está activo */
-            }
-            QToolButton {
-                background: transparent;
-            }
-            QLabel {
-                background: transparent;
-            }
-        """)
+        # Color de fondo con paleta
+        palette = self.palette()
+        palette.setColor(QPalette.ColorRole.Window, QColor("#CFFFE5"))  # Fondo verde pastel
+        self.setAutoFillBackground(True)
+        self.setPalette(palette)
 
-        # Layout vertical principal
+        # Layout principal vertical
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.setSpacing(8)
 
-        # ─── Top bar: logo + botón de colapso ──────────────────────
+        # Top bar: logo + botón de colapso
         top = QWidget()
-        top.setStyleSheet("background: transparent;")  # importantísimo
         top_l = QHBoxLayout(top)
         top_l.setContentsMargins(8, 8, 8, 8)
         top_l.setSpacing(4)
@@ -96,14 +75,14 @@ class Sidebar(QWidget):
         top_l.addStretch()
         self._layout.addWidget(top)
 
-        # ─── Menú de botones ──────────────────────────────────────
+        # Menú de botones
         self._btns: dict[str, QPushButton] = {}
         for text, fname in self._items:
             self.add_item(text, fname)
 
         self._layout.addStretch()
 
-        # ─── Botón de salida ──────────────────────────────────────
+        # Botón de salida
         self._btn_exit = QPushButton("Salir" if self._is_expanded else "")
         exit_icon = os.path.join(self._icon_folder, "exit.png")
         if os.path.exists(exit_icon):
@@ -116,6 +95,14 @@ class Sidebar(QWidget):
         )
         self._btn_exit.clicked.connect(self._handle_exit)
         self._layout.addWidget(self._btn_exit)
+
+        # Aplicar estilos a los botones
+        self.set_button_colors(
+            base_color="#CFFFE5",
+            hover_color="#A0D6B4",
+            checked_color="#82CA9D",
+            border_color="#7AC29A"
+        )
 
     def add_item(self, text: str, icon_file: str, callback=None):
         btn = QPushButton(text if self._is_expanded else "")
@@ -135,6 +122,27 @@ class Sidebar(QWidget):
         self._layout.addWidget(btn)
         self._btns[text] = btn
 
+    def set_button_colors(self, base_color: str, hover_color: str, checked_color: str, border_color: str = "#CCCCCC"):
+        """Estilo bonito para los botones."""
+        button_style = f"""
+            QPushButton {{
+                background-color: {base_color};
+                color: #2E2E2E;
+                border: 2px solid {border_color};
+                border-radius: 10px;
+                text-align: left;
+                padding-left: 12px;
+            }}
+            QPushButton:hover {{
+                background-color: {hover_color};
+            }}
+            QPushButton:checked {{
+                background-color: {checked_color};
+            }}
+        """
+        for btn in list(self._btns.values()) + [self._btn_exit]:
+            btn.setStyleSheet(button_style)
+
     def toggle(self):
         start, end = (
             (self._w_exp, self._w_col)
@@ -145,7 +153,7 @@ class Sidebar(QWidget):
         anim.setStartValue(start)
         anim.setEndValue(end)
         anim.setDuration(self._anim_dur)
-        anim.setEasingCurve(QEasingCurve.Type.InOutCubic)
+        anim.setEasingCurve(QEasingCurve.Type.OutQuart)  # Animación suave
         anim.finished.connect(self._on_anim_done)
         anim.start()
 
@@ -155,8 +163,38 @@ class Sidebar(QWidget):
 
     def _on_anim_done(self):
         for text, btn in self._btns.items():
-            btn.setText(text if self._is_expanded else "")
-        self._btn_exit.setText("Salir" if self._is_expanded else "")
+            if self._is_expanded:
+                btn.setText(text)
+                btn.setStyleSheet(btn.styleSheet() + """
+                    text-align: left;
+                    padding-left: 12px;
+                    color: #2E2E2E;
+                    qproperty-iconSize: 16px 16px;
+                """)
+            else:
+                btn.setText(text)
+                btn.setStyleSheet(btn.styleSheet() + """
+                    text-align: center;
+                    padding-left: 0px;
+                    color: transparent;
+                    qproperty-iconSize: 24px 24px;
+                """)
+        if self._is_expanded:
+            self._btn_exit.setText("Salir")
+            self._btn_exit.setStyleSheet(self._btn_exit.styleSheet() + """
+                text-align: left;
+                padding-left: 12px;
+                color: #2E2E2E;
+                qproperty-iconSize: 16px 16px;
+            """)
+        else:
+            self._btn_exit.setText("Salir")
+            self._btn_exit.setStyleSheet(self._btn_exit.styleSheet() + """
+                text-align: center;
+                padding-left: 0px;
+                color: transparent;
+                qproperty-iconSize: 24px 24px;
+            """)
 
     def _handle_exit(self):
         self.window().close()
