@@ -1,40 +1,73 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QButtonGroup
+import sys
+import os
+
+from PyQt6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout,
+    QHBoxLayout, QButtonGroup, QStackedWidget
+)
 from PyQt6.uic import loadUi
+from PyQt6.QtCore import Qt
+
 from Interfaz.home import HomeWindow  # Asegúrate de que el path sea correcto
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Crear widget central con layout vertical
-        central_widget = QWidget()
-        layout = QVBoxLayout(central_widget)
+        self.setWindowTitle("HydroTech")
 
-        # Cargar botones (parte superior)
+        # Widget central
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        # Layout principal horizontal
+        main_layout = QHBoxLayout(central_widget)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+
+        # ─── Área de contenido principal ───────────────────────────
+        content_widget = QWidget()
+        content_layout = QVBoxLayout(content_widget)
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(0)
+
+        # Parte superior: botones
         botones_widget = QWidget()
         loadUi("Interfaz/botonesHead.ui", botones_widget)
-        layout.addWidget(botones_widget)
+        content_layout.addWidget(botones_widget)
 
-        # Crear un grupo de botones para que sean mutuamente excluyentes
+        # Grupo de botones
         self.button_group = QButtonGroup(self)
         self.button_group.addButton(botones_widget.findChild(QWidget, "btnHome"))
         self.button_group.addButton(botones_widget.findChild(QWidget, "btnDatos"))
         self.button_group.addButton(botones_widget.findChild(QWidget, "btnHistorial"))
 
-        # Seleccionar el botón "Home" por defecto
+        # Botón Home seleccionado por defecto
         btn_home = botones_widget.findChild(QWidget, "btnHome")
         btn_home.setChecked(True)
 
-        # Cargar vista de gráficas (parte inferior)
+        # Parte inferior: área de vistas
+        self.stack = QStackedWidget()
         home_view = HomeWindow()
-        layout.addWidget(home_view)
+        self.stack.addWidget(home_view)
+        content_layout.addWidget(self.stack)
 
-        # Establecer como widget central
-        self.setCentralWidget(central_widget)
-        self.setWindowTitle("HydroTech")
+        # Agrega el área de contenido al layout principal
+        main_layout.addWidget(content_widget)
+
+    def _create_centered_page(self, html_text):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label = QLabel(html_text)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(label)
+        return page
+
 
 if __name__ == "__main__":
-    app = QApplication([])
+    app = QApplication(sys.argv)
     window = MainWindow()
     window.showMaximized()
-    app.exec()
+    sys.exit(app.exec())
