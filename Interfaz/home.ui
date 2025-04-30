@@ -2,7 +2,6 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <!-- Configuración de tamaño y título -->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,57 +13,78 @@
   <property name="windowTitle">
    <string>HydroTech</string>
   </property>
-  <!-- Hoja de estilo integrada -->
   <property name="styleSheet">
-   <string notr="true">
-/* Fondo general de la ventana */
+   <string notr="true">&lt;property name=&quot;styleSheet&quot;&gt;
+ &lt;string notr=&quot;true&quot;&gt;
+/* --------------------- ESTILOS GLOBALES --------------------- */
 QWidget {
-    background-color: #F4FFFA; /* Verde-menta muy claro */
-    font-family: "Segoe UI", sans-serif;
+    background-color: #F4FFFA;
+    font-family: &quot;Segoe UI&quot;;
     color: #333333;
 }
 
-/* Estilos para los botones (sin estado, hover, pressed y checked) */
-QPushButton {
-    background-color: #2ECC71; /* Verde vivo */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
+/* --------------------- TÍTULOS --------------------- */
+QLabel#sectionTitle {
+    font-size: 22px;
     font-weight: bold;
-    margin: 4px;
+    color: #2c3e50;
+    qproperty-alignment: AlignCenter;
+    margin: 15px 0;
 }
 
-QPushButton:hover {
-    background-color: #27AE60; /* Verde un poco más oscuro */
+QLabel#graphTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #34495e;
+    qproperty-alignment: AlignCenter;
 }
 
-QPushButton:pressed {
-    background-color: #229954; /* Verde aún más oscuro */
+/* --------------------- TARJETAS --------------------- */
+QFrame#cardFrame {
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid #DDDDDD;
+    padding: 15px;
+    min-height: auto;
 }
 
-QPushButton:checked {
-    background-color: #1ABC9C; /* Turquesa para el botón seleccionado */
+QFrame#phScaleFrame {
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid #DDDDDD;
+    padding: 20px;
+    min-height: 200px;
 }
 
-/* Estilo para los QGraphicsView (espacio para gráficas) */
-QGraphicsView {
-    background-color: #FFFFFF;        /* Fondo blanco */
-    border: 1px solid #CCCCCC;        /* Borde gris suave */
-    border-radius: 6px;               /* Bordes redondeados */
-    margin: 6px;                     /* Separación para simular una “sombra” */
+QFrame#gaugeFrame {
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid #DDDDDD;
+    padding: 20px;
+    min-height: 400px;
 }
 
-/* Menú y barra de estado */
-QMenuBar, QStatusBar {
-    background-color: #E8F8F5;
+/* --------------------- SCROLL --------------------- */
+QScrollArea {
+    border: none;
+    background: transparent;
 }
-   </string>
+
+QScrollBar:vertical {
+    width: 10px;
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: #c0c0c0;
+    border-radius: 4px;
+}
+ &lt;/string&gt;
+&lt;/property&gt;</string>
   </property>
-  <!-- Contenido de la ventana -->
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
-    <!-- Segunda sección: área de gráficas organizada en cuadrícula -->
     <item>
      <widget class="QWidget" name="temp_Grafico" native="true">
       <layout class="QGridLayout" name="gridLayout">
@@ -85,7 +105,6 @@ QMenuBar, QStatusBar {
     </item>
    </layout>
   </widget>
-  <!-- Menú superior -->
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -96,7 +115,6 @@ QMenuBar, QStatusBar {
     </rect>
    </property>
   </widget>
-  <!-- Barra de estado inferior -->
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
