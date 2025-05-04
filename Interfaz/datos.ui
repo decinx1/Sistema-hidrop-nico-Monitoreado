@@ -19,7 +19,7 @@ QTableView {
     background-color: #a1e236;
     border: none;
     font-size: 16px;
-    alternate-background-color:rgb(71, 86, 46);
+    alternate-background-color: #8fd128;
     selection-background-color: #72bd25;
 }
 
@@ -53,8 +53,34 @@ QDialog QLabel {
        <item>
         <widget class="QWidget" name="tabla" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item>
-           <widget class="QTableView" name="tableView"/>
+           <widget class="QTableView" name="tableView">
+            <property name="styleSheet">
+             <string notr="true">QTableView {
+    background-color: #a1e236;
+    border: none;
+    font-size: 16px;
+    alternate-background-color: #8fd128;
+    selection-background-color: #72bd25;
+}
+
+/* Encabezado de tabla */
+QHeaderView::section {
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    padding: 8px;
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+        }
+</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

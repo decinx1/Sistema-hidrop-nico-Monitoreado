@@ -1,10 +1,39 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QTableView, QHeaderView, QLabel,
-    QVBoxLayout, QDialog, QGraphicsOpacityEffect
+    QVBoxLayout, QDialog, QGraphicsOpacityEffect,
+    QStyledItemDelegate
 )
-from PyQt6.QtGui import QStandardItemModel, QStandardItem
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
+from PyQt6.QtGui import QStandardItemModel, QStandardItem, QPainter, QColor, QPen, QBrush
+from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRectF
 from PyQt6.uic import loadUi
+
+class RoundedTextDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        painter.save()
+        
+        # Obtener texto
+        text = index.data()
+        if not text: 
+            painter.restore()
+            return
+
+        # Rectángulo del área a dibujar
+        rect = QRectF(option.rect.adjusted(8, 8, -8, -8))
+
+        # Estilo redondeado
+        bg_color = QColor("#444")  # Color de fondo tipo etiqueta
+        text_color = QColor("white")
+
+        # Dibujar fondo redondeado
+        painter.setBrush(QBrush(bg_color))
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.drawRoundedRect(rect, 12, 12)
+
+        # Dibujar texto
+        painter.setPen(QPen(text_color))
+        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
+
+        painter.restore()
 
 
 class DatosView(QMainWindow):
@@ -34,6 +63,9 @@ class DatosView(QMainWindow):
             self.model.appendRow(items)
 
         self.table.setModel(self.model)
+        delegate = RoundedTextDelegate()
+        self.table.setItemDelegateForColumn(0, delegate) #se aplica a la columna 0 que es la de nombre
+
 
         # Expandir columnas y ajustar altura de filas
         self.table.horizontalHeader().setStretchLastSection(True)
