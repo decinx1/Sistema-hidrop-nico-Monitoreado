@@ -13,6 +13,38 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* Estilo para la tabla */
+QTableView {
+    background-color: #a1e236;
+    border: none;
+    font-size: 16px;
+    alternate-background-color:rgb(71, 86, 46);
+    selection-background-color: #72bd25;
+}
+
+/* Encabezados de la tabla */
+QHeaderView::section {
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    padding: 8px;
+}
+
+/* Modal de detalles */
+QDialog {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+/* Texto dentro del modal */
+QDialog QLabel {
+    font-size: 16px;
+    padding: 10px;
+    color: #444;
+}
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
