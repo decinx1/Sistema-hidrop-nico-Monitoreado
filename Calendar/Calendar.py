@@ -1,33 +1,78 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QGridLayout, QPushButton, 
+from PyQt6.QtWidgets import (QMainWindow, QWidget, QGridLayout, QPushButton,
                             QLabel, QVBoxLayout, QDialog, QHBoxLayout,
-                            QComboBox, QSpinBox)
+                            QComboBox, QSpinBox, QTableWidget, QTableWidgetItem)
 from PyQt6.QtCore import Qt, QDate
+from conexion_cliente import obtener_datos_por_fecha  # ✅ Importar la función que creamos
+from functools import partial
+
 
 class DayDialog(QDialog):
+    last_size = None
     def __init__(self, date, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"Día {date.toString('dd/MM/yyyy')}")
-        self.setFixedSize(300, 200)
-        
+        # Establecer tamaño dinámico y recordar el último usado
+        if DayDialog.last_size:
+            self.resize(DayDialog.last_size)
+        else:
+            self.resize(600, 400)  # Tamaño inicial sugerido
+
+        self.setMinimumSize(400, 300)  # Evita que sea demasiado pequeño
+
         layout = QVBoxLayout()
         fecha_label = QLabel(date.toString("dddd, dd MMMM yyyy"))
         fecha_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(fecha_label)
-        
-        # Datos de ejemplo para el día
-        datos = [
-            ("pH", "6.5"),
-            ("Calidad agua", "Buena"),
-            ("Temperatura", "23°C"),
-            ("Nivel agua", "80%")
-        ]
-        
-        for texto, valor in datos:
-            lbl = QLabel(f"{texto}: {valor}")
-            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            layout.addWidget(lbl)
-        
+
+        # Convertir fecha al formato YYYY-MM-DD para MySQL
+        fecha_str = date.toString("yyyy-MM-dd")
+
+        # Obtener datos de la base
+        self.resultados = obtener_datos_por_fecha(fecha_str)
+
+        if self.resultados:
+            # Obtener lista de sensores únicos
+            sensores = sorted(set(sensor for _, sensor, _, _ in self.resultados))
+            self.combo_filtro = QComboBox()
+            self.combo_filtro.addItem("Todos")
+            self.combo_filtro.addItems(sensores)
+            self.combo_filtro.currentTextChanged.connect(self.actualizar_tabla)
+            layout.addWidget(self.combo_filtro)
+
+            # Crear tabla
+            self.tabla = QTableWidget()
+            self.tabla.setColumnCount(4)
+            self.tabla.setHorizontalHeaderLabels(["ID", "Sensor", "Valor", "Fecha"])
+            layout.addWidget(self.tabla)
+
+            # Mostrar todos por defecto
+            self.actualizar_tabla("Todos")
+        else:
+            mensaje = QLabel("No hay datos para esta fecha")
+            mensaje.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout.addWidget(mensaje)
+
         self.setLayout(layout)
+
+    def actualizar_tabla(self, sensor_filtrado):
+        datos_filtrados = self.resultados if sensor_filtrado == "Todos" else [
+            dato for dato in self.resultados if dato[1] == sensor_filtrado
+        ]
+
+        self.tabla.setRowCount(len(datos_filtrados))
+
+        for fila, (id_, sensor, valor, fecha) in enumerate(datos_filtrados):
+            self.tabla.setItem(fila, 0, QTableWidgetItem(str(id_)))
+            self.tabla.setItem(fila, 1, QTableWidgetItem(sensor))
+            self.tabla.setItem(fila, 2, QTableWidgetItem(str(valor)))
+            self.tabla.setItem(fila, 3, QTableWidgetItem(str(fecha)))
+
+        self.tabla.resizeColumnsToContents()
+
+    def closeEvent(self, event):
+        DayDialog.last_size = self.size()  # Guarda el tamaño cuando se cierra
+        super().closeEvent(event)
+
 
 class CalendarWindow(QMainWindow):
     def __init__(self):
@@ -150,7 +195,8 @@ class CalendarWindow(QMainWindow):
             
             btn = self.create_day_button(day, not (is_past or is_today))
             if is_past or is_today:
-                btn.clicked.connect(lambda _, d=current_date: self.show_day_details(d))
+                btn.clicked.connect(partial(self.show_day_details, current_date))
+
             
             self.calendar_grid.addWidget(btn, row, col)
             
