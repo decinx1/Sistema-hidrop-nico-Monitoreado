@@ -14,36 +14,132 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/* Estilo para la tabla */
+   <string notr="true"><![CDATA[
+/* === QTableView === */
 QTableView {
-    background-color: #a1e236;
+    background-color: #8cc63f;
     border: none;
     font-size: 16px;
-    alternate-background-color: #8fd128;
-    selection-background-color: #72bd25;
+    selection-background-color: #5a9216;
+    border-radius: 8px;
+    color: #333333;
+}
+QTableView::item {
+    padding: 8px;
+    border-radius: 6px;
+    margin: 2px;
+}
+QTableView::item:selected {
+    background-color: #5a9216;
+    color: white;
 }
 
-/* Encabezados de la tabla */
+/* === QHeaderView === */
 QHeaderView::section {
-    background-color: #444;
+    background-color: #444444;
     color: white;
     font-weight: bold;
     padding: 8px;
+    border: none;
+    border-radius: 12px;
+    margin: 1px;
 }
 
-/* Modal de detalles */
-QDialog {
+/* === QScrollBar === */
+QScrollBar:vertical {
     background-color: #f0f0f0;
-    border-radius: 8px;
+    width: 10px;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical {
+    background-color: #8cc63f;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical:hover {
+    background-color: #7ab62e;
 }
 
-/* Texto dentro del modal */
+/* === QDialog === */
+QDialog {
+    background-color: #ffffff;
+    border: 2px solid #8cc63f;
+    border-radius: 15px;
+}
+
+/* === Modal title bar === */
+QDialog QWidget#titleBar {
+    background-color: #00aeef;
+    color: white;
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* === Modal content === */
+QDialog QWidget#contentWidget {
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    margin: 15px;
+}
+
 QDialog QLabel {
     font-size: 16px;
     padding: 10px;
-    color: #444;
+    color: #333333;
 }
-</string>
+QDialog QLabel#sectionTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00aeef;
+    padding: 10px;
+}
+QDialog QLabel#valueLabel {
+    font-size: 16px;
+    color: #444444;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+/* === Buttons === */
+QDialog QPushButton {
+    background-color: #8cc63f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+QDialog QPushButton:hover {
+    background-color: #7ab62e;
+}
+QDialog QPushButton:pressed {
+    background-color: #5a9216;
+}
+QDialog QPushButton#closeButton {
+    background-color: #00aeef;
+    color: white;
+}
+QDialog QPushButton#closeButton:hover {
+    background-color: #0099cc;
+}
+
+/* === Separators and graphs === */
+QDialog QFrame#separator {
+    background-color: #e0e0e0;
+    max-height: 1px;
+    margin: 10px 15px;
+}
+QDialog QFrame#graphFrame {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 10px;
+}
+   ]]></string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -57,30 +153,7 @@ QDialog QLabel {
            <number>0</number>
           </property>
           <item>
-           <widget class="QTableView" name="tableView">
-            <property name="styleSheet">
-             <string notr="true">QTableView {
-    background-color: #a1e236;
-    border: none;
-    font-size: 16px;
-    alternate-background-color: #8fd128;
-    selection-background-color: #72bd25;
-}
-
-/* Encabezado de tabla */
-QHeaderView::section {
-    background-color: #444;
-    color: white;
-    font-weight: bold;
-    padding: 8px;
-    border: none;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-
-        }
-</string>
-            </property>
-           </widget>
+           <widget class="QTableView" name="tableView"/>
           </item>
          </layout>
         </widget>

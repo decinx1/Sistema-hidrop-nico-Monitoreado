@@ -46,14 +46,14 @@ class DatosView(QMainWindow):
 
         # Crear modelo
         self.model = QStandardItemModel()
-        self.model.setHorizontalHeaderLabels(["Nombre", "Color", "Pin", "Datos", "Detalles."])
+        self.model.setHorizontalHeaderLabels(["Nombre", "Datos", "Detalles"])
 
         # Datos de ejemplo
         data = [
-            ["PH", "", "", "", "⋮"],
-            ["Nutrientes", "", "", "", "⋮"],
-            ["Flujo del agua", "", "", "", "⋮"],
-            ["Nivel del agua", "", "", "", "⋮"],
+            ["PH", "", "⋮"],
+            ["Nutrientes", "", "⋮"],
+            ["Flujo del agua", "", "⋮"],
+            ["Nivel del agua", "", "⋮"],
         ]
 
         for row_data in data:
@@ -109,7 +109,7 @@ class DatosView(QMainWindow):
         modal.exec()
 
     def on_table_click(self, index):
-        if index.column() != 4:  # Columna Detalles
+        if index.column() != 3:  # Columna Detalles
             return
 
         fila = index.row()
