@@ -41,10 +41,10 @@ class MainWindow(QMainWindow):
         sidebar = Sidebar(
             icon_folder=os.path.join(os.path.dirname(__file__), "icons"),
             menu_items=items,
-            expanded_width=180,
+            expanded_width=240,  # Increased from 180 to 240
             collapsed_width=60,
             animation_duration=180,
-            logo_filename="Logeishon.png"
+            logo_filename="Logeishon 2.png"
         )
         hbox.addWidget(sidebar)
 
@@ -76,8 +76,3 @@ if __name__ == "__main__":
     window.resize(800, 600)
     window.show()
     sys.exit(app.exec())
-
-
-
-
-
