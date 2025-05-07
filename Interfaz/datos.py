@@ -109,7 +109,7 @@ class DatosView(QMainWindow):
         modal.exec()
 
     def on_table_click(self, index):
-        if index.column() != 3:  # Columna Detalles
+        if index.column() != 2:  # Columna Detalles
             return
 
         fila = index.row()
