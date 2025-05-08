@@ -1,6 +1,2 @@
-.idea/
-venv/
-_pycache_/
-*.pyc
-.env/
-.env
+.venv
+README.md
