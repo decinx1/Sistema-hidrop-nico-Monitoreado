@@ -7,7 +7,6 @@ from functools import partial
 
 class DayDialog(QDialog):
     last_size = None
-
     def __init__(self, date, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"Día {date.toString('dd/MM/yyyy')}")
