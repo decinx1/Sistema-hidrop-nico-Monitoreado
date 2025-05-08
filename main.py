@@ -3,13 +3,13 @@ import os
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
-    QHBoxLayout, QButtonGroup, QStackedWidget
+    QHBoxLayout, QButtonGroup, QStackedWidget, QLabel
 )
 from PyQt6.uic import loadUi
 from PyQt6.QtCore import Qt
 
-from Interfaz.home import HomeWindow  # Asegúrate de que el path sea correcto
-
+from Interfaz.home import HomeWindow 
+from Interfaz.datos import DatosView 
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -43,15 +43,28 @@ class MainWindow(QMainWindow):
         self.button_group.addButton(botones_widget.findChild(QWidget, "btnDatos"))
         self.button_group.addButton(botones_widget.findChild(QWidget, "btnHistorial"))
 
-        # Botón Home seleccionado por defecto
+        # Encuentra botones específicos
         btn_home = botones_widget.findChild(QWidget, "btnHome")
+        btn_datos = botones_widget.findChild(QWidget, "btnDatos")
+        btn_historial = botones_widget.findChild(QWidget, "btnHistorial")
+
         btn_home.setChecked(True)
 
         # Parte inferior: área de vistas
         self.stack = QStackedWidget()
         home_view = HomeWindow()
-        self.stack.addWidget(home_view)
+        datos_view = DatosView()
+
+        self.stack.addWidget(home_view)  # 0
+        self.stack.addWidget(datos_view)  # 1
+
         content_layout.addWidget(self.stack)
+
+        # Conectar los botones para cambiar la vista
+        btn_home.clicked.connect(lambda: self.stack.setCurrentIndex(0))
+        btn_datos.clicked.connect(lambda: self.stack.setCurrentIndex(1))
+        # historial:
+        #btn_historial.clicked.connect(lambda: self.stack.setCurrentIndex(2))
 
         # Agrega el área de contenido al layout principal
         main_layout.addWidget(content_widget)
