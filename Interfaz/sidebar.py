@@ -21,7 +21,7 @@ class Sidebar(QWidget):
         expanded_width: int = 240,
         collapsed_width: int = 60,
         animation_duration: int = 300,
-        logo_filename: str = "logo.png",
+        logo_filename: str = "logeishon 2.png",
         parent=None
     ):
         super().__init__(parent)
