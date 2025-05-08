@@ -10,6 +10,7 @@ from PyQt6.QtCore import Qt
 
 from Interfaz.home import HomeWindow 
 from Interfaz.datos import DatosView 
+from Interfaz.sidebar import Sidebar
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -31,6 +32,10 @@ class MainWindow(QMainWindow):
         content_layout = QVBoxLayout(content_widget)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
+
+        sidebar_widget = Sidebar()
+        main_layout.addWidget(sidebar_widget)
+        
 
         # Parte superior: botones
         botones_widget = QWidget()
@@ -68,6 +73,17 @@ class MainWindow(QMainWindow):
 
         # Agrega el área de contenido al layout principal
         main_layout.addWidget(content_widget)
+
+    def on_sidebar_toggled(self, expanded):
+    # Aquí podrías hacer que el contenido se expanda o se ajuste
+        if expanded:
+            print("Sidebar expandida")
+        else:
+            print("Sidebar retraída")
+    
+    # Aquí puedes forzar un resize si es necesario
+        self.adjustSize()
+
 
     def _create_centered_page(self, html_text):
         page = QWidget()
