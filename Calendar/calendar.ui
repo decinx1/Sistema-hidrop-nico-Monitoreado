@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>744</width>
+    <height>674</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLineEdit" name="lineEditSearch">
+         <property name="placeholderText">
+          <string>Ingrese el criterio de búsqueda</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonSearch">
+         <property name="text">
+          <string>Buscar</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCalendarWidget" name="calendarWidget">
+         <property name="styleSheet">
+          <string notr="true">
+QCalendarWidget {
+    background-color: #FFFFFF;
+    color: #212121; /* Texto oscuro por defecto */
+    border: 1px solid #E0E0E0; /* Borde general muy claro */
+    font-family: &quot;Segoe UI&quot;, Arial, sans-serif; /* O tu fuente preferida */
+}
+
+/* --- Barra de Navegación --- */
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+    background-color: #8BC34A; /* Verde Lima */
+    min-height: 45px;
+    padding: 5px 8px; /* Espaciado interno */
+}
+
+/* === Navegación: Controles Actualizados === */
+
+/* --- 1. Botones de Flecha (Chevron Minimalista) --- */
+QCalendarWidget QToolButton#qt_calendar_prevmonth,
+QCalendarWidget QToolButton#qt_calendar_nextmonth {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF; /* Color del carácter (blanco) */
+    font-size: 18pt; /* Tamaño del carácter */
+    qproperty-text: &quot;&quot;; /* Limpiar por si acaso */
+    padding: 6px 10px; /* Espaciado interno */
+    margin: 0 3px; /* Margen externo */
+    border-radius: 4px; /* Esquinas redondeadas */
+}
+QCalendarWidget QToolButton#qt_calendar_prevmonth {
+    qproperty-text: &quot;\u2039&quot;; /* Carácter: ‹ */
+}
+QCalendarWidget QToolButton#qt_calendar_nextmonth {
+    qproperty-text: &quot;\u203A&quot;; /* Carácter: › */
+}
+
+/* --- 2. Botón de Mes (Sin flecha indicadora) --- */
+QCalendarWidget QToolButton#qt_calendar_monthbutton {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF; /* Texto Blanco */
+    font-size: 11pt;
+    font-weight: bold;
+    padding: 5px 15px; /* Espaciado */
+    margin: 0 5px; /* Margen entre mes y año */
+    border-radius: 4px;
+    text-align: center;
+}
+/* Ocultar el indicador de menú desplegable predeterminado */
+QCalendarWidget QToolButton#qt_calendar_monthbutton::menu-indicator {
+    image: none; /* Intenta quitar la flecha */
+    width: 0px; /* Asegura que no ocupe espacio */
+}
+
+/* --- 3. SpinBox de Año (Botones estilizados) --- */
+QCalendarWidget QSpinBox {
+    background-color: transparent; /* Fondo transparente */
+    color: #FFFFFF; /* Texto Blanco */
+    border: none; /* Sin borde alrededor del texto */
+    font-size: 11pt;
+    font-weight: bold;
+    padding: 5px; /* Espaciado para el texto */
+    min-width: 70px; /* Ancho mínimo */
+    /* Estilo de selección DENTRO del SpinBox */
+    selection-background-color: rgba(255, 255, 255, 0.4);
+    selection-color: #000000; /* Texto negro al seleccionar */
+}
+/* Estilo de los botones de subir/bajar del SpinBox */
+QCalendarWidget QSpinBox::up-button,
+QCalendarWidget QSpinBox::down-button {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo muy sutil */
+    border: none; /* Sin borde */
+    width: 22px; /* Ancho del botón */
+    border-radius: 4px; /* Esquinas redondeadas */
+    margin: 1px 2px 1px 0; /* Margen (Arriba Derecha Abajo Izquierda) */
+}
+QCalendarWidget QSpinBox::up-button {
+     subcontrol-origin: padding; /* Posición relativa al padding */
+     subcontrol-position: top right; /* Arriba a la derecha */
+}
+QCalendarWidget QSpinBox::down-button {
+     subcontrol-origin: padding;
+     subcontrol-position: bottom right; /* Abajo a la derecha */
+}
+/* Ocultar las flechas gráficas predeterminadas */
+QCalendarWidget QSpinBox::up-arrow,
+QCalendarWidget QSpinBox::down-arrow {
+     border: none;
+     width: 0px;
+     height: 0px;
+     background: transparent;
+     /* El estilo se aplica al botón (::up-button, ::down-button) */
+}
+
+/* --- Hover/Pressed para TODOS los botones en la barra --- */
+/* Aplica a flechas, mes, año (si es botón) y botones del spinbox */
+QCalendarWidget QWidget#qt_calendar_navigationbar QToolButton:hover,
+QCalendarWidget QSpinBox::up-button:hover,
+QCalendarWidget QSpinBox::down-button:hover {
+    background-color: rgba(255, 255, 255, 0.25); /* Overlay blanco en hover */
+}
+QCalendarWidget QWidget#qt_calendar_navigationbar QToolButton:pressed,
+QCalendarWidget QSpinBox::up-button:pressed,
+QCalendarWidget QSpinBox::down-button:pressed {
+    background-color: rgba(255, 255, 255, 0.35); /* Overlay más fuerte al presionar */
+}
+
+
+/* === Resto del Estilo del Calendario (Sin cambios respecto al anterior) === */
+
+/* --- Vista de Tabla del Calendario --- */
+QCalendarWidget QTableView {
+    background-color: #FFFFFF;
+    border: none;
+    gridline-color: #E0E0E0; /* Líneas sutiles */
+    selection-background-color: #1565C0; /* Azul Fuerte para selección */
+    selection-color: #FFFFFF; /* Texto blanco en selección */
+}
+/* --- Celdas de Fecha --- */
+QCalendarWidget QTableView::item {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #F5F5F5; /* Borde muy sutil */
+    border-radius: 4px; /* Esquinas redondeadas */
+    color: #212121; /* Texto oscuro */
+}
+/* --- Hover sobre Fechas --- */
+QCalendarWidget QTableView::item:hover {
+    background-color: #F5F5F5; /* Gris claro */
+    color: #000000;
+    border: 1px solid #E0E0E0;
+}
+/* --- Fecha Seleccionada --- */
+QCalendarWidget QTableView::item:selected {
+    background-color: #1565C0; /* Azul Fuerte */
+    color: #FFFFFF;
+    font-weight: bold;
+    border: 1px solid #0D47A1; /* Borde azul oscuro */
+    border-radius: 4px;
+}
+/* --- Barra de Días de la Semana --- */
+QCalendarWidget QWidget#qt_calendar_weekdaybar {
+    background-color: #8BC34A; /* Verde Lima */
+    color: #FFFFFF; /* Texto Blanco */
+    font-size: 9pt;
+    font-weight: bold;
+    text-transform: uppercase; /* Mayúsculas */
+    padding: 10px 0;
+    border-bottom: 1px solid #7CB342; /* Línea inferior verde oscuro */
+}
+/* --- Fechas Deshabilitadas --- */
+QCalendarWidget QAbstractItemView:disabled {
+    color: #BDBDBD; /* Gris claro */
+    selection-background-color: transparent;
+    selection-color: #BDBDBD;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>744</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
