@@ -4,32 +4,32 @@ from PyQt6.QtWidgets import (
     QStyledItemDelegate
 )
 from PyQt6.QtGui import QStandardItemModel, QStandardItem, QPainter, QColor, QPen, QBrush, QIcon
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRectF
+from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRectF, QSize
 from PyQt6.uic import loadUi
+import os
+
+# Ruta robusta del icono
+icon_path = os.path.join(os.path.dirname(__file__), "icons", "menu.png")
+
 
 class RoundedTextDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         painter.save()
         
-        # Obtener texto
-        text = index.data()
-        if not text: 
+        text = index.data(Qt.ItemDataRole.DisplayRole)
+        if not text:
+            super().paint(painter, option, index)
             painter.restore()
             return
 
-        # Rectángulo del área a dibujar
         rect = QRectF(option.rect.adjusted(8, 8, -8, -8))
-
-        # Estilo redondeado
-        bg_color = QColor("#444")  # Color de fondo tipo etiqueta
+        bg_color = QColor("#444")
         text_color = QColor("white")
 
-        # Dibujar fondo redondeado
         painter.setBrush(QBrush(bg_color))
         painter.setPen(Qt.PenStyle.NoPen)
         painter.drawRoundedRect(rect, 12, 12)
 
-        # Dibujar texto
         painter.setPen(QPen(text_color))
         painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
 
@@ -41,14 +41,11 @@ class DatosView(QMainWindow):
         super().__init__()
         loadUi("Interfaz/datos.ui", self)
 
-        # Encontrar la tabla
         self.table = self.findChild(QTableView, "tableView")
 
-        # Crear modelo
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Nombre", "Datos", "Detalles"])
 
-        # Datos de ejemplo
         data = [
             ["PH", ""],
             ["Nutrientes", ""],
@@ -60,20 +57,21 @@ class DatosView(QMainWindow):
             items = [QStandardItem(cell) for cell in row_data]
             for item in items:
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            # Crear el ítem con icono
+                item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)  # Deshabilitar edición
             icon_item = QStandardItem()
-            icon_item.setIcon(QIcon("icons/menu.png"))
+            icon_item.setIcon(QIcon(icon_path))
             icon_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            icon_item.setFlags(icon_item.flags() & ~Qt.ItemFlag.ItemIsEditable)  # Deshabilitar edición
 
-            items.append(icon_item)  # Añadir el ítem del icono a la fila
+            items.append(icon_item)
             self.model.appendRow(items)
 
         self.table.setModel(self.model)
+        self.table.setIconSize(QSize(32, 32))  
+
         delegate = RoundedTextDelegate()
-        self.table.setItemDelegateForColumn(0, delegate) #se aplica a la columna 0 que es la de nombre
+        self.table.setItemDelegateForColumn(0, delegate)
 
-
-        # Expandir columnas y ajustar altura de filas
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setDefaultSectionSize(60)
@@ -81,41 +79,34 @@ class DatosView(QMainWindow):
         self.table.setShowGrid(False)
         self.table.setAlternatingRowColors(True)
 
-        # Conectar clic
         self.table.clicked.connect(self.on_table_click)
 
     def show_details_modal(self, nombre, texto_detalle):
-        # Crear el modal
         modal = QDialog(self)
         modal.setWindowTitle("Detalles")
         modal.setFixedSize(400, 300)
         modal.setWindowModality(Qt.WindowModality.ApplicationModal)
 
-        # Layout del modal
         layout = QVBoxLayout(modal)
-
-        # Label de contenido
         details_label = QLabel(f"<b>{nombre}</b><br><br>{texto_detalle}")
         details_label.setWordWrap(True)
-
-        # Agregar widgets al layout
         layout.addWidget(details_label)
 
-        # Animación de opacidad (fade-in)
         opacity_effect = QGraphicsOpacityEffect()
         modal.setGraphicsEffect(opacity_effect)
 
-        animation = QPropertyAnimation(opacity_effect, b"opacity")
-        animation.setDuration(400)
-        animation.setStartValue(0.0)
-        animation.setEndValue(1.0)
-        animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        animation.start()
+        # GUARDAR la animación en self para evitar que se destruya
+        self.animation = QPropertyAnimation(opacity_effect, b"opacity")
+        self.animation.setDuration(400)
+        self.animation.setStartValue(0.0)
+        self.animation.setEndValue(1.0)
+        self.animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.animation.start()
 
         modal.exec()
 
     def on_table_click(self, index):
-        if index.column() != 2:  # Columna Detalles
+        if index.column() != 2:
             return
 
         fila = index.row()

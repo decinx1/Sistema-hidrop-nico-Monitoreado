@@ -45,7 +45,7 @@ QLineEdit {
       <item>
        <widget class="QPushButton" name="btnHome">
         <property name="text">
-         <string>Home</string>
+         <string>Gráficas</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
