@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout, QDialog, QGraphicsOpacityEffect,
     QStyledItemDelegate
 )
-from PyQt6.QtGui import QStandardItemModel, QStandardItem, QPainter, QColor, QPen, QBrush
+from PyQt6.QtGui import QStandardItemModel, QStandardItem, QPainter, QColor, QPen, QBrush, QIcon
 from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRectF
 from PyQt6.uic import loadUi
 
@@ -50,16 +50,22 @@ class DatosView(QMainWindow):
 
         # Datos de ejemplo
         data = [
-            ["PH", "", "⋮"],
-            ["Nutrientes", "", "⋮"],
-            ["Flujo del agua", "", "⋮"],
-            ["Nivel del agua", "", "⋮"],
+            ["PH", ""],
+            ["Nutrientes", ""],
+            ["Flujo del agua", ""],
+            ["Nivel del agua", ""],
         ]
 
         for row_data in data:
             items = [QStandardItem(cell) for cell in row_data]
             for item in items:
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            # Crear el ítem con icono
+            icon_item = QStandardItem()
+            icon_item.setIcon(QIcon("icons/menu.png"))
+            icon_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+
+            items.append(icon_item)  # Añadir el ítem del icono a la fila
             self.model.appendRow(items)
 
         self.table.setModel(self.model)
