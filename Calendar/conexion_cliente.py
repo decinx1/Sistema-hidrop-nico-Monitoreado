@@ -6,7 +6,7 @@ from datetime import datetime
 def obtener_datos_por_fecha(fecha_str):
     try:
         conexion = pymysql.connect(
-            host='192.168.136.38',
+            host='192.168.0.116',
             user='sensorrasp',
             password='Rasp1234!',
             database='hydroponia',
