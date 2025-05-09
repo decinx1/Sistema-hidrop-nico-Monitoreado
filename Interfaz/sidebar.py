@@ -26,10 +26,8 @@ class Sidebar(QWidget):
     ):
         super().__init__(parent)
 
-        # ✅ DEFAULT ICON FOLDER
         self._icon_folder = icon_folder or os.path.join(os.path.dirname(__file__), "icons")
 
-        # ✅ DEFAULT MENU ITEMS (nuevo)
         self._items = menu_items or [
             ("Home", "home.png"),
             ("Configuración", "config.png"),

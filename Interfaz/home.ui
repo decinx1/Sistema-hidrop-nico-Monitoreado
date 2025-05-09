@@ -27,7 +27,7 @@ QWidget {
 QLabel#sectionTitle {
     font-size: 22px;
     font-weight: bold;
-    color: #2c3e50;
+    color:rgb(0, 124, 249);
     qproperty-alignment: AlignCenter;
     margin: 15px 0;
 }

@@ -36,7 +36,6 @@ class MainWindow(QMainWindow):
         sidebar_widget = Sidebar()
         main_layout.addWidget(sidebar_widget)
         
-
         # Parte superior: botones
         botones_widget = QWidget()
         loadUi("Interfaz/botonesHead.ui", botones_widget)
@@ -59,9 +58,11 @@ class MainWindow(QMainWindow):
         self.stack = QStackedWidget()
         home_view = HomeWindow()
         datos_view = DatosView()
+        config_view = self._create_centered_page("Configuración")
 
         self.stack.addWidget(home_view)  # 0
         self.stack.addWidget(datos_view)  # 1
+        self.stack.addWidget(config_view)  # 2
 
         content_layout.addWidget(self.stack)
 
@@ -84,6 +85,13 @@ class MainWindow(QMainWindow):
     # Aquí puedes forzar un resize si es necesario
         self.adjustSize()
 
+    def _on_sidebar_toggled_with_message(self, expanded):
+        if expanded:
+            self.stack.setCurrentIndex(0)  # Home
+            print("Home")
+        else:
+            self.stack.setCurrentIndex(2)  # Configuración
+            print("Configuración")
 
     def _create_centered_page(self, html_text):
         page = QWidget()

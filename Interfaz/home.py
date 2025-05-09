@@ -196,7 +196,7 @@ class PlotCanvas(FigureCanvas):
         self.axes.fill_between(xnew, y_smooth, color='#3498db', alpha=0.2)
         self.axes.scatter(x, y, color='#2ecc71', edgecolor='#27ae60', s=100, zorder=5)
 
-        # Estilos del gráfico (permanecen en Python por ser dinámicos)
+        # Estilos del gráfico 
         self.axes.set_facecolor('#ffffff')
         self.axes.grid(True, linestyle='--', linewidth=0.5, alpha=0.5)
         [self.axes.spines[side].set_visible(False) for side in ['top', 'right']]
