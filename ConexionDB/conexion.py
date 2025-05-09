@@ -2,13 +2,13 @@
 import mysql.connector
 from mysql.connector import Error
 
-def conectar_bd():
+def conectar_db ():
     try:
         conexion = mysql.connector.connect(
             host="localhost",      # Nombre del host
             user="root",           # Usuario de MySQL
             password="",           # Contraseña de MySQL 
-            database="acuaponia"   # Nombre de la base de datos
+            database="conector_db "   # Nombre de la base de datos
         )
         
         if conexion.is_connected():
@@ -20,6 +20,6 @@ def conectar_bd():
 
 # Prueba la conexión
 if __name__ == "__main__":
-    conexion = conectar_bd()
+    conexion = conectar_db ()
     if conexion:
         conexion.close()

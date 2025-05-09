@@ -1,12 +1,16 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QGridLayout, QPushButton,
-                            QLabel, QVBoxLayout, QDialog, QHBoxLayout,
-                            QComboBox, QSpinBox, QTableWidget, QTableWidgetItem, QTimeEdit)
+from PyQt6.QtWidgets import (
+    QMainWindow, QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout,
+    QDialog, QHBoxLayout, QComboBox, QSpinBox, QTableWidget, QTableWidgetItem,
+    QTimeEdit, QLineEdit, QMessageBox
+)
 from PyQt6.QtCore import Qt, QDate, QTime
 from conexion_cliente import obtener_datos_por_fecha
 from functools import partial
 
+
 class DayDialog(QDialog):
     last_size = None
+
     def __init__(self, date, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"Día {date.toString('dd/MM/yyyy')}")
@@ -111,7 +115,7 @@ class DayDialog(QDialog):
         datos_filtrados = [
             dato for dato in self.resultados
             if (sensor_filtrado == "Todos" or dato[1] == sensor_filtrado)
-               and hora_ini <= str(dato[3]).split()[1][:5] <= hora_fin
+            and hora_ini <= str(dato[3]).split()[1][:5] <= hora_fin
         ]
         return datos_filtrados
 
@@ -160,12 +164,65 @@ class DayDialog(QDialog):
         DayDialog.last_size = self.size()
         super().closeEvent(event)
 
+class KeywordSearchDialog(QDialog):
+    def __init__(self, coincidencias, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Resultados de búsqueda")
+
+        layout = QVBoxLayout()
+
+        if coincidencias:
+            for fecha, datos in coincidencias.items():
+                fecha_label = QLabel(f"Fecha: {fecha}")
+                layout.addWidget(fecha_label)
+
+                tabla = QTableWidget()
+                tabla.setColumnCount(4)
+                tabla.setHorizontalHeaderLabels(["ID", "Sensor", "Valor", "Fecha"])
+
+                for fila, (id_, sensor, valor, fecha) in enumerate(datos):
+                    tabla.insertRow(fila)
+                    tabla.setItem(fila, 0, QTableWidgetItem(str(id_)))
+                    tabla.setItem(fila, 1, QTableWidgetItem(sensor))
+                    tabla.setItem(fila, 2, QTableWidgetItem(str(valor)))
+                    tabla.setItem(fila, 3, QTableWidgetItem(str(fecha)))
+
+                layout.addWidget(tabla)
+        else:
+            mensaje = QLabel("No se encontraron coincidencias para la palabra clave.")
+            layout.addWidget(mensaje)
+
+        self.setLayout(layout)
+
+
+
 class CalendarWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Calendario")
         self.current_date = QDate.currentDate()
         self.initUI()
+
+    def buscar_por_palabra_clave(self, palabra_clave):
+        from conexion_cliente import obtener_todas_las_fechas_y_datos
+
+        resultados = obtener_todas_las_fechas_y_datos()
+
+        coincidencias = {}
+        for fecha_str, datos in resultados.items():
+            for dato in datos:
+                if palabra_clave.lower() in dato[1].lower():
+                    if fecha_str not in coincidencias:
+                        coincidencias[fecha_str] = []
+                    coincidencias[fecha_str].append(dato)
+
+        if coincidencias:
+            # Mostrar los resultados en un modal
+            dialog = KeywordSearchDialog(coincidencias, self)
+            dialog.exec()
+        else:
+            QMessageBox.information(self, "Sin resultados",
+                                    f"No se encontraron datos con la palabra clave '{palabra_clave}'.")
 
     def initUI(self):
         central_widget = QWidget()
@@ -175,6 +232,17 @@ class CalendarWindow(QMainWindow):
         central_widget.setLayout(main_layout)
 
         self.create_header(main_layout)
+
+        # Buscador y botón de búsqueda
+        buscador_layout = QHBoxLayout()
+        self.input_busqueda = QLineEdit()
+        self.input_busqueda.setPlaceholderText("Buscar por fecha (dd/mm/yyyy)")
+        btn_buscar = QPushButton("Buscar")
+        btn_buscar.clicked.connect(self.buscar_por_fecha)
+        buscador_layout.addWidget(self.input_busqueda)
+        buscador_layout.addWidget(btn_buscar)
+        main_layout.addLayout(buscador_layout)
+
         self.create_weekdays_header(main_layout)
 
         self.calendar_grid = QGridLayout()
@@ -305,6 +373,19 @@ class CalendarWindow(QMainWindow):
     def show_day_details(self, date):
         dialog = DayDialog(date, self)
         dialog.exec()
+
+    def buscar_por_fecha(self):
+        texto = self.input_busqueda.text().strip()
+
+        # Intentar interpretar como fecha
+        fecha = QDate.fromString(texto, "dd/MM/yyyy")
+        if fecha.isValid():
+            dialog = DayDialog(fecha, self)
+            dialog.exec()
+        else:
+            # Buscar por palabra clave en todas las fechas disponibles
+            self.buscar_por_palabra_clave(texto)
+
 
 if __name__ == "__main__":
     from PyQt6.QtWidgets import QApplication

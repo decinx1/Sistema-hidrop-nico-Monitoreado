@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>609</height>
+    <width>744</width>
+    <height>674</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,20 @@
     <item>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLineEdit" name="lineEditSearch">
+         <property name="placeholderText">
+          <string>Ingrese el criterio de búsqueda</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonSearch">
+         <property name="text">
+          <string>Buscar</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QCalendarWidget" name="calendarWidget">
          <property name="styleSheet">
@@ -191,7 +205,7 @@ QCalendarWidget QAbstractItemView:disabled {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>744</width>
      <height>22</height>
     </rect>
    </property>
