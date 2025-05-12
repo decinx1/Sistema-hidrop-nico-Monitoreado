@@ -7,7 +7,7 @@ class BotonesHeader(QWidget):
         super().__init__(parent)
 
         # Cargar el diseño desde el archivo UI
-        loadUi("Interfaz/botonesHead.ui", self)
+        loadUi("ui/botonesHead.ui", self)
 
         # Grupo de botones
         self.button_group = QButtonGroup(self)

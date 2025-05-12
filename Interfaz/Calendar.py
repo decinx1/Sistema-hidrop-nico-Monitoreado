@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QTimeEdit, QLineEdit, QMessageBox
 )
 from PyQt6.QtCore import Qt, QDate, QTime
-from Calendar.conexion_cliente import obtener_datos_por_fecha
+from Interfaz.conexion_cliente import obtener_datos_por_fecha
 from functools import partial
 
 
@@ -204,7 +204,7 @@ class CalendarWindow(QMainWindow):
         self.initUI()
 
     def buscar_por_palabra_clave(self, palabra_clave):
-        from conexion_cliente import obtener_todas_las_fechas_y_datos
+        from Interfaz.conexion_cliente import obtener_todas_las_fechas_y_datos
 
         resultados = obtener_todas_las_fechas_y_datos()
 

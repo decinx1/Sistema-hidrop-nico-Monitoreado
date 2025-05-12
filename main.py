@@ -12,7 +12,7 @@ from Interfaz.home import HomeWindow
 from Interfaz.datos import DatosView 
 from Interfaz.sidebar import Sidebar
 from Interfaz.botonesheader import BotonesHeader
-from Calendar.Calendar import CalendarWindow
+from Interfaz.Calendar import CalendarWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -89,13 +89,13 @@ class MainWindow(QMainWindow):
         layout.addWidget(label)
         return page
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
-    # --- Cargar Hoja de Estilos ---
+        # --- Cargar Hoja de Estilos ---
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        qss_relative_path = os.path.join("Calendar","access", "qss", "styles.qss")
+        qss_relative_path = os.path.join("access", "qss", "styles.qss")
         qss_path = os.path.abspath(os.path.join(script_dir, qss_relative_path))
         qss_file = QFile(qss_path)
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Excepción durante la carga de la hoja de estilos: {e}")
     # --- Fin Carga de Estilos ---
-
+    
     window = MainWindow()
     window.showMaximized()
     sys.exit(app.exec())

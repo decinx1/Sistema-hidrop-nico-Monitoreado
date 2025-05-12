@@ -39,7 +39,7 @@ class RoundedTextDelegate(QStyledItemDelegate):
 class DatosView(QMainWindow):
     def __init__(self):
         super().__init__()
-        loadUi("Interfaz/datos.ui", self)
+        loadUi("ui/datos.ui", self)
 
         self.table = self.findChild(QTableView, "tableView")
 
