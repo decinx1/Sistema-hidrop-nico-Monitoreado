@@ -9,12 +9,12 @@ QMainWindow, QDialog {
 
 /* --- Estilos para QLabel --- */
 QLabel {
-    font-size: 20px;
+    font-size: 13px;
     color: #333333;
     padding: 4px;
 }
 
-QLabelfecha_label_dialog { /* ID para la etiqueta de fecha en el diálogo */
+QLabel#fecha_label_dialog { /* ID para la etiqueta de fecha en el diálogo */
     font-size: 20px;
     font-weight: bold;
     color: #005A9C; /* Azul oscuro */
@@ -326,71 +326,3 @@ QWidget#days_header_widget QLabel {
     margin-right: 3px;
 }
 
-/* Estilo base para los tres botones del header cuando NO están activos (checked) */
-QPushButton#btnHome,
-QPushButton#btnDatos,
-QPushButton#btnHistorial {
-    background-color: #FFFFFF;    /* Fondo blanco */
-    color: #333333;               /* Texto oscuro */
-    border: 1px solid #D0D0D0;    /* Borde gris claro */
-    border-radius: 6px;           /* Bordes un poco más redondeados */
-    padding: 10px 20px;           /* Ajusta el padding */
-    font-size: 14px;              /* Ajusta la fuente */
-    min-height: 36px;             /* Ajusta la altura */
-    /* qproperty-iconSize: 20px 20px; */ /* Opcional: si quieres definir tamaño de icono aquí */
-    /* text-align: left; */ /* Si quieres alinear texto e icono a la izquierda dentro del botón */
-}
-
-/* Efecto Hover para los tres botones del header */
-QPushButton#btnHome:hover,
-QPushButton#btnDatos:hover,
-QPushButton#btnHistorial:hover {
-    background-color: #E8F0FE;    /* Un azul muy pálido de fondo */
-    border-color: #0078D4;        /* Borde azul al pasar el mouse */
-    color: #0078D4;               /* Texto azul al pasar el mouse (opcional) */
-}
-
-/* ----- ESTILOS PARA LOS BOTONES DEL HEADER CUANDO ESTÁN ACTIVOS (CHECKED) ----- */
-
-/* Botón "Gráficas" (btnHome) cuando está activo/chequeado */
-QPushButton#btnHome:checked {
-    background-color: #4CAF50;    /* Verde para Home/Gráficas activo */
-    color: white;                 /* Texto blanco */
-    border: 1px solid #388E3C;    /* Borde verde más oscuro o del mismo color */
-    /* Puedes añadir otras propiedades si quieres que el borde sea más grueso, etc. */
-    /* font-weight: bold; */ /* Opcional: texto en negrita para el activo */
-}
-
-/* Botón "Datos" (btnDatos) cuando está activo/chequeado */
-QPushButton#btnDatos:checked {
-    background-color: #4CAF50;    /* VERDE para Datos activo (como en tu imagen) */
-    /* O si quieres un color diferente para "Datos" activo, cámbialo aquí: */
-    /* background-color: #0078D4;    /* Ejemplo: Azul para Datos activo */
-    color: white;
-    border: 1px solid #388E3C; /* Borde correspondiente */
-    /* border-color: #005A9C; /* Si usas azul */
-}
-
-/* Botón "Historial" (btnHistorial) cuando está activo/chequeado */
-QPushButton#btnHistorial:checked {
-    background-color: #4CAF50;    /* VERDE para Historial activo (como en tu imagen) */
-    /* O si quieres un color diferente para "Historial" activo, cámbialo aquí: */
-    /* background-color: #FF9800;    /* Ejemplo: Naranja para Historial activo */
-    color: white;
-    border: 1px solid #388E3C; /* Borde correspondiente */
-    /* border-color: #F57C00; /* Si usas naranja */
-}
-
-
-/* --- Estilos para el QLineEdit del header (si también lo quieres aquí) --- */
-/* Asumiendo que el objectName del QLineEdit en tu .ui es "lineEdit" */
-QLineEdit#lineEdit { /* O un selector más general si no tiene objectName o si hay varios */
-    padding: 8px 12px;
-    border: 1px solid #CCCCCC;
-    border-radius: 6px;
-    min-height: 20px; /* Para que la altura sea consistente con los botones */
-    font-size: 13px;
-}
-QLineEdit#lineEdit:focus {
-    border-color: #0078D4; /* Borde azul al enfocar */
-}
