@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
     QScrollArea, QFrame, QSizePolicy
 )
 from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
@@ -28,11 +29,13 @@ class HomeWindow(QWidget):
         # Secciones de gráficos
         self.add_graphs_row(
             ("pH", [5.5, 6.8, 7.0, 6.9]),
-            ("Temperatura (°C)", [30, 22, 23, 21])
+            ("Temperatura (°C)", [30, 22, 23, 21]),
+            ["Interfaz/icons/ph.png", "Interfaz/icons/temp.png"]
         )
         self.add_graphs_row(
             ("CE (mS/cm)", [1.2, 1.3, 1.4, 1.5]),
-            ("Nivel (cm)", [10, 12, 11, 13])
+            ("Nivel (cm)", [10, 12, 11, 13]),
+            ["Interfaz/icons/ce.png", "Interfaz/icons/nivel.png"]
         )
 
         # Secciones de pH
@@ -67,36 +70,55 @@ class HomeWindow(QWidget):
         self.main_layout.addWidget(label)
 
 
-    def add_graphs_row(self, graph1, graph2):
+    def add_graphs_row(self, graph1, graph2, icons):
         row = QHBoxLayout()
         row.setSpacing(30)
-        
-        row.addWidget(self.create_card(graph1[0], graph1[1]))
-        row.addWidget(self.create_card(graph2[0], graph2[1]))
+
+        row.addWidget(self.create_card_with_icons(graph1[0], graph1[1], icons[0]))
+        row.addWidget(self.create_card_with_icons(graph2[0], graph2[1], icons[1]))
         self.main_layout.addLayout(row)
 
-    def create_card(self, title, data):
+    def create_card_with_icons(self, title, data, icon_path):
         frame = QFrame()
         frame.setObjectName("cardFrame")
         layout = QVBoxLayout(frame)
-        layout.setContentsMargins(15, 15, 15, 15) 
+        layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(15)
 
+        # Contenedor para íconos y título
+        title_layout = QHBoxLayout()
+        title_layout.setSpacing(10)
+
+        # Ícono antes del título
+        icon_before = QLabel()
+        icon_before.setPixmap(QPixmap(icon_path))
+        title_layout.addWidget(icon_before)
+
+        # Título
         label = QLabel(title)
         label.setObjectName("graphTitle")
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        #Estilos para fuente de título de la gráfica
+        # Estilos para fuente de título de la gráfica
         font = label.font()
         font.setPointSize(14)
         font.setFamily("Arial Rounded MT Bold")
         font.setBold(True)
         label.setFont(font)
-        layout.addWidget(label)
+        title_layout.addWidget(label)
+
+        # Ícono después del título
+        icon_after = QLabel()
+        icon_after.setPixmap(QPixmap("Interfaz/icons/info2.png"))
+        title_layout.addWidget(icon_after)
+
+        # Alinear el layout de título
+        title_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addLayout(title_layout)
 
         canvas = PlotCanvas(title, data)
         canvas.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        canvas.setMinimumHeight(300)  
+        canvas.setMinimumHeight(300)
         layout.addWidget(canvas)
         return frame
 
