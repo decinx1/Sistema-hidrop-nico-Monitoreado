@@ -211,7 +211,7 @@ class PlotCanvas(FigureCanvas):
 
         # Estilos del gráfico 
         self.axes.set_facecolor('#ffffff')
-        self.axes.grid(True, linestyle='--', linewidth=0.5, alpha=0.5)
+        self.axes.grid(True, linestyle='--', linewidth= 0.5, alpha= 0.6, color = '#0000FF')
         [self.axes.spines[side].set_visible(False) for side in ['top', 'right']]
         self.axes.spines['left'].set_color('#cccccc')
         self.axes.spines['bottom'].set_color('#cccccc')
@@ -222,29 +222,29 @@ class PlotCanvas(FigureCanvas):
         # colorear segun rango de valores
         if title.lower().startswith("ph"):
             #Se colorea segun el rango que se establezca
-            self.axes.axhspan(0, 5.5, facecolor="#e74c3c", alpha=0.3) #Peligro ácido
-            self.axes.axhspan(5.5, 6.0, facecolor="#f1c40f", alpha=0.3) #Advertencia ácido
-            self.axes.axhspan(6.0, 6.8, facecolor="#27ae60", alpha=0.3) #Óptimo
-            self.axes.axhspan(6.8, 7.5, facecolor="#f1c40f", alpha=0.3) #Advertencia alcalino
-            self.axes.axhspan(7.5, 14, facecolor="#e74c3c", alpha=0.3) #Peligro alcalino
+            self.axes.axhspan(0, 5.5, facecolor="#FF0000", alpha=0.4) #Peligro ácido
+            self.axes.axhspan(5.5, 6.0, facecolor="#f1c40f", alpha=0.4) #Advertencia ácido
+            self.axes.axhspan(6.0, 6.8, facecolor="#00C853", alpha=0.4) #Óptimo
+            self.axes.axhspan(6.8, 7.5, facecolor="#f1c40f", alpha=0.4) #Advertencia alcalino
+            self.axes.axhspan(7.5, 14, facecolor="#FF0000", alpha=0.4) #Peligro alcalino
         elif "temperatura" in title.lower():
-            self.axes.axhspan(0, 10, facecolor="#e74c3c", alpha=0.3)
-            self.axes.axhspan(10, 18, facecolor="#f1c40f", alpha=0.3)
-            self.axes.axhspan(18, 24, facecolor="#27ae60", alpha=0.3)
-            self.axes.axhspan(24, 30, facecolor="#f1c40f", alpha=0.3)
-            self.axes.axhspan(30, 50, facecolor="#e74c3c", alpha=0.3)
+            self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(10, 18, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(18, 24, facecolor="#00C853", alpha=0.4)
+            self.axes.axhspan(24, 30, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(30, 50, facecolor="#FF0000", alpha=0.4)
         elif "ce" in title.lower():
-            self.axes.axhspan(0, 1, facecolor="#e74c3c", alpha=0.3)
-            self.axes.axhspan(1, 1.5, facecolor="#f1c40f", alpha=0.3)
-            self.axes.axhspan(1.5, 2.0, facecolor="#27ae60", alpha=0.3)
-            self.axes.axhspan(2.0, 2.5, facecolor="#f1c40f", alpha=0.3)
-            self.axes.axhspan(2.5, 5, facecolor="#e74c3c", alpha=0.3)
+            self.axes.axhspan(0, 1, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(1, 1.5, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(1.5, 2.0, facecolor="#00C853", alpha=0.4)
+            self.axes.axhspan(2.0, 2.5, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(2.5, 5, facecolor="#FF0000", alpha=0.4)
         elif "nivel" in title.lower():
-            self.axes.axhspan(0, 10, facecolor="#e74c3c", alpha=0.3)
-            self.axes.axhspan(10, 15, facecolor="#f1c40f", alpha=0.3)
-            self.axes.axhspan(15, 25, facecolor="#27ae60", alpha=0.3)
-            self.axes.axhspan(25, 30, facecolor="#f1c40f", alpha=0.3)
-            self.axes.axhspan(30, 35, facecolor="#e74c3c", alpha=0.3)
+            self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(10, 15, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(15, 25, facecolor="#00C853", alpha=0.4)
+            self.axes.axhspan(25, 30, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(30, 35, facecolor="#FF0000", alpha=0.4)
 
         # Delimitacion de rangos
         if title.lower().startswith("ph"):

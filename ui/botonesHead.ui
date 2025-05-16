@@ -15,27 +15,6 @@
   </property>
   <property name="styleSheet">
    <string notr="true">/* Header completo: botones + buscador */
-QPushButton {
-    padding: 8px 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-QPushButton:hover {
-    border: 2px solid #7db9e8;
-    background-color: #f1f1f1;
-}
-QPushButton:checked {
-    background-color: #4CAF50;
-    color: white;
-    border: 2px solid #4CAF50;
-}
-
-QLineEdit {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
 </string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
