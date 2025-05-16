@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-    QScrollArea, QFrame, QSizePolicy
+    QScrollArea, QFrame, QSizePolicy, QToolTip
 )
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap
@@ -10,7 +10,17 @@ import numpy as np
 from scipy.interpolate import make_interp_spline
 import matplotlib.pyplot as plt
 import random
-    
+
+
+class HoverLabel(QLabel):
+    def __init__(self, tooltip_text="", parent=None):
+        super().__init__(parent)
+        self.tooltip_text = tooltip_text
+
+    def enterEvent(self, event):
+        QToolTip.showText(self.mapToGlobal(self.rect().center()), self.tooltip_text, self)
+        super().enterEvent(event)
+
 
 class HomeWindow(QWidget):
     def __init__(self):
@@ -26,21 +36,27 @@ class HomeWindow(QWidget):
         self.main_layout.setContentsMargins(20, 20, 20, 20)
         self.main_layout.setSpacing(40)
 
-        # Secciones de gráficos
+        # Secciones de gráficos con tooltips personalizados
         self.add_graphs_row(
             ("pH", [5.5, 6.8, 7.0, 6.9]),
             ("Temperatura (°C)", [30, 22, 23, 21]),
-            ["Interfaz/icons/ph.png", "Interfaz/icons/temp.png"]
+            ["Interfaz/icons/ph.png", "Interfaz/icons/temp.png"],
+            [
+                "El pH mide la acidez o alcalinidad de la solución nutritiva.",
+                "La temperatura afecta la absorción de nutrientes por las raíces."
+            ]
         )
         self.add_graphs_row(
             ("CE (mS/cm)", [1.2, 1.3, 1.4, 1.5]),
             ("Nivel (cm)", [10, 12, 11, 13]),
-            ["Interfaz/icons/ce.png", "Interfaz/icons/nivel.png"]
+            ["Interfaz/icons/ce.png", "Interfaz/icons/nivel.png"],
+            [
+                "La CE indica la concentración de sales disueltas en el agua.",
+                "El nivel de agua debe ser estable para evitar estrés hídrico."
+            ]
         )
 
-        # Secciones de pH
-        self.add_section_title("Escala Visual de pH")
-        self.add_ph_scale()
+        # Sección del medidor de pH
         self.add_section_title("Medidor de pH Actual")
         self.add_ph_gauge(7.0)
 
@@ -59,26 +75,21 @@ class HomeWindow(QWidget):
         label = QLabel(text)
         label.setObjectName("sectionTitle")
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        ## Estilos para fuente de título de sección de medidor ph
         font = label.font()
         font.setPointSize(14)
         font.setFamily("Arial Rounded MT Bold")
         font.setBold(True)
         label.setFont(font)
-
         self.main_layout.addWidget(label)
 
-
-    def add_graphs_row(self, graph1, graph2, icons):
+    def add_graphs_row(self, graph1, graph2, icons, tooltips):
         row = QHBoxLayout()
         row.setSpacing(30)
-
-        row.addWidget(self.create_card_with_icons(graph1[0], graph1[1], icons[0]))
-        row.addWidget(self.create_card_with_icons(graph2[0], graph2[1], icons[1]))
+        row.addWidget(self.create_card_with_icons(graph1[0], graph1[1], icons[0], tooltips[0]))
+        row.addWidget(self.create_card_with_icons(graph2[0], graph2[1], icons[1], tooltips[1]))
         self.main_layout.addLayout(row)
 
-    def create_card_with_icons(self, title, data, icon_path):
+    def create_card_with_icons(self, title, data, icon_path, tooltip_text):
         frame = QFrame()
         frame.setObjectName("cardFrame")
         layout = QVBoxLayout(frame)
@@ -98,8 +109,6 @@ class HomeWindow(QWidget):
         label = QLabel(title)
         label.setObjectName("graphTitle")
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Estilos para fuente de título de la gráfica
         font = label.font()
         font.setPointSize(14)
         font.setFamily("Arial Rounded MT Bold")
@@ -107,12 +116,12 @@ class HomeWindow(QWidget):
         label.setFont(font)
         title_layout.addWidget(label)
 
-        # Ícono después del título
-        icon_after = QLabel()
+        # Ícono después del título con tooltip personalizado
+        icon_after = HoverLabel(tooltip_text)
         icon_after.setPixmap(QPixmap("Interfaz/icons/info2.png"))
+        icon_after.setCursor(Qt.CursorShape.PointingHandCursor)
         title_layout.addWidget(icon_after)
 
-        # Alinear el layout de título
         title_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addLayout(title_layout)
 
@@ -122,49 +131,11 @@ class HomeWindow(QWidget):
         layout.addWidget(canvas)
         return frame
 
-    def add_ph_scale(self):
-        ph_card = QFrame()
-        ph_card.setObjectName("phScaleFrame")
-        layout = QVBoxLayout(ph_card)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        fig = Figure(figsize=(8, 2))
-        ax = fig.add_subplot(111)
-        
-        ph_colors = [
-            "#FF0000", "#FF4500", "#FF8C00", "#FFD700",
-            "#ADFF2F", "#7CFC00", "#00FA9A", "#00CED1",
-            "#1E90FF", "#4169E1", "#6A5ACD", "#8A2BE2",
-            "#9400D3", "#8B008B"
-        ]
-
-        for idx, color in enumerate(ph_colors):
-            ax.bar(idx, 1, color=color, edgecolor='none', width=1)
-
-        ax.set_xlim(0, 14)
-        ax.set_ylim(0, 1)
-        ax.set_xticks([0, 7, 14])
-        ax.set_xticklabels(["Ácido", "Neutral", "Alcalino"], fontsize=12, fontweight='bold')
-        ax.get_yaxis().set_visible(False)
-        [ax.spines[side].set_visible(False) for side in ['top', 'right', 'left', 'bottom']]
-        ax.tick_params(axis='x', which='both', length=0)
-
-        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-        layout.addWidget(FigureCanvas(fig))
-
-        ph_canvas = FigureCanvas(fig)
-        ph_canvas.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        ph_canvas.setMinimumHeight(150)
-        layout.addWidget(ph_canvas)
-
-        self.main_layout.addWidget(ph_card)
-
     def add_ph_gauge(self, ph_value):
         self.gauge_card = QFrame()
         self.gauge_card.setObjectName("gaugeFrame")
         self.gauge_layout = QVBoxLayout(self.gauge_card)
         self.gauge_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
         self.ph_gauge_canvas = self.create_gauge_canvas(ph_value)
         self.gauge_layout.addWidget(self.ph_gauge_canvas)
         self.main_layout.addWidget(self.gauge_card)
@@ -184,7 +155,6 @@ class HomeWindow(QWidget):
         theta = (ph_value / 14) * np.pi
         ax.plot([theta, theta], [0, 1], color='black', linewidth=3)
 
-        # Configuración visual
         ax.set_yticklabels([])
         ax.set_xticklabels([])
         ax.set_ylim(0, 1)
@@ -195,7 +165,6 @@ class HomeWindow(QWidget):
         gauge_canvas = FigureCanvas(fig)
         gauge_canvas.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         gauge_canvas.setMinimumHeight(200)
-
         return gauge_canvas
 
     def simulate_ph_update(self):
@@ -206,7 +175,6 @@ class HomeWindow(QWidget):
         if self.ph_gauge_canvas:
             self.gauge_layout.removeWidget(self.ph_gauge_canvas)
             self.ph_gauge_canvas.setParent(None)
-        
         self.ph_gauge_canvas = self.create_gauge_canvas(ph_value)
         self.gauge_layout.addWidget(self.ph_gauge_canvas)
 
@@ -222,18 +190,14 @@ class PlotCanvas(FigureCanvas):
         self.axes.clear()
         x = np.linspace(1, len(data), len(data))
         y = np.array(data)
-        
-        # Suavizado de curva
+
         xnew = np.linspace(x.min(), x.max(), 300)
         spl = make_interp_spline(x, y, k=2)
         y_smooth = spl(xnew)
 
-        # Gráfico principal
         self.axes.plot(xnew, y_smooth, color='#3498db', linewidth=3, solid_capstyle='round')
-
-        # Estilos del gráfico 
         self.axes.set_facecolor('#ffffff')
-        self.axes.grid(True, linestyle='--', linewidth= 0.5, alpha= 0.6, color = '#0000FF')
+        self.axes.grid(True, linestyle='--', linewidth=0.5, alpha=0.6, color='#0000FF')
         [self.axes.spines[side].set_visible(False) for side in ['top', 'right']]
         self.axes.spines['left'].set_color('#cccccc')
         self.axes.spines['bottom'].set_color('#cccccc')
@@ -241,41 +205,33 @@ class PlotCanvas(FigureCanvas):
         self.axes.set_ylabel("Valor", fontsize=12, color='#34495e', labelpad=15)
         self.axes.tick_params(axis='both', labelsize=10, colors='#34495e')
 
-        # colorear segun rango de valores
         if title.lower().startswith("ph"):
-            #Se colorea segun el rango que se establezca
-            self.axes.axhspan(0, 5.5, facecolor="#FF0000", alpha=0.4) #Peligro ácido
-            self.axes.axhspan(5.5, 6.0, facecolor="#f1c40f", alpha=0.4) #Advertencia ácido
-            self.axes.axhspan(6.0, 6.8, facecolor="#00C853", alpha=0.4) #Óptimo
-            self.axes.axhspan(6.8, 7.5, facecolor="#f1c40f", alpha=0.4) #Advertencia alcalino
-            self.axes.axhspan(7.5, 14, facecolor="#FF0000", alpha=0.4) #Peligro alcalino
+            self.axes.axhspan(0, 5.5, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(5.5, 6.0, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(6.0, 6.8, facecolor="#00C853", alpha=0.4)
+            self.axes.axhspan(6.8, 7.5, facecolor="#f1c40f", alpha=0.4)
+            self.axes.axhspan(7.5, 14, facecolor="#FF0000", alpha=0.4)
+            self.axes.set_ylim(0, 14)
         elif "temperatura" in title.lower():
             self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)
             self.axes.axhspan(10, 18, facecolor="#f1c40f", alpha=0.4)
             self.axes.axhspan(18, 24, facecolor="#00C853", alpha=0.4)
             self.axes.axhspan(24, 30, facecolor="#f1c40f", alpha=0.4)
             self.axes.axhspan(30, 50, facecolor="#FF0000", alpha=0.4)
+            self.axes.set_ylim(0, 40)
         elif "ce" in title.lower():
             self.axes.axhspan(0, 1, facecolor="#FF0000", alpha=0.4)
             self.axes.axhspan(1, 1.5, facecolor="#f1c40f", alpha=0.4)
             self.axes.axhspan(1.5, 2.0, facecolor="#00C853", alpha=0.4)
             self.axes.axhspan(2.0, 2.5, facecolor="#f1c40f", alpha=0.4)
             self.axes.axhspan(2.5, 5, facecolor="#FF0000", alpha=0.4)
+            self.axes.set_ylim(0, 4)
         elif "nivel" in title.lower():
             self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)
             self.axes.axhspan(10, 15, facecolor="#f1c40f", alpha=0.4)
             self.axes.axhspan(15, 25, facecolor="#00C853", alpha=0.4)
             self.axes.axhspan(25, 30, facecolor="#f1c40f", alpha=0.4)
             self.axes.axhspan(30, 35, facecolor="#FF0000", alpha=0.4)
-
-        # Delimitacion de rangos
-        if title.lower().startswith("ph"):
-            self.axes.set_ylim(0, 14)  #Rango de PH 0-14
-        elif "temperatura" in title.lower():
-            self.axes.set_ylim(0, 40)  #Rango de temperatura 0-40
-        elif "ce" in title.lower():
-            self.axes.set_ylim(0, 4)
-        elif "nivel" in title.lower():
             self.axes.set_ylim(0, 35)
 
         self.draw()
