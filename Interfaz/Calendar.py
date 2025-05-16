@@ -385,13 +385,3 @@ class CalendarWindow(QMainWindow):
         else:
             # Buscar por palabra clave en todas las fechas disponibles
             self.buscar_por_palabra_clave(texto)
-
-
-if __name__ == "__main__":
-    from PyQt6.QtWidgets import QApplication
-    import sys
-
-    app = QApplication(sys.argv)
-    window = CalendarWindow()
-    window.show()
-    sys.exit(app.exec())
