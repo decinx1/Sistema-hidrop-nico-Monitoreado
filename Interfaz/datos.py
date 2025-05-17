@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QTableView, QHeaderView, QLabel,
     QVBoxLayout, QDialog, QGraphicsOpacityEffect,
-    QStyledItemDelegate, QFrame, QSizePolicy
+    QStyledItemDelegate, QFrame, QSizePolicy, QHBoxLayout
 )
 from PyQt6.QtGui import QStandardItemModel, QStandardItem, QPainter, QColor, QPen, QBrush, QIcon
 from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRectF, QSize
@@ -54,7 +54,6 @@ class DatosView(QMainWindow):
         loadUi("ui/datos.ui", self)
 
         self.table = self.findChild(QTableView, "tableView")
-
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Nombre", "Datos", "Detalles"])
 
@@ -98,9 +97,13 @@ class DatosView(QMainWindow):
         main_layout.addWidget(self.table)
 
         # Agregar la escala visual de pH debajo de la tabla
+        QLabel("Escala de pH").setObjectName("sectionTitle")
+        main_layout.addWidget(QLabel("Escala de pH"), alignment=Qt.AlignmentFlag.AlignCenter)
+        main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.ph_card = QFrame()
         self.add_ph_scale()
         main_layout.addWidget(self.ph_card)
-
+        
         # Establecer el layout principal en la ventana
         central_widget = QFrame()
         central_widget.setLayout(main_layout)
@@ -154,6 +157,21 @@ class DatosView(QMainWindow):
         ph_card.setObjectName("phScaleFrame")
         layout = QVBoxLayout(ph_card)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Agregar etiquetas de texto para indicar ácido y alcalino
+        labels_layout = QHBoxLayout()
+        acid_label = QLabel("Muy Ácido")
+        acid_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        neutral_label = QLabel("Neutral")
+        neutral_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        alkaline_label = QLabel("Muy Alcalino")
+        alkaline_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+        labels_layout.addWidget(acid_label)
+        labels_layout.addStretch()
+        labels_layout.addWidget(neutral_label)
+        labels_layout.addStretch()
+        labels_layout.addWidget(alkaline_label)
+        layout.addLayout(labels_layout)
 
         fig = Figure(figsize=(8, 2))
         ax = fig.add_subplot(111)
