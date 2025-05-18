@@ -168,7 +168,7 @@ class DatosView(QMainWindow):
         alkaline_label.setAlignment(Qt.AlignmentFlag.AlignRight)
         labels_layout.addWidget(acid_label)
         labels_layout.addStretch()
-        labels_layout.addWidget(neutral_label)
+        labels_layout.addWidget(neutral_label)    
         labels_layout.addStretch()
         labels_layout.addWidget(alkaline_label)
         layout.addLayout(labels_layout)
