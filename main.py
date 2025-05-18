@@ -1,9 +1,10 @@
 import sys
 import os
+from PyQt6.QtCore import QTimer
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
-    QHBoxLayout, QStackedWidget, QLabel
+    QHBoxLayout, QStackedWidget, QLabel, QDialog, QLineEdit, QPushButton
 )
 from PyQt6.uic import loadUi
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
@@ -13,6 +14,29 @@ from Interfaz.datos import DatosView
 from Interfaz.sidebar import Sidebar
 from Interfaz.botonesheader import BotonesHeader
 from Interfaz.Calendar import CalendarWindow
+
+class LoginDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.path.join("ui", "ui_login.ui"), self)
+        self.setWindowTitle("Inicio de Sesión")
+        self.staticUser = "hydroadmin"
+        self.staticPass = "123"
+        self.pushButton.clicked.connect(self.check_login)
+        self.accepted = False
+
+    def check_login(self):
+        user = self.lineEdit_user.text()
+        password = self.lineEdit_pass.text()
+        if user.lower() == self.staticUser.lower() and password == self.staticPass:
+            self.label_status.setText(f"Bienvenido, {user}")
+            self.label_status.setStyleSheet("color: green;")
+            self.accepted = True
+            # Espera 1.5 segundos antes de cerrar el login para mostrar el mensaje
+            QTimer.singleShot(800, self.accept)
+        else:
+            self.label_status.setText("Usuario o contraseña incorrectos")
+            self.label_status.setStyleSheet("color: red;")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -92,13 +116,12 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-        # --- Cargar Hoja de Estilos ---
+    # --- Cargar Hoja de Estilos ---
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         qss_relative_path = os.path.join("access", "qss", "styles.qss")
         qss_path = os.path.abspath(os.path.join(script_dir, qss_relative_path))
         qss_file = QFile(qss_path)
-
         if not qss_file.exists():
             print(f"ERROR: El archivo de hoja de estilos NO EXISTE en la ruta: {qss_path}")
         elif qss_file.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text):
@@ -108,11 +131,15 @@ if __name__ == "__main__":
             print(f"Hoja de estilos '{qss_path}' cargada correctamente.")
         else:
             print(f"ERROR: No se pudo abrir la hoja de estilos '{qss_path}'. Razón: {qss_file.errorString()}")
-
     except Exception as e:
         print(f"Excepción durante la carga de la hoja de estilos: {e}")
     # --- Fin Carga de Estilos ---
-    
-    window = MainWindow()
-    window.showMaximized()
-    sys.exit(app.exec())
+
+    # Mostrar login antes de la ventana principal
+    login = LoginDialog()
+    if login.exec() == QDialog.DialogCode.Accepted and login.accepted:
+        window = MainWindow()
+        window.showMaximized()
+        sys.exit(app.exec())
+    else:
+        sys.exit(0)
