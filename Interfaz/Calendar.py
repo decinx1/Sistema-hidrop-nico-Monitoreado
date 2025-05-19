@@ -168,6 +168,8 @@ class KeywordSearchDialog(QDialog):
     def __init__(self, coincidencias, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Resultados de búsqueda")
+        self.adjustSize()  # Se ajusta automáticamente al contenido
+        self.setMinimumWidth(480)  # Ancho mínimo para mantener buena legibilidad
 
         layout = QVBoxLayout()
 
@@ -236,7 +238,7 @@ class CalendarWindow(QMainWindow):
         # Buscador y botón de búsqueda
         buscador_layout = QHBoxLayout()
         self.input_busqueda = QLineEdit()
-        self.input_busqueda.setPlaceholderText("Buscar por fecha (dd/mm/yyyy)")
+        self.input_busqueda.setPlaceholderText("Buscar por fecha (00/00/0000) o palabra clave (ph, temperatura)")
         btn_buscar = QPushButton("Buscar")
         btn_buscar.clicked.connect(self.buscar_por_fecha)
         buscador_layout.addWidget(self.input_busqueda)

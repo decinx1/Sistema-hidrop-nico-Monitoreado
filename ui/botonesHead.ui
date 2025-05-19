@@ -72,19 +72,26 @@ QLineEdit {
         </property>
        </widget>
       </item>
+      <!-- Campo de texto para la búsqueda -->
       <item>
        <widget class="QLineEdit" name="lineEdit">
         <property name="placeholderText">
          <string>Buscar...</string>
         </property>
         <property name="minimumHeight">
-    <number>35</number>
-  </property>
-  <!-- ancho máximo para que no crezca indefinidamente -->
-  <property name="maximumWidth">
-    <number>500</number>
-  </property>
-
+         <number>35</number>
+        </property>
+        <property name="maximumWidth">
+         <number>500</number>
+        </property>
+       </widget>
+      </item>
+      <!-- Botón de búsqueda -->
+      <item>
+       <widget class="QPushButton" name="btnBuscar">
+        <property name="text">
+         <string>Buscar</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -92,6 +99,4 @@ QLineEdit {
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
 </ui>
