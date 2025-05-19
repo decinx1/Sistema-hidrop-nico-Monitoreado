@@ -257,9 +257,11 @@ class CalendarWindow(QMainWindow):
         header_layout = QHBoxLayout(header)
 
         prev_btn = QPushButton("◀")
+        prev_btn.setToolTip("Mes anterior")
         prev_btn.clicked.connect(self.prev_month)
 
         next_btn = QPushButton("▶")
+        next_btn.setToolTip("Mes siguiente")
         next_btn.clicked.connect(self.next_month)
 
         self.month_combo = QComboBox()
