@@ -1,4 +1,6 @@
 import sys
+import json
+import os
 from PyQt6.QtWidgets import QApplication, QWidget
 from PyQt6.uic import loadUi
 
@@ -12,9 +14,20 @@ class MainWindow(QWidget):
         # Conectar botón
         self.pushButton.clicked.connect(self.check_login)
 
-        # Credenciales
-        self.staticUser = "hydroadmin"
-        self.staticPass = "123"
+        # Cargar credenciales desde env/config.json
+        self.load_credentials()
+
+    def load_credentials(self):
+        config_path = os.path.join("env", "config.json")
+        try:
+            with open(config_path, "r") as f:
+                config = json.load(f)
+                self.staticUser = config.get("user", "")
+                self.staticPass = config.get("password", "")
+        except Exception as e:
+            print(f"Error al cargar las credenciales: {e}")
+            self.staticUser = ""
+            self.staticPass = ""
 
     def check_login(self):
         user = self.lineEdit_user.text()
