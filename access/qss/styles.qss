@@ -326,3 +326,24 @@ QWidget#days_header_widget QLabel {
     margin-right: 3px;
 }
 
+/* --- Botones Header personalizados --- */
+QPushButton#btnHome, QPushButton#btnDatos, QPushButton#btnHistorial {
+    background-color: #0078D4; /* Azul primario */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 13px;
+    min-height: 28px;
+    font-weight: normal;
+    transition: background 0.2s, color 0.2s;
+}
+QPushButton#btnHome:checked, QPushButton#btnDatos:checked, QPushButton#btnHistorial:checked {
+    background-color: #005A9C; 
+    color: white;
+    font-weight: bold;
+}
+QPushButton#btnHome:hover, QPushButton#btnDatos:hover, QPushButton#btnHistorial:hover {
+    background-color: #005A9C; /* Azul más oscuro al pasar el mouse */
+}
+
