@@ -1,44 +1,33 @@
 import sys
-import json
-import os
-from PyQt6.QtWidgets import QApplication, QWidget
-from PyQt6.uic import loadUi
+from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
+from login import LoginForm
+from register import RegisterForm
 
-class MainWindow(QWidget):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Login y Registro")
+        self.setFixedSize(400, 400)
 
-        # Cargar el archivo .ui
-        loadUi("ui_login.ui", self)
+        self.stack = QStackedWidget()
+        self.setCentralWidget(self.stack)
 
-        # Conectar botón
-        self.pushButton.clicked.connect(self.check_login)
+        # Instanciar formularios con referencia a esta ventana
+        self.login_form = LoginForm(self)
+        self.register_form = RegisterForm(self)
 
-        # Cargar credenciales desde env/config.json
-        self.load_credentials()
+        # Añadir a la pila de widgets
+        self.stack.addWidget(self.login_form)     # índice 0
+        self.stack.addWidget(self.register_form)  # índice 1
 
-    def load_credentials(self):
-        config_path = os.path.join("env", "config.json")
-        try:
-            with open(config_path, "r") as f:
-                config = json.load(f)
-                self.staticUser = config.get("user", "")
-                self.staticPass = config.get("password", "")
-        except Exception as e:
-            print(f"Error al cargar las credenciales: {e}")
-            self.staticUser = ""
-            self.staticPass = ""
+        # Mostrar login por defecto
+        self.stack.setCurrentIndex(0)
 
-    def check_login(self):
-        user = self.lineEdit_user.text()
-        password = self.lineEdit_pass.text()
-
-        if user.lower() == self.staticUser.lower() and password == self.staticPass:
-            self.label_status.setText(f"Bienvenido, {user}")
-            self.label_status.setStyleSheet("color: green;")
-        else:
-            self.label_status.setText("Usuario o contraseña incorrectos")
-            self.label_status.setStyleSheet("color: red;")
+    def cambiar_vista(self, vista):
+        if vista == "login":
+            self.stack.setCurrentIndex(0)
+        elif vista == "registro":
+            self.stack.setCurrentIndex(1)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
