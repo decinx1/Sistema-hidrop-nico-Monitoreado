@@ -134,6 +134,16 @@ QPushButton:pressed {
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="btn_to_register">
+        <property name="text">
+         <string>¿No tienes cuenta? Regístrate</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: transparent; color: #0AACEB; border: none; text-decoration: underline;</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

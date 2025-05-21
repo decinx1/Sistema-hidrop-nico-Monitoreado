@@ -14,6 +14,8 @@ from Interfaz.datos import DatosView
 from Interfaz.sidebar import Sidebar
 from Interfaz.botonesheader import BotonesHeader
 from Interfaz.Calendar import CalendarWindow
+from Interfaz.login import LoginForm
+from Interfaz.register import RegisterForm
 
 class LoginDialog(QDialog):
     def __init__(self):
@@ -37,6 +39,25 @@ class LoginDialog(QDialog):
         else:
             self.label_status.setText("Usuario o contraseña incorrectos")
             self.label_status.setStyleSheet("color: red;")
+
+class AuthWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Login y Registro")
+        self.setFixedSize(400, 400)
+        self.stack = QStackedWidget()
+        self.setCentralWidget(self.stack)
+        self.login_form = LoginForm(self)
+        self.register_form = RegisterForm(self)
+        self.stack.addWidget(self.login_form)     # índice 0
+        self.stack.addWidget(self.register_form)  # índice 1
+        self.stack.setCurrentIndex(0)
+
+    def cambiar_vista(self, vista):
+        if vista == "login":
+            self.stack.setCurrentIndex(0)
+        elif vista == "registro":
+            self.stack.setCurrentIndex(1)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -135,11 +156,7 @@ if __name__ == "__main__":
         print(f"Excepción durante la carga de la hoja de estilos: {e}")
     # --- Fin Carga de Estilos ---
 
-    # Mostrar login antes de la ventana principal
-    login = LoginDialog()
-    if login.exec() == QDialog.DialogCode.Accepted and login.accepted:
-        window = MainWindow()
-        window.showMaximized()
-        sys.exit(app.exec())
-    else:
-        sys.exit(0)
+    # Mostrar ventana de login/registro y luego dashboard
+    auth = AuthWindow()
+    auth.show()
+    app.exec()
