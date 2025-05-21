@@ -1,14 +1,15 @@
 import os
+
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QSizePolicy, QToolButton, QLabel, QFrame
 )
+from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QIcon, QPixmap, QPalette, QColor, QFont
 from PyQt6.QtCore import (
     QSize, QPropertyAnimation, QEasingCurve,
     pyqtSignal, Qt
 )
-
 
 class Sidebar(QWidget):
     """Sidebar retráctil con logo, botones de menú y botón de salida."""
@@ -252,4 +253,16 @@ class Sidebar(QWidget):
         self._btn_exit.setText("Salir" if self._is_expanded else "")
 
     def _handle_exit(self):
-        self.window().close()
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("Confirmar salida")
+        msg_box.setText("¿Estás seguro de que deseas salir de la aplicación?")
+        msg_box.setIcon(QMessageBox.Icon.Question)
+
+        # Añadir botones Sí y No
+        yes_button = msg_box.addButton("Sí", QMessageBox.ButtonRole.YesRole)
+        no_button = msg_box.addButton("No", QMessageBox.ButtonRole.NoRole)
+
+        msg_box.exec()
+
+        if msg_box.clickedButton() == yes_button:
+            self.window().close()
