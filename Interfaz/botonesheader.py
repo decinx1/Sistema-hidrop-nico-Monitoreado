@@ -95,6 +95,16 @@ class BotonesHeader(QWidget):
         dialog = KeywordSearchDialog(coincidencias, self)
         dialog.exec()
 
+    def _on_button_clicked(self, button):
+        # Puedes personalizar la acción según el botón presionado
+        if button == self.btn_home:
+            print("Botón Home presionado")
+        elif button == self.btn_datos:
+            print("Botón Datos presionado")
+        elif button == self.btn_historial:
+            print("Botón Historial presionado")
+        # Aquí puedes emitir señales o llamar funciones para cambiar la vista
+
 
 class KeywordSearchDialog(QDialog):
     def __init__(self, coincidencias, parent=None):

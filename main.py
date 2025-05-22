@@ -4,16 +4,13 @@ from PyQt6.QtCore import QTimer
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
-    QHBoxLayout, QStackedWidget, QLabel, QDialog, QLineEdit, QPushButton
+    QHBoxLayout, QStackedWidget, QLabel, QDialog
 )
 from PyQt6.uic import loadUi
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
-from Interfaz.home import HomeWindow 
-from Interfaz.datos import DatosView 
 from Interfaz.sidebar import Sidebar
 from Interfaz.botonesheader import BotonesHeader
-from Interfaz.Calendar import CalendarWindow
 from Interfaz.login import LoginForm
 from Interfaz.register import RegisterForm
 
@@ -62,50 +59,46 @@ class AuthWindow(QMainWindow):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("HydroTech")
-
-        # Widget central
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-
-        # Layout principal horizontal
         main_layout = QHBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-
-        # ─── Área de contenido principal ───────────────────────────
         content_widget = QWidget()
         content_layout = QVBoxLayout(content_widget)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
-
         sidebar_widget = Sidebar()
         main_layout.addWidget(sidebar_widget)
-        
-        # Parte superior: botones
         botones_widget = BotonesHeader()
         content_layout.addWidget(botones_widget)
-
-        # Parte inferior: área de vistas
         self.stack = QStackedWidget()
-        home_view = HomeWindow()
-        datos_view = DatosView()
-        historial_view = CalendarWindow()
-
-        self.stack.addWidget(home_view)  # 0
-        self.stack.addWidget(datos_view)  # 1
-        self.stack.addWidget(historial_view)  # 2
-
+        self.views = {}  # Diccionario para lazy loading
+        self._load_view(0)
         content_layout.addWidget(self.stack)
-
-        # Conectar los botones para cambiar la vista
-        botones_widget.btn_home.clicked.connect(lambda: self.stack.setCurrentIndex(0))
-        botones_widget.btn_datos.clicked.connect(lambda: self.stack.setCurrentIndex(1))
-        botones_widget.btn_historial.clicked.connect(lambda: self.stack.setCurrentIndex(2))
-
-        # Agrega el área de contenido al layout principal
+        botones_widget.btn_home.clicked.connect(lambda: self._load_view(0))
+        botones_widget.btn_datos.clicked.connect(lambda: self._load_view(1))
+        botones_widget.btn_historial.clicked.connect(lambda: self._load_view(2))
         main_layout.addWidget(content_widget)
+
+    def _load_view(self, index):
+        # Lazy loading de vistas
+        if index not in self.views:
+            if index == 0:
+                from Interfaz.home import HomeWindow
+                view = HomeWindow()
+            elif index == 1:
+                from Interfaz.datos import DatosView
+                view = DatosView()
+            elif index == 2:
+                from Interfaz.Calendar import CalendarWindow
+                view = CalendarWindow()
+            else:
+                return
+            self.views[index] = view
+            self.stack.addWidget(view)
+        self.stack.setCurrentWidget(self.views[index])
 
     def on_sidebar_toggled(self, expanded):
     # Aquí podrías hacer que el contenido se expanda o se ajuste
@@ -157,6 +150,10 @@ if __name__ == "__main__":
     # --- Fin Carga de Estilos ---
 
     # Mostrar ventana de login/registro y luego dashboard
-    auth = AuthWindow()
-    auth.show()
+    # auth = AuthWindow()
+    # auth.show()
+    # app.exec()
+    # Para pruebas sin login, puedes iniciar el dashboard directamente:
+    window = MainWindow()
+    window.show()
     app.exec()
