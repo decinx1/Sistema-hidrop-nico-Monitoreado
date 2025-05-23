@@ -74,22 +74,31 @@ class MainWindow(QMainWindow):
         content_layout.setSpacing(0)
         # BotonesHeader con importación bajo demanda
         from Interfaz.botonesheader import BotonesHeader
-        botones_widget = BotonesHeader()
-        content_layout.addWidget(botones_widget)
+        self.botones_widget = BotonesHeader()
+        content_layout.addWidget(self.botones_widget)
         self.stack = QStackedWidget()
         self.views = {}  # Diccionario para lazy loading
         self._load_view(0)
         content_layout.addWidget(self.stack)
-        botones_widget.btn_home.clicked.connect(lambda: self._load_view(0))
-        botones_widget.btn_datos.clicked.connect(lambda: self._load_view(1))
-        botones_widget.btn_historial.clicked.connect(lambda: self._load_view(2))
+        # Conectar solo los botones de BotonesHeader a las vistas que lo requieren
+        self.botones_widget.btn_home.clicked.connect(lambda: self._load_view(0))
+        self.botones_widget.btn_datos.clicked.connect(lambda: self._load_view(1))
+        self.botones_widget.btn_historial.clicked.connect(lambda: self._load_view(2))
         main_layout.addWidget(content_widget)
         # Conectar Sidebar a las vistas
-        sidebar_widget._btns["Home"].clicked.connect(lambda: self._load_view(0))
-        sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._load_view(3))
-        sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._load_view(4))
-        sidebar_widget._btns["Correo"].clicked.connect(lambda: self._load_view(5))
-        sidebar_widget._btns["Notificaciones"].clicked.connect(lambda: self._load_view(6))
+        sidebar_widget._btns["Home"].clicked.connect(lambda: self._show_view_with_header(0))
+        sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._show_view_without_header(3))
+        sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._show_view_without_header(4))
+        sidebar_widget._btns["Correo"].clicked.connect(lambda: self._show_view_without_header(5))
+        sidebar_widget._btns["Notificaciones"].clicked.connect(lambda: self._show_view_without_header(6))
+
+    def _show_view_with_header(self, index):
+        self.botones_widget.show()
+        self._load_view(index)
+
+    def _show_view_without_header(self, index):
+        self.botones_widget.hide()
+        self._load_view(index)
 
     def _load_view(self, index):
         # Lazy loading de vistas con importaciones bajo demanda

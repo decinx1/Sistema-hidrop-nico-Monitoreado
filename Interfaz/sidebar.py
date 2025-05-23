@@ -78,6 +78,10 @@ class Sidebar(QWidget):
         for text, fname in self._items:
             self.add_item(text, fname)
 
+        # Seleccionar el botón Home al iniciar
+        if "Home" in self._btns:
+            self._btns["Home"].setChecked(True)
+
         self._layout.addStretch()
 
         # Botón de salida
@@ -220,19 +224,34 @@ class Sidebar(QWidget):
         """)
 
     def toggle(self):
+        # Animar la sidebar correctamente en cualquier modo de ventana
         start, end = (
             (self._w_exp, self._w_col)
             if self._is_expanded else
             (self._w_col, self._w_exp)
         )
-        anim = QPropertyAnimation(self, b"minimumWidth", self)
+        anim = QPropertyAnimation(self, b"maximumWidth", self)
         anim.setStartValue(start)
         anim.setEndValue(end)
         anim.setDuration(self._anim_dur)
         anim.setEasingCurve(QEasingCurve.Type.InOutQuint)
-        anim.finished.connect(self._on_anim_done)
+        def finish_anim():
+            self.setFixedWidth(end)
+            self.setMinimumWidth(end)
+            self.setMaximumWidth(end)
+            # Mostrar nombres solo cuando está expandida
+            for text, btn in self._btns.items():
+                btn.setText(text if self._is_expanded else "")
+            self._btn_exit.setText("Salir" if self._is_expanded else "")
+        anim.finished.connect(finish_anim)
         anim.start()
-
+        self.setMinimumWidth(min(start, end))
+        self.setMaximumWidth(max(start, end))
+        if self.parent() and hasattr(self.parent(), 'updateGeometry'):
+            self.parent().updateGeometry()
+        parent_window = self.window()
+        if parent_window and hasattr(parent_window, 'updateGeometry'):
+            parent_window.updateGeometry()
         self._is_expanded = not self._is_expanded
         self.toggled.emit(self._is_expanded)
         self._set_logo_pixmap(expanded=self._is_expanded)
