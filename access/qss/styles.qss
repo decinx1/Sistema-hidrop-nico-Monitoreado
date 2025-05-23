@@ -336,7 +336,7 @@ QPushButton#btnHome, QPushButton#btnDatos, QPushButton#btnHistorial {
     font-size: 13px;
     min-height: 28px;
     font-weight: normal;
-    transition: background 0.2s, color 0.2s;
+    /* transition: background 0.2s, color 0.2s; */
 }
 QPushButton#btnHome:checked, QPushButton#btnDatos:checked, QPushButton#btnHistorial:checked {
     background-color: #005A9C; 

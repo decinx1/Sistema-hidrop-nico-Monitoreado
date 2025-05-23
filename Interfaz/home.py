@@ -10,6 +10,13 @@ import numpy as np
 from scipy.interpolate import make_interp_spline
 import matplotlib.pyplot as plt
 import random
+from datetime import datetime, timedelta
+
+# Importa la función para obtener datos recientes de la BD
+try:
+    from Interfaz.conexion_cliente import obtener_datos_por_fecha
+except ImportError:
+    obtener_datos_por_fecha = None
 
 
 class HoverLabel(QLabel):
@@ -36,10 +43,19 @@ class HomeWindow(QWidget):
         self.main_layout.setContentsMargins(20, 20, 20, 20)
         self.main_layout.setSpacing(40)
 
+        # --- NUEVO: Cargar datos reales o simular si no hay conexión ---
+        self.datos_recientes = self.obtener_datos_recientes()
+        # Guardar si estamos simulando o usando BD
+        self.simulando = not any(self.datos_recientes.values()) or not obtener_datos_por_fecha
+        # ---
+
+        # --- NUEVO: Inicializa series en memoria (FIFO) ---
+        self.series = self.inicializar_series()
+
         # Secciones de gráficos con tooltips personalizados
         self.add_graphs_row(
-            ("pH", [5.5, 6.8, 7.0, 6.9]),
-            ("Temperatura (°C)", [30, 22, 23, 21]),
+            ("pH", self.series['ph']),
+            ("Temperatura (°C)", self.series['temperatura']),
             ["Interfaz/icons/ph.png", "Interfaz/icons/temp.png"],
             [
                 "El pH mide la acidez o alcalinidad de la solución nutritiva.",
@@ -47,8 +63,8 @@ class HomeWindow(QWidget):
             ]
         )
         self.add_graphs_row(
-            ("CE (mS/cm)", [1.2, 1.3, 1.4, 1.5]),
-            ("Nivel (cm)", [10, 12, 11, 13]),
+            ("CE (mS/cm)", self.series['ce']),
+            ("Nivel (cm)", self.series['nivel']),
             ["Interfaz/icons/ce.png", "Interfaz/icons/nivel.png"],
             [
                 "La CE indica la concentración de sales disueltas en el agua.",
@@ -58,12 +74,12 @@ class HomeWindow(QWidget):
 
         # Sección del medidor de pH
         self.add_section_title("Medidor de pH Actual")
-        self.add_ph_gauge(7.0)
+        self.add_ph_gauge(self.series['ph'][-1])
 
-        # Temporizador para simulación
+        # --- Un solo temporizador para actualizar todo ---
         self.timer = QTimer()
-        self.timer.timeout.connect(self.simulate_ph_update)
-        self.timer.start(2000)
+        self.timer.timeout.connect(self.actualizar_en_tiempo_real)
+        self.timer.start(8000)  # Cada 8 segundos
 
         # Configuración final del layout
         scroll_area.setWidget(container)
@@ -167,16 +183,99 @@ class HomeWindow(QWidget):
         gauge_canvas.setMinimumHeight(200)
         return gauge_canvas
 
-    def simulate_ph_update(self):
-        new_ph = round(random.uniform(5.5, 8.0), 2)
-        self.update_ph_gauge(new_ph)
-
     def update_ph_gauge(self, ph_value):
         if self.ph_gauge_canvas:
             self.gauge_layout.removeWidget(self.ph_gauge_canvas)
             self.ph_gauge_canvas.setParent(None)
         self.ph_gauge_canvas = self.create_gauge_canvas(ph_value)
         self.gauge_layout.addWidget(self.ph_gauge_canvas)
+
+    def inicializar_series(self):
+        # Obtiene los datos iniciales (BD o simulados)
+        datos = self.obtener_datos_recientes()
+        # Asegura longitud 20
+        for k in datos:
+            if len(datos[k]) < 20:
+                datos[k] = [datos[k][0]] * (20 - len(datos[k])) + datos[k]
+            else:
+                datos[k] = datos[k][-20:]
+        return datos
+
+    def actualizar_en_tiempo_real(self):
+        # Simula/agrega solo el último dato (o real si hay BD)
+        nuevo = self.obtener_nuevo_dato()
+        for k in self.series:
+            self.series[k].append(nuevo[k])
+            if len(self.series[k]) > 20:
+                self.series[k].pop(0)
+        self.actualizar_graficas_en_tiempo_real()
+        self.update_ph_gauge(self.series['ph'][-1])
+
+    def obtener_nuevo_dato(self):
+        # Si hay BD, trae solo el último dato; si no, simula
+        if obtener_datos_por_fecha:
+            hoy = datetime.now().strftime('%Y-%m-%d')
+            registros = obtener_datos_por_fecha(hoy)
+            if registros:
+                nuevo = {}
+                for sensor in self.series.keys():
+                    valores = [float(r[2]) for r in registros if r[1].lower() == sensor]
+                    nuevo[sensor] = valores[-1] if valores else self.series[sensor][-1]
+                return nuevo
+        # Simulación
+        return {
+            'ph': round(random.uniform(5.8, 7.2), 2),
+            'temperatura': round(random.uniform(20, 25), 1),
+            'ce': round(random.uniform(1.1, 1.6), 2),
+            'nivel': round(random.uniform(10, 14), 1),
+        }
+
+    def actualizar_graficas_en_tiempo_real(self):
+        # Actualiza las gráficas de la ventana Home
+        filas = [self.main_layout.itemAt(i) for i in range(self.main_layout.count()) if isinstance(self.main_layout.itemAt(i), QHBoxLayout)]
+        if len(filas) >= 2:
+            # Primera fila: pH y Temperatura
+            row1 = self.main_layout.itemAt(0).layout()
+            if row1:
+                card_ph = row1.itemAt(0).widget()
+                card_temp = row1.itemAt(1).widget()
+                self._actualizar_card_grafica(card_ph, 'pH', self.series['ph'])
+                self._actualizar_card_grafica(card_temp, 'Temperatura (°C)', self.series['temperatura'])
+            # Segunda fila: CE y Nivel
+            row2 = self.main_layout.itemAt(1).layout()
+            if row2:
+                card_ce = row2.itemAt(0).widget()
+                card_nivel = row2.itemAt(1).widget()
+                self._actualizar_card_grafica(card_ce, 'CE (mS/cm)', self.series['ce'])
+                self._actualizar_card_grafica(card_nivel, 'Nivel (cm)', self.series['nivel'])
+
+    def _actualizar_card_grafica(self, card, titulo, datos):
+        # Busca el PlotCanvas dentro del card y actualiza la gráfica
+        for i in range(card.layout().count()):
+            widget = card.layout().itemAt(i).widget()
+            if isinstance(widget, PlotCanvas):
+                widget.plot(titulo, datos)
+                break
+
+    def obtener_datos_recientes(self):
+        # Obtiene los datos de la última hora (o simula si no hay BD)
+        datos = {'ph': [], 'temperatura': [], 'ce': [], 'nivel': []}
+        if obtener_datos_por_fecha:
+            hoy = datetime.now().strftime('%Y-%m-%d')
+            registros = obtener_datos_por_fecha(hoy)
+            if registros:
+                for sensor in datos.keys():
+                    valores = [float(r[2]) for r in registros if r[1].lower() == sensor]
+                    datos[sensor] = valores[-20:] if valores else [0]
+        # Si no hay datos, simula
+        if not any(datos.values()) or not obtener_datos_por_fecha:
+            datos = {
+                'ph': [round(random.uniform(5.8, 7.2), 2) for _ in range(20)],
+                'temperatura': [round(random.uniform(20, 25), 1) for _ in range(20)],
+                'ce': [round(random.uniform(1.1, 1.6), 2) for _ in range(20)],
+                'nivel': [round(random.uniform(10, 14), 1) for _ in range(20)],
+            }
+        return datos
 
 
 class PlotCanvas(FigureCanvas):
@@ -188,19 +287,27 @@ class PlotCanvas(FigureCanvas):
 
     def plot(self, title, data):
         self.axes.clear()
-        x = np.linspace(1, len(data), len(data))
+        x = np.arange(len(data))
         y = np.array(data)
-
-        xnew = np.linspace(x.min(), x.max(), 300)
-        spl = make_interp_spline(x, y, k=2)
-        y_smooth = spl(xnew)
-
+        if len(x) > 1:
+            xnew = np.linspace(x.min(), x.max(), 300)
+            spl = make_interp_spline(x, y, k=2)
+            y_smooth = spl(xnew)
+        else:
+            xnew, y_smooth = x, y
         self.axes.plot(xnew, y_smooth, color='#3498db', linewidth=3, solid_capstyle='round')
         self.axes.set_facecolor('#ffffff')
         self.axes.grid(True, linestyle='--', linewidth=0.5, alpha=0.6, color='#0000FF')
         [self.axes.spines[side].set_visible(False) for side in ['top', 'right']]
         self.axes.spines['left'].set_color('#cccccc')
         self.axes.spines['bottom'].set_color('#cccccc')
+        # Eje X: muestra tiempo relativo si hay suficientes datos
+        if len(x) > 1:
+            minutos = 8
+            labels = [f"-{(len(x)-i-1)*minutos}min" for i in range(len(x))]
+            step = max(1, len(x)//6)
+            self.axes.set_xticks(x[::step])
+            self.axes.set_xticklabels(labels[::step], rotation=30, fontsize=9)
         self.axes.set_xlabel("Tiempo", fontsize=12, color='#34495e', labelpad=15)
         self.axes.set_ylabel("Valor", fontsize=12, color='#34495e', labelpad=15)
         self.axes.tick_params(axis='both', labelsize=10, colors='#34495e')
