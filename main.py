@@ -9,14 +9,6 @@ from PyQt6.QtWidgets import (
 from PyQt6.uic import loadUi
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
-from Interfaz.sidebar import Sidebar
-from Interfaz.botonesheader import BotonesHeader
-from Interfaz.login import LoginForm
-from Interfaz.register import RegisterForm
-from Interfaz.configuracion import ConfiguracionWindow
-from Interfaz.usuario import UsuarioWindow
-from Interfaz.correo import CorreoWindow
-from Interfaz.notificaciones import NotificacionesWindow
 
 class LoginDialog(QDialog):
     def __init__(self):
@@ -48,6 +40,9 @@ class AuthWindow(QMainWindow):
         self.setFixedSize(400, 400)
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
+        # Importaciones bajo demanda
+        from Interfaz.login import LoginForm
+        from Interfaz.register import RegisterForm
         self.login_form = LoginForm(self)
         self.register_form = RegisterForm(self)
         self.stack.addWidget(self.login_form)     # índice 0
@@ -69,13 +64,16 @@ class MainWindow(QMainWindow):
         main_layout = QHBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        # Sidebar con lambdas para cambiar de vista
+        # Sidebar con importación bajo demanda
+        from Interfaz.sidebar import Sidebar
         sidebar_widget = Sidebar()
         main_layout.addWidget(sidebar_widget)
         content_widget = QWidget()
         content_layout = QVBoxLayout(content_widget)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
+        # BotonesHeader con importación bajo demanda
+        from Interfaz.botonesheader import BotonesHeader
         botones_widget = BotonesHeader()
         content_layout.addWidget(botones_widget)
         self.stack = QStackedWidget()
@@ -94,7 +92,7 @@ class MainWindow(QMainWindow):
         sidebar_widget._btns["Notificaciones"].clicked.connect(lambda: self._load_view(6))
 
     def _load_view(self, index):
-        # Lazy loading de vistas
+        # Lazy loading de vistas con importaciones bajo demanda
         if index not in self.views:
             if index == 0:
                 from Interfaz.home import HomeWindow
@@ -106,12 +104,16 @@ class MainWindow(QMainWindow):
                 from Interfaz.Calendar import CalendarWindow
                 view = CalendarWindow()
             elif index == 3:
+                from Interfaz.configuracion import ConfiguracionWindow
                 view = ConfiguracionWindow()
             elif index == 4:
+                from Interfaz.usuario import UsuarioWindow
                 view = UsuarioWindow()
             elif index == 5:
+                from Interfaz.correo import CorreoWindow
                 view = CorreoWindow()
             elif index == 6:
+                from Interfaz.notificaciones import NotificacionesWindow
                 view = NotificacionesWindow()
             else:
                 return
@@ -120,13 +122,11 @@ class MainWindow(QMainWindow):
         self.stack.setCurrentWidget(self.views[index])
 
     def on_sidebar_toggled(self, expanded):
-    # Aquí podrías hacer que el contenido se expanda o se ajuste
         if expanded:
             print("Sidebar expandida")
         else:
             print("Sidebar retraída")
-    
-    # Aquí puedes forzar un resize si es necesario
+        # Aquí podrías hacer que el contenido se expanda o se ajuste
         self.adjustSize()
 
     def _on_sidebar_toggled_with_message(self, expanded):
@@ -146,7 +146,6 @@ class MainWindow(QMainWindow):
         layout.addWidget(label)
         return page
 
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     # --- Cargar Hoja de Estilos ---
@@ -155,15 +154,13 @@ if __name__ == "__main__":
         qss_relative_path = os.path.join("access", "qss", "styles.qss")
         qss_path = os.path.abspath(os.path.join(script_dir, qss_relative_path))
         qss_file = QFile(qss_path)
-        if not qss_file.exists():
-            print(f"ERROR: El archivo de hoja de estilos NO EXISTE en la ruta: {qss_path}")
-        elif qss_file.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text):
+        if qss_file.exists() and qss_file.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text):
             stream = QTextStream(qss_file)
             app.setStyleSheet(stream.readAll())
             qss_file.close()
             print(f"Hoja de estilos '{qss_path}' cargada correctamente.")
         else:
-            print(f"ERROR: No se pudo abrir la hoja de estilos '{qss_path}'. Razón: {qss_file.errorString()}")
+            print(f"ERROR: El archivo de hoja de estilos NO EXISTE o no se pudo abrir en la ruta: {qss_path}")
     except Exception as e:
         print(f"Excepción durante la carga de la hoja de estilos: {e}")
     # --- Fin Carga de Estilos ---
