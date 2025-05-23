@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UsuarioWindow</class>
+ <widget class="QWidget" name="UsuarioWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Perfil de Usuario</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelTitulo">
+     <property name="text">
+      <string>Mi Perfil</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 20px; font-weight: bold; margin: 10px 0 18px 0; color: #1E4620;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frameDatos">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="styleSheet">
+      <string>QFrame { background: #f5f5f5; border-radius: 12px; padding: 18px; border: 1px solid #C8E6C9; }</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutDatos">
+      <item>
+       <widget class="QLabel" name="labelNombre">
+        <property name="text">
+         <string>Nombre de usuario</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 14px; color: #388e3c; font-weight: 500;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEditNombre">
+        <property name="placeholderText">
+         <string>Ingresa tu nombre</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; padding: 7px; border-radius: 6px; border: 1px solid #bdbdbd; background: #fff;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelCorreo">
+        <property name="text">
+         <string>Correo electrónico</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 14px; color: #388e3c; font-weight: 500;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEditCorreo">
+        <property name="placeholderText">
+         <string>Ingresa tu correo</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; padding: 7px; border-radius: 6px; border: 1px solid #bdbdbd; background: #fff;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelPass">
+        <property name="text">
+         <string>Contraseña</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 14px; color: #388e3c; font-weight: 500;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEditPass">
+        <property name="placeholderText">
+         <string>Dejar en blanco para no cambiar</string>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; padding: 7px; border-radius: 6px; border: 1px solid #bdbdbd; background: #fff;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>30</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnGuardar">
+     <property name="text">
+      <string>Guardar Cambios</string>
+     </property>
+     <property name="styleSheet">
+      <string>background-color: #4CAF50; color: white; font-size: 16px; border-radius: 8px; padding: 10px 0; font-weight: bold; margin-top: 10px;</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
