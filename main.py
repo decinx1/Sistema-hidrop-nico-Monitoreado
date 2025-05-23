@@ -13,6 +13,10 @@ from Interfaz.sidebar import Sidebar
 from Interfaz.botonesheader import BotonesHeader
 from Interfaz.login import LoginForm
 from Interfaz.register import RegisterForm
+from Interfaz.configuracion import ConfiguracionWindow
+from Interfaz.usuario import UsuarioWindow
+from Interfaz.correo import CorreoWindow
+from Interfaz.notificaciones import NotificacionesWindow
 
 class LoginDialog(QDialog):
     def __init__(self):
@@ -65,12 +69,13 @@ class MainWindow(QMainWindow):
         main_layout = QHBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
+        # Sidebar con lambdas para cambiar de vista
+        sidebar_widget = Sidebar()
+        main_layout.addWidget(sidebar_widget)
         content_widget = QWidget()
         content_layout = QVBoxLayout(content_widget)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
-        sidebar_widget = Sidebar()
-        main_layout.addWidget(sidebar_widget)
         botones_widget = BotonesHeader()
         content_layout.addWidget(botones_widget)
         self.stack = QStackedWidget()
@@ -81,6 +86,12 @@ class MainWindow(QMainWindow):
         botones_widget.btn_datos.clicked.connect(lambda: self._load_view(1))
         botones_widget.btn_historial.clicked.connect(lambda: self._load_view(2))
         main_layout.addWidget(content_widget)
+        # Conectar Sidebar a las vistas
+        sidebar_widget._btns["Home"].clicked.connect(lambda: self._load_view(0))
+        sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._load_view(3))
+        sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._load_view(4))
+        sidebar_widget._btns["Correo"].clicked.connect(lambda: self._load_view(5))
+        sidebar_widget._btns["Notificaciones"].clicked.connect(lambda: self._load_view(6))
 
     def _load_view(self, index):
         # Lazy loading de vistas
@@ -94,6 +105,14 @@ class MainWindow(QMainWindow):
             elif index == 2:
                 from Interfaz.Calendar import CalendarWindow
                 view = CalendarWindow()
+            elif index == 3:
+                view = ConfiguracionWindow()
+            elif index == 4:
+                view = UsuarioWindow()
+            elif index == 5:
+                view = CorreoWindow()
+            elif index == 6:
+                view = NotificacionesWindow()
             else:
                 return
             self.views[index] = view
