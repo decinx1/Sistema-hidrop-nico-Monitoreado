@@ -41,13 +41,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_correo">
-        <property name="placeholderText">
-         <string>Correo electrónico</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayoutTelefono">
         <item>
          <widget class="QComboBox" name="comboBox_lada"/>

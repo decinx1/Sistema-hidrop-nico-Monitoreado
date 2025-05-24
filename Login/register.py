@@ -87,7 +87,6 @@ class RegisterForm(QWidget):
 
     def registrar(self):
         nombre = self.lineEdit_nombre.text()
-        correo = self.lineEdit_correo.text()
         lada = self.comboBox_lada.currentText().split()[0]
         telefono = self.lineEdit_telefono.text()
         telefono_completo = f"{lada}{telefono}"
@@ -98,12 +97,12 @@ class RegisterForm(QWidget):
             self.label_resultado.setStyleSheet("color: red;")
             return
 
-        if not nombre or not correo or not telefono or not contraseña:
+        if not nombre or not telefono or not contraseña:
             self.label_resultado.setText("Todos los campos son obligatorios")
             self.label_resultado.setStyleSheet("color: red;")
             return
 
-        if registrar_usuario(nombre, correo, telefono_completo, contraseña):
+        if registrar_usuario(nombre, telefono_completo, contraseña):
             self.label_resultado.setText("Usuario registrado correctamente")
             self.label_resultado.setStyleSheet("color: green;")
             self.limpiar()
@@ -115,7 +114,6 @@ class RegisterForm(QWidget):
 
     def limpiar(self):
         self.lineEdit_nombre.clear()
-        self.lineEdit_correo.clear()
         self.lineEdit_telefono.clear()
         self.lineEdit_contraseña.clear()
 
