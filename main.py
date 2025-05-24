@@ -116,12 +116,6 @@ class MainWindow(QMainWindow):
             elif index == 4:
                 from Interfaz.usuario import UsuarioWindow
                 view = UsuarioWindow()
-            elif index == 5:
-                from Interfaz.correo import CorreoWindow
-                view = CorreoWindow()
-            elif index == 6:
-                from Interfaz.notificaciones import NotificacionesWindow
-                view = NotificacionesWindow()
             else:
                 return
             self.views[index] = view
