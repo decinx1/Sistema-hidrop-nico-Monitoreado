@@ -17,7 +17,7 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="styleSheet">
-      <string notr="true">background-color: #FFFFFF; border-radius: 10px; padding: 8px;</string>
+      <string notr="true">background-color: #FFFFFF; border-radius: 15px; padding: 5px;</string>
      </property>
      <layout class="QVBoxLayout" name="frameLayout">
       <item>
@@ -60,6 +60,33 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_enviar_codigo">
+        <property name="text">
+         <string>Enviar código</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #16A34A; color: white; border-radius: 5px; padding: 6px;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_codigo_verificacion">
+        <property name="placeholderText">
+         <string>Código de verificación SMS</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_verificar_codigo">
+        <property name="text">
+         <string>Verificar código</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #16A34A; color: white; border-radius: 5px; padding: 6px;</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit_contraseña">
