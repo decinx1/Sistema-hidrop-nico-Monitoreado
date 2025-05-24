@@ -89,9 +89,7 @@ class MainWindow(QMainWindow):
         sidebar_widget._btns["Home"].clicked.connect(lambda: self._show_view_with_header(0))
         sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._show_view_without_header(3))
         sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._show_view_without_header(4))
-        sidebar_widget._btns["Correo"].clicked.connect(lambda: self._show_view_without_header(5))
-        sidebar_widget._btns["Notificaciones"].clicked.connect(lambda: self._show_view_without_header(6))
-
+        
     def _show_view_with_header(self, index):
         self.botones_widget.show()
         self._load_view(index)

@@ -33,8 +33,6 @@ class Sidebar(QWidget):
             ("Home", "home.png"),
             ("Configuración", "config.png"),
             ("Usuario", "Usuario.png"),
-            ("Correo", "Correoo.png"),
-            ("Notificaciones", "notii.png"),
         ]
 
         self._w_exp, self._w_col = expanded_width, collapsed_width
