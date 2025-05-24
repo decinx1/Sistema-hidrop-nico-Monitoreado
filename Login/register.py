@@ -2,6 +2,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QWidget
 from PyQt6.uic import loadUi
 from ConexionDB.usuarios import registrar_usuario
+from tokenSMS import enviar_codigo_verificacion, verificar_codigo
 
 class RegisterForm(QWidget):
     lada_max_digitos = {
@@ -39,6 +40,9 @@ class RegisterForm(QWidget):
         self.comboBox_lada.addItem(QIcon("flags/it.svg"), "+39 Italia")
         self.comboBox_lada.currentIndexChanged.connect(self.actualizar_max_digitos)
         self.actualizar_max_digitos()
+        self.codigo_verificado = False
+        self.pushButton_enviar_codigo.clicked.connect(self.enviar_codigo)
+        self.pushButton_verificar_codigo.clicked.connect(self.verificar_codigo)
         self.pushButton_registrar.clicked.connect(self.registrar)
         self.btn_to_login.clicked.connect(self.go_to_login)
 
@@ -47,6 +51,40 @@ class RegisterForm(QWidget):
         max_digitos = self.lada_max_digitos.get(lada, 10)
         self.lineEdit_telefono.setMaxLength(max_digitos)
 
+    def enviar_codigo(self):
+        lada = self.comboBox_lada.currentText().split()[0]
+        telefono = self.lineEdit_telefono.text()
+        telefono_completo = f"{lada}{telefono}"
+        self.codigo_verificado = False
+        if not telefono:
+            self.label_resultado.setText("Ingresa el teléfono")
+            self.label_resultado.setStyleSheet("color: red;")
+            self.label_resultado.setVisible(True)
+            return
+        try:
+            enviar_codigo_verificacion(telefono_completo)
+            self.label_resultado.setText("Código enviado por SMS")
+            self.label_resultado.setStyleSheet("color: green;")
+            self.label_resultado.setVisible(True)
+        except Exception:
+            self.label_resultado.setText("Error al enviar SMS")
+            self.label_resultado.setStyleSheet("color: red;")
+            self.label_resultado.setVisible(True)
+
+    def verificar_codigo(self):
+        lada = self.comboBox_lada.currentText().split()[0]
+        telefono = self.lineEdit_telefono.text()
+        telefono_completo = f"{lada}{telefono}"
+        codigo = self.lineEdit_codigo_verificacion.text()
+        if verificar_codigo(telefono_completo, codigo):
+            self.codigo_verificado = True
+            self.label_resultado.setText("Código verificado correctamente")
+            self.label_resultado.setStyleSheet("color: green;")
+        else:
+            self.codigo_verificado = False
+            self.label_resultado.setText("Código incorrecto")
+            self.label_resultado.setStyleSheet("color: red;")
+
     def registrar(self):
         nombre = self.lineEdit_nombre.text()
         correo = self.lineEdit_correo.text()
@@ -54,6 +92,11 @@ class RegisterForm(QWidget):
         telefono = self.lineEdit_telefono.text()
         telefono_completo = f"{lada}{telefono}"
         contraseña = self.lineEdit_contraseña.text()
+
+        if not self.codigo_verificado:
+            self.label_resultado.setText("Verifica el código antes de registrar")
+            self.label_resultado.setStyleSheet("color: red;")
+            return
 
         if not nombre or not correo or not telefono or not contraseña:
             self.label_resultado.setText("Todos los campos son obligatorios")
@@ -67,6 +110,8 @@ class RegisterForm(QWidget):
         else:
             self.label_resultado.setText("Error al registrar usuario")
             self.label_resultado.setStyleSheet("color: red;")
+
+
 
     def limpiar(self):
         self.lineEdit_nombre.clear()
