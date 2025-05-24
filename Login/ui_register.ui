@@ -17,7 +17,7 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="styleSheet">
-      <string notr="true">background-color: #FFFFFF; border-radius: 10px; padding: 15px;</string>
+      <string notr="true">background-color: #FFFFFF; border-radius: 10px; padding: 8px;</string>
      </property>
      <layout class="QVBoxLayout" name="frameLayout">
       <item>
@@ -48,11 +48,18 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_telefono">
-        <property name="placeholderText">
-         <string>Número de teléfono</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayoutTelefono">
+        <item>
+         <widget class="QComboBox" name="comboBox_lada"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_telefono">
+          <property name="placeholderText">
+           <string>Número de teléfono</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit_contraseña">

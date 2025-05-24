@@ -3,7 +3,7 @@ from datetime import datetime
 
 def conectar_bd():
     return pymysql.connect(
-        host='192.168.136.38',
+        host='192.168.1.69',
         user='sensorrasp',
         password='Rasp1234!',
         database='hydroponia',
