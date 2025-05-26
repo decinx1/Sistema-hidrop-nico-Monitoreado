@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QScrollArea, QFrame, QSizePolicy, QToolTip
 )
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal, QObject
 from PyQt6.QtGui import QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -29,6 +29,32 @@ class HoverLabel(QLabel):
         super().enterEvent(event)
 
 
+class DataFetchWorker(QObject):
+    data_ready = pyqtSignal(dict)
+    def __init__(self, obtener_datos_por_fecha):
+        super().__init__()
+        self.obtener_datos_por_fecha = obtener_datos_por_fecha
+        self._running = True
+
+    def stop(self):
+        self._running = False
+
+    def fetch_latest(self):
+        # Llama a la base de datos y emite los datos
+        datos = {'ph': [], 'temperatura': [], 'ce': [], 'nivel': []}
+        if self.obtener_datos_por_fecha:
+            from datetime import datetime
+            hoy = datetime.now().strftime('%Y-%m-%d')
+            try:
+                registros = self.obtener_datos_por_fecha(hoy)
+            except Exception:
+                registros = None
+            if registros:
+                for sensor in datos.keys():
+                    valores = [float(r[2]) for r in registros if r[1].lower() == sensor]
+                    datos[sensor] = valores[-20:] if valores else []
+        self.data_ready.emit(datos)
+
 class HomeWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -50,7 +76,10 @@ class HomeWindow(QWidget):
         # ---
 
         # --- NUEVO: Inicializa series en memoria (FIFO) ---
-        self.series = self.inicializar_series()
+        if not self.simulando:
+            self.series = self.inicializar_series()
+        else:
+            self.series = {'ph': [], 'temperatura': [], 'ce': [], 'nivel': []}
 
         # Secciones de gráficos con tooltips personalizados
         self.add_graphs_row(
@@ -74,11 +103,23 @@ class HomeWindow(QWidget):
 
         # Sección del medidor de pH
         self.add_section_title("Medidor de pH Actual")
-        self.add_ph_gauge(self.series['ph'][-1])
+        ph_value = self.series['ph'][-1] if self.series['ph'] else 7.0  # Valor neutro si no hay datos
+        self.add_ph_gauge(ph_value)
+
+        # --- NUEVO: Hilo para consultas a la BD ---
+        self.worker_thread = None
+        self.worker = None
+        if obtener_datos_por_fecha:
+            self.worker_thread = QThread()
+            self.worker = DataFetchWorker(obtener_datos_por_fecha)
+            self.worker.moveToThread(self.worker_thread)
+            self.worker.data_ready.connect(self.on_data_ready)
+            self.worker_thread.start()
+        # ---
 
         # --- Un solo temporizador para actualizar todo ---
         self.timer = QTimer()
-        self.timer.timeout.connect(self.actualizar_en_tiempo_real)
+        self.timer.timeout.connect(self.solicitar_actualizacion_datos)
         self.timer.start(8000)  # Cada 8 segundos
 
         # Configuración final del layout
@@ -157,6 +198,9 @@ class HomeWindow(QWidget):
         self.main_layout.addWidget(self.gauge_card)
 
     def create_gauge_canvas(self, ph_value):
+        # Si ph_value es None, usa 7.0
+        if ph_value is None:
+            ph_value = 7.0
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(6, 3))
         ax.set_theta_zero_location("N")
         ax.set_theta_direction(-1)
@@ -208,11 +252,51 @@ class HomeWindow(QWidget):
             self.series[k].append(nuevo[k])
             if len(self.series[k]) > 20:
                 self.series[k].pop(0)
+        # Evita error si no hay datos válidos
+        ph_value = self.series['ph'][-1] if self.series['ph'] and self.series['ph'][-1] is not None else 7.0
         self.actualizar_graficas_en_tiempo_real()
-        self.update_ph_gauge(self.series['ph'][-1])
+        self.update_ph_gauge(ph_value)
+
+    def closeEvent(self, event):
+        # Detener el hilo de la base de datos al cerrar
+        if self.worker_thread and self.worker:
+            self.worker.stop()
+            self.worker_thread.quit()
+            self.worker_thread.wait()
+        super().closeEvent(event)
+
+    def solicitar_actualizacion_datos(self):
+        # Llama al worker en el hilo secundario
+        if self.worker:
+            QTimer.singleShot(0, self.worker.fetch_latest)
+        else:
+            self.actualizar_en_tiempo_real()  # fallback si no hay worker
+
+    def on_data_ready(self, datos):
+        # Actualiza las series y la UI con los datos recibidos del hilo
+        for k in datos:
+            if k in self.series:
+                self.series[k].append(datos[k][-1] if datos[k] else None)
+                if len(self.series[k]) > 20:
+                    self.series[k].pop(0)
+        ph_value = self.series['ph'][-1] if self.series['ph'] and self.series['ph'][-1] is not None else 7.0
+        self.actualizar_graficas_en_tiempo_real()
+        self.update_ph_gauge(ph_value)
+
+    def obtener_datos_recientes(self):
+        # Obtiene los datos de la última hora (solo reales, sin simulación)
+        datos = {'ph': [], 'temperatura': [], 'ce': [], 'nivel': []}
+        if obtener_datos_por_fecha:
+            hoy = datetime.now().strftime('%Y-%m-%d')
+            registros = obtener_datos_por_fecha(hoy)
+            if registros:
+                for sensor in datos.keys():
+                    valores = [float(r[2]) for r in registros if r[1].lower() == sensor]
+                    datos[sensor] = valores[-20:] if valores else []
+        return datos
 
     def obtener_nuevo_dato(self):
-        # Si hay BD, trae solo el último dato; si no, simula
+        # Solo datos reales, sin simulación
         if obtener_datos_por_fecha:
             hoy = datetime.now().strftime('%Y-%m-%d')
             registros = obtener_datos_por_fecha(hoy)
@@ -220,15 +304,9 @@ class HomeWindow(QWidget):
                 nuevo = {}
                 for sensor in self.series.keys():
                     valores = [float(r[2]) for r in registros if r[1].lower() == sensor]
-                    nuevo[sensor] = valores[-1] if valores else self.series[sensor][-1]
+                    nuevo[sensor] = valores[-1] if valores else None
                 return nuevo
-        # Simulación
-        return {
-            'ph': round(random.uniform(5.8, 7.2), 2),
-            'temperatura': round(random.uniform(20, 25), 1),
-            'ce': round(random.uniform(1.1, 1.6), 2),
-            'nivel': round(random.uniform(10, 14), 1),
-        }
+        return {k: None for k in self.series.keys()}
 
     def actualizar_graficas_en_tiempo_real(self):
         # Actualiza las gráficas de la ventana Home
@@ -258,7 +336,7 @@ class HomeWindow(QWidget):
                 break
 
     def obtener_datos_recientes(self):
-        # Obtiene los datos de la última hora (o simula si no hay BD)
+        # Obtiene los datos de la última hora (solo reales, sin simulación)
         datos = {'ph': [], 'temperatura': [], 'ce': [], 'nivel': []}
         if obtener_datos_por_fecha:
             hoy = datetime.now().strftime('%Y-%m-%d')
@@ -266,15 +344,7 @@ class HomeWindow(QWidget):
             if registros:
                 for sensor in datos.keys():
                     valores = [float(r[2]) for r in registros if r[1].lower() == sensor]
-                    datos[sensor] = valores[-20:] if valores else [0]
-        # Si no hay datos, simula
-        if not any(datos.values()) or not obtener_datos_por_fecha:
-            datos = {
-                'ph': [round(random.uniform(5.8, 7.2), 2) for _ in range(20)],
-                'temperatura': [round(random.uniform(20, 25), 1) for _ in range(20)],
-                'ce': [round(random.uniform(1.1, 1.6), 2) for _ in range(20)],
-                'nivel': [round(random.uniform(10, 14), 1) for _ in range(20)],
-            }
+                    datos[sensor] = valores[-20:] if valores else []
         return datos
 
 
@@ -287,15 +357,25 @@ class PlotCanvas(FigureCanvas):
 
     def plot(self, title, data):
         self.axes.clear()
-        x = np.arange(len(data))
-        y = np.array(data)
+        # Filtrar datos inválidos (None, nan, inf) para evitar crash en interpolación
+        if data:
+            x = np.arange(len(data))
+            y = np.array(data, dtype=float)
+            # Filtra nan e inf
+            mask = np.isfinite(y)
+            x = x[mask]
+            y = y[mask]
+        else:
+            x = np.array([])
+            y = np.array([])
         if len(x) > 1:
             xnew = np.linspace(x.min(), x.max(), 300)
             spl = make_interp_spline(x, y, k=2)
             y_smooth = spl(xnew)
         else:
             xnew, y_smooth = x, y
-        self.axes.plot(xnew, y_smooth, color='#3498db', linewidth=3, solid_capstyle='round')
+        if len(x) > 0:
+            self.axes.plot(xnew, y_smooth, color='#3498db', linewidth=3, solid_capstyle='round')
         self.axes.set_facecolor('#ffffff')
         self.axes.grid(True, linestyle='--', linewidth=0.5, alpha=0.6, color='#0000FF')
         [self.axes.spines[side].set_visible(False) for side in ['top', 'right']]
