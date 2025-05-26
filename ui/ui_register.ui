@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RegisterForm</class>
+ <widget class="QWidget" name="RegisterForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #16A34A;</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">background-color: #FFFFFF; border-radius: 10px; padding: 15px;</string>
+     </property>
+     <layout class="QVBoxLayout" name="frameLayout">
+      <item>
+       <widget class="QLabel" name="labelTitle">
+        <property name="text">
+         <string>Registro de Usuario</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 18pt; font-weight: bold; color: #16A34A;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_nombre">
+        <property name="placeholderText">
+         <string>Nombre de usuario</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_correo">
+        <property name="placeholderText">
+         <string>Correo electrónico</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_telefono">
+        <property name="placeholderText">
+         <string>Número de teléfono</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_contraseña">
+        <property name="placeholderText">
+         <string>Contraseña</string>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_confirmar_contraseña">
+        <property name="placeholderText">
+         <string>Confirmar contraseña</string>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_registrar">
+        <property name="text">
+         <string>Registrar</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #0AACEB; color: white; border-radius: 5px; padding: 6px;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_resultado">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold; color: red;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_to_login">
+        <property name="text">
+         <string>¿Ya tienes cuenta? Inicia sesión</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: transparent; color: #0AACEB; border: none; text-decoration: underline;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

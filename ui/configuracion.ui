@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConfiguracionWindow</class>
+ <widget class="QWidget" name="ConfiguracionWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>440</width>
+    <height>420</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Configuración</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelTitulo">
+     <property name="text">
+      <string>Configuración del Sistema</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 22px; font-weight: bold; color: #1976D2; margin: 18px 0 18px 0;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <layout class="QVBoxLayout" name="scrollLayout">
+       <item>
+        <widget class="QFrame" name="frameConfig">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="styleSheet">
+          <string>QFrame { background: #f5faff; border-radius: 16px; border: 1px solid #90caf9; padding: 18px; }</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayoutFrame">
+          <item>
+           <widget class="QGroupBox" name="groupResolucion">
+            <property name="title">
+             <string>Resolución de pantalla</string>
+            </property>
+            <property name="styleSheet">
+             <string>QGroupBox { font-size: 15px; font-weight: 600; color: #1976D2; border: none; margin-top: 10px; }</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayoutResolucion">
+             <item>
+              <widget class="QComboBox" name="comboResolucion">
+               <property name="styleSheet">
+                <string>font-size: 15px; padding: 6px; border-radius: 6px; border: 1px solid #bdbdbd; background: #fff;</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>800x600</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>1024x768</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>1280x720</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>1920x1080</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupTema">
+            <property name="title">
+             <string>Tema</string>
+            </property>
+            <property name="styleSheet">
+             <string>QGroupBox { font-size: 15px; font-weight: 600; color: #1976D2; border: none; margin-top: 10px; }</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayoutTema">
+             <item>
+              <widget class="QRadioButton" name="radioClaro">
+               <property name="text">
+                <string>Claro</string>
+               </property>
+               <property name="styleSheet">
+                <string>font-size: 15px; color: #1976D2;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioOscuro">
+               <property name="text">
+                <string>Oscuro</string>
+               </property>
+               <property name="styleSheet">
+                <string>font-size: 15px; color: #1976D2;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupNotificaciones">
+            <property name="title">
+             <string>Notificaciones</string>
+            </property>
+            <property name="styleSheet">
+             <string>QGroupBox { font-size: 15px; font-weight: 600; color: #1976D2; border: none; margin-top: 10px; }</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayoutNotificaciones">
+             <item>
+              <widget class="QCheckBox" name="checkNotificaciones">
+               <property name="text">
+                <string>Activar notificaciones</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <property name="styleSheet">
+                <string>font-size: 15px; color: #1976D2;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnGuardar">
+     <property name="text">
+      <string>Guardar Cambios</string>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string>font-size: 16px; font-weight: bold; color: white; background: #1976D2; border-radius: 8px; padding: 10px 0; margin-top: 18px;</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

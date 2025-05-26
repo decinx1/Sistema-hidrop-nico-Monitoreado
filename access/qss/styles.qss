@@ -1,0 +1,349 @@
+/* styles.qss */
+
+/* --- Estilos Generales para Ventanas --- */
+QMainWindow, QDialog {
+    background-color: #f4f4f9; /* Un gris muy claro para el fondo */
+    font-family: "Segoe UI", Arial, sans-serif; /* Fuente más moderna */
+    color: #333333; /* Color de texto principal */
+}
+
+/* --- Estilos para QLabel --- */
+QLabel {
+    font-size: 13px;
+    color: #333333;
+    padding: 4px;
+}
+
+QLabel#fecha_label_dialog { /* ID para la etiqueta de fecha en el diálogo */
+    font-size: 20px;
+    font-weight: bold;
+    color: #005A9C; /* Azul oscuro */
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ddeeee;
+    padding-bottom: 8px;
+}
+
+QLabel#mensaje_no_datos { /* ID para el mensaje de "no hay datos" */
+    font-size: 15px;
+    font-style: italic;
+    color: #777777;
+    padding: 25px;
+}
+
+QLabel#pagina_label { /* Etiqueta "Página X de Y" */
+    font-size: 12px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #555555;
+}
+
+/* Para las etiquetas de "Desde:", "Hasta:", "Sensor:", "Mostrar:" */
+QWidget > QHBoxLayout > QLabel, QWidget > QVBoxLayout > QLabel {
+    font-weight: normal;
+    font-size: 13px;
+    margin-right: 2px; /* Pequeño espacio antes del control */
+}
+
+
+/* --- Estilos para QPushButton --- */
+QPushButton {
+    background-color: #0078D4; /* Azul primario */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 4px;
+    min-height: 28px;
+}
+
+QPushButton:hover {
+    background-color: #005A9C; /* Azul más oscuro al pasar el mouse */
+}
+
+QPushButton:pressed {
+    background-color: #004C80; /* Azul aún más oscuro al presionar */
+}
+
+QPushButton:disabled {
+    background-color: #BDBDBD; /* Gris para deshabilitado */
+    color: #757575;
+}
+
+/* Botones de navegación del calendario (anterior/siguiente mes) */
+QPushButton#prev_btn, QPushButton#next_btn {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 6px 10px;
+    min-width: 45px;
+    background-color: #607D8B; /* Gris azulado */
+}
+QPushButton#prev_btn:hover, QPushButton#next_btn:hover {
+    background-color: #455A64; /* Más oscuro */
+}
+
+/* Botones de los días del calendario */
+QPushButton.day_button_base { /* Clase base para todos los días */
+    font-size: 13px;
+    padding: 0px; /* El tamaño se controla con min-size y sizePolicy */
+    border: 1px solid #DFDFDF;
+    background-color: #FFFFFF;
+    color: #333333;
+    border-radius: 3px;
+    font-weight: normal;
+}
+
+QPushButton.day_button_base:hover {
+    background-color: #E0F7FA; /* Celeste claro al pasar el mouse */
+    border: 1px solid #0078D4;
+}
+
+QPushButton.day_button_base:disabled { /* Días de otro mes o futuros */
+    background-color: #f8f8f8;
+    color: #AAAAAA;
+    border: 1px solid #EEEEEE;
+}
+QPushButton.day_button_base:disabled:hover {
+    background-color: #f8f8f8; /* Mantiene el color al pasar el mouse si está deshabilitado */
+    border: 1px solid #EEEEEE;
+}
+
+
+QPushButton#day_button_today { /* ID para el botón del día actual */
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    font-weight: bold;
+    border: 1px solid #388E3C;
+}
+QPushButton#day_button_today:hover {
+    background-color: #388E3C;
+}
+
+QPushButton#day_button_past { /* ID para días pasados (con datos) */
+    background-color: #E3F2FD; /* Azul muy claro */
+    color: #0D47A1; /* Azul oscuro para el texto */
+    /* font-weight: bold; */ /* Opcional */
+}
+QPushButton#day_button_past:hover {
+    background-color: #BBDEFB;
+    border: 1px solid #0078D4;
+}
+
+
+/* --- Estilos para QComboBox --- */
+QComboBox {
+    padding: 6px 8px;
+    border: 1px solid #ABADB3;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 13px;
+    min-height: 20px; /* Altura mínima consistente */
+    selection-background-color: #0078D4; /* Color de fondo del item seleccionado en el desplegable */
+    selection-color: white; /* Color de texto del item seleccionado en el desplegable */
+}
+
+QComboBox:hover {
+    border: 1px solid #0078D4;
+}
+
+QComboBox:focus {
+    border: 1px solid #005A9C;
+    /* box-shadow: 0 0 3px #005A9C;  No soportado directamente, pero la idea es resaltar */
+}
+
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 22px;
+    border-left-width: 1px;
+    border-left-color: #ABADB3;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background-color: #f0f0f0;
+}
+QComboBox::drop-down:hover {
+    background-color: #e0e0e0;
+}
+
+QComboBox::down-arrow {
+    /* Para una flecha simple sin imagen: usa un carácter Unicode o dibuja con bordes */
+    /* Aquí un ejemplo con un carácter (puede no verse igual en todos lados) */
+    /* Otra opción es usar una imagen SVG o PNG */
+    image: url(icon_arrow_down.svg); /* Necesitarás un SVG o PNG */
+    width: 10px;
+    height: 10px;
+}
+QComboBox::down-arrow:on { /* Cuando el desplegable está abierto */
+    /* image: url(icon_arrow_up.svg); */
+}
+
+
+QComboBox QAbstractItemView { /* Estilo para la lista desplegable */
+    border: 1px solid #ABADB3;
+    background-color: white;
+    color: #333333;
+    padding: 4px;
+    outline: none; /* Quita el borde de foco en el desplegable */
+}
+
+/* --- Estilos para QSpinBox y QTimeEdit --- */
+QSpinBox, QTimeEdit {
+    padding: 6px 8px;
+    border: 1px solid #ABADB3;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 13px;
+    min-height: 20px;
+}
+QSpinBox:hover, QTimeEdit:hover {
+    border: 1px solid #0078D4;
+}
+QSpinBox:focus, QTimeEdit:focus {
+    border: 1px solid #005A9C;
+}
+
+
+QSpinBox::up-button, QSpinBox::down-button,
+QTimeEdit::up-button, QTimeEdit::down-button {
+    subcontrol-origin: border;
+    width: 18px;
+    border-left: 1px solid #ABADB3;
+    background-color: #f0f0f0;
+    border-radius: 0px; /* Para que se unan al borde */
+}
+QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+QTimeEdit::up-button:hover, QTimeEdit::down-button:hover {
+    background-color: #e0e0e0;
+}
+
+QSpinBox::up-button, QTimeEdit::up-button {
+    subcontrol-position: top right;
+    border-top-right-radius: 2px; /* Redondea solo la esquina superior del botón */
+}
+
+QSpinBox::down-button, QTimeEdit::down-button {
+    subcontrol-position: bottom right;
+    border-bottom-right-radius: 2px; /* Redondea solo la esquina inferior del botón */
+}
+
+QSpinBox::up-arrow, QTimeEdit::up-arrow {
+    /* image: url(icon_arrow_up_small.svg); */
+    /* Alternativa con bordes si no tienes imagen */
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid #555;
+    width: 0px;
+    height: 0px;
+    margin: 0 auto; /* Centra la flecha */
+}
+
+QSpinBox::down-arrow, QTimeEdit::down-arrow {
+    /* image: url(icon_arrow_down_small.svg); */
+    /* Alternativa con bordes si no tienes imagen */
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #555;
+    width: 0px;
+    height: 0px;
+    margin: 0 auto; /* Centra la flecha */
+}
+
+
+/* --- Estilos para QTableWidget --- */
+QTableWidget {
+    border: 1px solid #C9C9C9;
+    gridline-color: #DCDCDC;
+    font-size: 13px;
+    background-color: #FFFFFF;
+    alternate-background-color: #F7F9FC; /* Color para filas alternas */
+    selection-background-color: #AED6F1; /* Azul claro para la selección */
+    selection-color: #1C1C1C; /* Color de texto oscuro para la selección */
+}
+QTableWidget:focus {
+    border: 1px solid #0078D4;
+}
+
+QTableWidget::item {
+    padding: 7px 5px; /* Más padding vertical */
+    border-bottom: 1px solid #EAEAEA; /* Línea sutil entre filas */
+    border-right: 1px dotted #EAEAEA; /* Línea punteada sutil entre columnas */
+}
+QTableWidget::item:selected {
+    background-color: #0078D4; /* Azul primario para fondo de celda seleccionada */
+    color: white; /* Texto blanco para celda seleccionada */
+}
+
+
+QHeaderView::section {
+    background-color: #E8E8E8; /* Gris claro para el encabezado */
+    color: #222222; /* Texto oscuro */
+    padding: 7px 5px;
+    border: none; /* Quitar bordes individuales de sección */
+    border-bottom: 1px solid #B0B0B0; /* Línea inferior sólida */
+    font-size: 13px;
+    font-weight: bold;
+}
+
+QHeaderView::section:horizontal {
+    border-right: 1px solid #D0D0D0; /* Separador vertical entre encabezados */
+}
+QHeaderView::section:horizontal:last {
+    border-right: none; /* No poner borde en la última sección */
+}
+
+QHeaderView::section:vertical {
+    border-bottom: 1px solid #D0D0D0; /* Separador horizontal */
+}
+QHeaderView::section:vertical:last {
+    border-bottom: none;
+}
+
+/* --- Contenedores Específicos (opcional) --- */
+QWidget#header_widget { /* Contenedor del encabezado del calendario */
+    background-color: #E1E8ED; /* Azul grisáceo muy claro */
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+QWidget#days_header_widget { /* Contenedor de los nombres de los días de la semana */
+    background-color: #F5F5F5;
+    padding: 6px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+QWidget#days_header_widget QLabel {
+    font-weight: bold;
+    color: #555;
+}
+
+/* Clase para los layouts de filtros y paginación en DayDialog */
+.controls_layout QWidget { /* Para que los márgenes no se apliquen a los widgets internos sino al layout */
+    margin-right: 8px;
+}
+.controls_layout QLabel {
+    margin-right: 3px;
+}
+
+/* --- Botones Header personalizados --- */
+QPushButton#btnHome, QPushButton#btnDatos, QPushButton#btnHistorial {
+    background-color: #0078D4; /* Azul primario */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 13px;
+    min-height: 28px;
+    font-weight: normal;
+    /* transition: background 0.2s, color 0.2s; */
+}
+QPushButton#btnHome:checked, QPushButton#btnDatos:checked, QPushButton#btnHistorial:checked {
+    background-color: #005A9C; 
+    color: white;
+    font-weight: bold;
+}
+QPushButton#btnHome:hover, QPushButton#btnDatos:hover, QPushButton#btnHistorial:hover {
+    background-color: #005A9C; /* Azul más oscuro al pasar el mouse */
+}
+

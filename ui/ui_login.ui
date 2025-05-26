@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>322</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Fondo del formulario */
+QWidget#Form {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 #2c3e50, stop: 1 #3498db
+    );
+}
+
+/* Contenedor semi-transparente */
+QFrame#frame {
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 15px;
+}
+
+/* Título */
+QLabel#labelTitle {
+    color: white;
+    font: bold 24px &quot;Segoe UI&quot;;
+    qproperty-alignment: AlignCenter;
+}
+
+/* Estado / mensajes */
+QLabel#label_status {
+    color: #e74c3c;
+    font: italic 10px &quot;Segoe UI&quot;;
+}
+
+/* Campos de texto */
+QLineEdit {
+    background-color: rgba(255,255,255,0.8);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 10px;
+    padding: 5px;
+    font: 14px &quot;Segoe UI&quot;;
+}
+
+QLineEdit:focus {
+    border: 2px solid #2980b9;
+    background-color: #ecf0f1;
+}
+
+/* Botón principal */
+QPushButton {
+    background-color: #1abc9c;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font: bold 14px &quot;Segoe UI&quot;;
+    padding: 8px 16px;
+}
+
+QPushButton:hover {
+    background-color: #16a085;
+}
+
+QPushButton:pressed {
+    background-color: #149174;
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">background-color: #FFFFFF; border-radius: 10px; padding: 15px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <layout class="QVBoxLayout" name="frameLayout">
+      <item>
+       <widget class="QLabel" name="labelTitle">
+        <property name="styleSheet">
+         <string notr="true">font-size: 18pt; font-weight: bold; color: #16A34A;</string>
+        </property>
+        <property name="text">
+         <string>Inicio de Sesión</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_user">
+        <property name="placeholderText">
+         <string>Usuario</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_pass">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>Contraseña</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="styleSheet">
+         <string notr="true">background-color: #0AACEB; color: white; border-radius: 5px; padding: 6px;</string>
+        </property>
+        <property name="text">
+         <string>Iniciar Sesión</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_status">
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_to_register">
+        <property name="text">
+         <string>¿No tienes cuenta? Regístrate</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: transparent; color: #0AACEB; border: none; text-decoration: underline;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
