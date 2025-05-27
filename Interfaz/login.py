@@ -1,15 +1,12 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.uic import loadUi
 from ConexionDB.usuarios import verificar_credenciales
-import os
 
 class LoginForm(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
-        # Cargar el archivo .ui usando la ruta correcta
-        ui_path = os.path.join(os.path.dirname(__file__), '..', 'ui', 'ui_login.ui')
-        loadUi(ui_path, self)
+        loadUi("ui/ui_login.ui", self)
 
         self.pushButton.clicked.connect(self.login)
         self.btn_to_register.clicked.connect(self.go_to_register)
