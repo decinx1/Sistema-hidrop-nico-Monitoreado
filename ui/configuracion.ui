@@ -82,38 +82,7 @@
             </layout>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="groupTema">
-            <property name="title">
-             <string>Tema</string>
-            </property>
-            <property name="styleSheet">
-             <string>QGroupBox { font-size: 15px; font-weight: 600; color: #1976D2; border: none; margin-top: 10px; }</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayoutTema">
-             <item>
-              <widget class="QRadioButton" name="radioClaro">
-               <property name="text">
-                <string>Claro</string>
-               </property>
-               <property name="styleSheet">
-                <string>font-size: 15px; color: #1976D2;</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioOscuro">
-               <property name="text">
-                <string>Oscuro</string>
-               </property>
-               <property name="styleSheet">
-                <string>font-size: 15px; color: #1976D2;</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
+            
           <item>
            <widget class="QGroupBox" name="groupNotificaciones">
             <property name="title">
