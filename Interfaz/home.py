@@ -237,12 +237,19 @@ class HomeWindow(QWidget):
     def inicializar_series(self):
         # Obtiene los datos iniciales (BD o simulados)
         datos = self.obtener_datos_recientes()
-        # Asegura longitud 20
-        for k in datos:
-            if len(datos[k]) < 20:
+
+        # --- BUCLE FOR AÑADIDO ---
+        # Iteramos sobre cada llave ('ph', 'temperatura', 'ce', 'nivel')
+        for k in datos.keys():
+            # --- CÓDIGO DE RELLENO (DENTRO DEL BUCLE) ---
+            if not datos[k]:
+                # Si la lista está VACÍA, rellénala con 20 ceros
+                datos[k] = [0] * 20
+            elif len(datos[k]) < 20:
+                # Si NO está vacía PERO es más corta de 20, rellénala con su primer elemento
                 datos[k] = [datos[k][0]] * (20 - len(datos[k])) + datos[k]
-            else:
-                datos[k] = datos[k][-20:]
+            # --- FIN CÓDIGO DE RELLENO ---
+
         return datos
 
     def actualizar_en_tiempo_real(self):

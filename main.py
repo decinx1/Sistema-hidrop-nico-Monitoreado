@@ -10,6 +10,7 @@ from PyQt6.uic import loadUi
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
 
+
 class LoginDialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -27,11 +28,11 @@ class LoginDialog(QDialog):
             self.label_status.setText(f"Bienvenido, {user}")
             self.label_status.setStyleSheet("color: green;")
             self.accepted = True
-            # Espera 1.5 segundos antes de cerrar el login para mostrar el mensaje
             QTimer.singleShot(800, self.accept)
         else:
             self.label_status.setText("Usuario o contraseña incorrectos")
             self.label_status.setStyleSheet("color: red;")
+
 
 class AuthWindow(QMainWindow):
     def __init__(self):
@@ -45,15 +46,27 @@ class AuthWindow(QMainWindow):
         from Interfaz.register import RegisterForm
         self.login_form = LoginForm(self)
         self.register_form = RegisterForm(self)
-        self.stack.addWidget(self.login_form)     # índice 0
+        self.stack.addWidget(self.login_form)  # índice 0
         self.stack.addWidget(self.register_form)  # índice 1
         self.stack.setCurrentIndex(0)
+
+        self.main_app_window = None  # <--- AÑADIDO: Para guardar la ventana principal
 
     def cambiar_vista(self, vista):
         if vista == "login":
             self.stack.setCurrentIndex(0)
         elif vista == "registro":
             self.stack.setCurrentIndex(1)
+
+    # <--- MÉTODO AÑADIDO --- >
+    def login_exitoso(self):
+        """Esta función se llamará cuando el login sea correcto."""
+        print("Login exitoso! Abriendo aplicación principal...")
+        self.main_app_window = MainWindow()  # Creamos la ventana principal
+        self.main_app_window.showMaximized()  # La mostramos (o .show() si prefieres tamaño normal)
+        self.close()  # Cerramos la ventana de Auth/Login
+    # <--- FIN MÉTODO AÑADIDO --- >
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -89,7 +102,7 @@ class MainWindow(QMainWindow):
         sidebar_widget._btns["Home"].clicked.connect(lambda: self._show_view_with_header(0))
         sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._show_view_without_header(3))
         sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._show_view_without_header(4))
-        
+
     def _show_view_with_header(self, index):
         self.botones_widget.show()
         self._load_view(index)
@@ -147,6 +160,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(label)
         return page
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     # --- Cargar Hoja de Estilos ---
@@ -171,4 +185,3 @@ if __name__ == "__main__":
     auth.show()
     app.exec()
     # Para pruebas sin login, puedes iniciar el dashboard directamente:
-    

@@ -17,7 +17,7 @@ class RegisterForm(QWidget):
         self.main_window = main_window
         loadUi("ui/ui_register.ui", self)  # Cargar UI primero
         # Después de loadUi("ui_register.ui", self)
-        self.comboBox_lada.addItem(QIcon("flags/mx.svg"), "+52 México")
+        self.comboBox_lada.addItem(QIcon("/Interfaz/flags/mx.svg"), "+52 México")
         self.comboBox_lada.addItem(QIcon("flags/us.svg"), "+1 USA")
         self.comboBox_lada.addItem(QIcon("flags/ar.svg"), "+54 Argentina")
         self.comboBox_lada.addItem(QIcon("flags/br.svg"), "+55 Brasil")
