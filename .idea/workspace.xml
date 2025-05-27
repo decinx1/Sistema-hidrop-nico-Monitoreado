@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d26b1d94-a60f-4fe4-b060-d92551513297" name="Changes" comment="" />
+    <list default="true" id="d26b1d94-a60f-4fe4-b060-d92551513297" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Sistema-hidrop-nico-Monitoreado.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Sistema-hidrop-nico-Monitoreado.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interfaz/Calendar.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaz/Calendar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interfaz/botonesheader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaz/botonesheader.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,6 +43,7 @@
     "Python.sidebar.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "trabajo-recuperado",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/decinx/OneDrive/Escritorio/uni/Sistema-hidrop-nico-Monitoreado",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"

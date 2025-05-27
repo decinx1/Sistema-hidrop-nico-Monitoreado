@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget, QButtonGroup, QStackedWidget, QDialog, QVBoxLayout,
-    QLabel, QTableWidget, QTableWidgetItem, QMessageBox, QLineEdit, QPushButton
+    QLabel, QTableWidget, QTableWidgetItem, QMessageBox, QLineEdit, QPushButton, QHBoxLayout
 )
 from PyQt6.uic import loadUi
 from PyQt6.QtGui import QIcon
@@ -36,10 +36,11 @@ class BotonesHeader(QWidget):
                 btn.setIcon(QIcon(icon_path))
         # Botón de búsqueda
         self.btn_buscar = self.findChild(QPushButton, "btnBuscar")
+        self.btn_buscar.setStyleSheet("background-color: #4CAF50; color: white;")  # <-- LÍNEA AGREGADA
         self.btn_buscar.clicked.connect(self.realizar_busqueda)
         # Campo de texto
         self.lineEdit = self.findChild(QLineEdit, "lineEdit")
-        self.lineEdit.setPlaceholderText("Buscar...")
+        self.lineEdit.setPlaceholderText("Buscar por fecha (dd/mm/yyyy) o palabra (ejemplo: ph, temperatura)")
 
     def realizar_busqueda(self):
         palabra_clave = self.lineEdit.text().strip()
@@ -108,29 +109,103 @@ class KeywordSearchDialog(QDialog):
     def __init__(self, coincidencias, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Resultados de búsqueda")
-        self.adjustSize()
-        self.setMinimumWidth(480)
+        self.coincidencias = coincidencias
+        self.fechas = list(coincidencias.keys())
+        self.fechas_por_pagina = 3  # Mostrar 3 fechas a la vez
+        self.pagina_actual = 1
 
         layout = QVBoxLayout()
-
-        if coincidencias:
-            for fecha, datos in coincidencias.items():
-                fecha_label = QLabel(f"Fecha: {fecha}")
-                layout.addWidget(fecha_label)
-
-                tabla = QTableWidget()
-                tabla.setColumnCount(4)
-                tabla.setHorizontalHeaderLabels(["ID", "Sensor", "Valor", "Fecha"])
-                tabla.setRowCount(len(datos))
-
-                for fila, dato in enumerate(datos):
-                    tabla.setItem(fila, 0, QTableWidgetItem(str(dato[0])))  # ID
-                    tabla.setItem(fila, 1, QTableWidgetItem(str(dato[1])))  # Sensor
-                    tabla.setItem(fila, 2, QTableWidgetItem(str(dato[2])))  # Valor
-                    tabla.setItem(fila, 3, QTableWidgetItem(str(dato[3])))  # Fecha
-
-                layout.addWidget(tabla)
-        else:
-            layout.addWidget(QLabel("No se encontraron coincidencias para la palabra clave."))
-
         self.setLayout(layout)
+
+        # Controles de paginación
+        paginacion_layout = QHBoxLayout()
+        self.btn_anterior = QPushButton("Anterior")
+        self.btn_siguiente = QPushButton("Siguiente")
+        self.lbl_pagina = QLabel()
+
+        # ===== ESTILOS PARA LOS BOTONES =====
+        estilo_botones = """
+            QPushButton {
+                background-color: #4CAF50;  /* Color de fondo verde */
+                color: white;               /* Texto blanco */
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                font-weight: bold;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;  /* Color más oscuro al pasar mouse */
+            }
+            QPushButton:disabled {
+                background-color: #cccccc;  /* Color gris cuando está deshabilitado */
+                color: #666666;
+            }
+        """
+        self.btn_anterior.setStyleSheet(estilo_botones)
+        self.btn_siguiente.setStyleSheet(estilo_botones)
+        # ===== FIN DE ESTILOS =====
+
+        self.btn_anterior.clicked.connect(self.ir_anterior)
+        self.btn_siguiente.clicked.connect(self.ir_siguiente)
+
+        paginacion_layout.addWidget(self.btn_anterior)
+        paginacion_layout.addWidget(self.lbl_pagina)
+        paginacion_layout.addWidget(self.btn_siguiente)
+        paginacion_layout.addStretch()
+        layout.addLayout(paginacion_layout)
+
+        # Widget para contener los resultados
+        self.resultados_widget = QWidget()
+        self.resultados_layout = QVBoxLayout(self.resultados_widget)
+        layout.addWidget(self.resultados_widget)
+
+        self.actualizar_resultados()
+
+    def actualizar_resultados(self):
+        # Limpiar resultados anteriores
+        for i in reversed(range(self.resultados_layout.count())):
+            self.resultados_layout.itemAt(i).widget().setParent(None)
+
+        total_fechas = len(self.fechas)
+        total_paginas = max(1, (total_fechas + self.fechas_por_pagina - 1) // self.fechas_por_pagina)
+        self.pagina_actual = max(1, min(self.pagina_actual, total_paginas))
+
+        inicio = (self.pagina_actual - 1) * self.fechas_por_pagina
+        fin = inicio + self.fechas_por_pagina
+        fechas_pagina = self.fechas[inicio:fin]
+
+        for fecha in fechas_pagina:
+            datos = self.coincidencias[fecha]
+
+            fecha_label = QLabel(f"Fecha: {fecha}")
+            self.resultados_layout.addWidget(fecha_label)
+
+            tabla = QTableWidget()
+            tabla.setColumnCount(4)
+            tabla.setHorizontalHeaderLabels(["ID", "Sensor", "Valor", "Fecha"])
+
+            for fila, (id_, sensor, valor, fecha_hora) in enumerate(datos):
+                tabla.insertRow(fila)
+                tabla.setItem(fila, 0, QTableWidgetItem(str(id_)))
+                tabla.setItem(fila, 1, QTableWidgetItem(sensor))
+                tabla.setItem(fila, 2, QTableWidgetItem(str(valor)))
+                tabla.setItem(fila, 3, QTableWidgetItem(str(fecha_hora)))
+
+            self.resultados_layout.addWidget(tabla)
+
+        self.lbl_pagina.setText(f"Página {self.pagina_actual} de {total_paginas}")
+        self.btn_anterior.setEnabled(self.pagina_actual > 1)
+        self.btn_siguiente.setEnabled(self.pagina_actual < total_paginas)
+
+    def ir_anterior(self):
+        if self.pagina_actual > 1:
+            self.pagina_actual -= 1
+            self.actualizar_resultados()
+
+    def ir_siguiente(self):
+        total_fechas = len(self.fechas)
+        total_paginas = max(1, (total_fechas + self.fechas_por_pagina - 1) // self.fechas_por_pagina)
+        if self.pagina_actual < total_paginas:
+            self.pagina_actual += 1
+            self.actualizar_resultados()
