@@ -11,37 +11,35 @@ from Interfaz.conexion_cliente import obtener_todas_las_fechas_y_datos
 class BotonesHeader(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         # Cargar el diseño desde el archivo UI
         loadUi("ui/botonesHead.ui", self)
-
         # Grupo de botones
         self.button_group = QButtonGroup(self)
-        self.button_group.addButton(self.findChild(QWidget, "btnHome"))
-        self.button_group.addButton(self.findChild(QWidget, "btnDatos"))
-        self.button_group.addButton(self.findChild(QWidget, "btnHistorial"))
-
-        # Encuentra botones específicos
         self.btn_home = self.findChild(QWidget, "btnHome")
         self.btn_datos = self.findChild(QWidget, "btnDatos")
         self.btn_historial = self.findChild(QWidget, "btnHistorial")
-
-        # Botón de búsqueda
-        self.btn_buscar = self.findChild(QPushButton, "btnBuscar")
-        self.btn_buscar.clicked.connect(self.realizar_busqueda)
-
-        # Campo de texto
-        self.lineEdit = self.findChild(QLineEdit, "lineEdit")
-        self.lineEdit.setPlaceholderText("Buscar...")
-
+        self.button_group.addButton(self.btn_home)
+        self.button_group.addButton(self.btn_datos)
+        self.button_group.addButton(self.btn_historial)
         self.btn_home.setChecked(True)
         self.button_group.setExclusive(True)
         self.button_group.buttonClicked.connect(self._on_button_clicked)
-
-        # Asignar iconos
-        self.btn_home.setIcon(QIcon("Interfaz/icons/grafica.png"))
-        self.btn_datos.setIcon(QIcon("Interfaz/icons/info.png"))
-        self.btn_historial.setIcon(QIcon("Interfaz/icons/historial.png"))
+        # Asignar iconos solo si existen (evita retrasos si no existen)
+        import os
+        iconos = {
+            self.btn_home: "Interfaz/icons/grafica.png",
+            self.btn_datos: "Interfaz/icons/info.png",
+            self.btn_historial: "Interfaz/icons/historial.png"
+        }
+        for btn, icon_path in iconos.items():
+            if os.path.exists(icon_path):
+                btn.setIcon(QIcon(icon_path))
+        # Botón de búsqueda
+        self.btn_buscar = self.findChild(QPushButton, "btnBuscar")
+        self.btn_buscar.clicked.connect(self.realizar_busqueda)
+        # Campo de texto
+        self.lineEdit = self.findChild(QLineEdit, "lineEdit")
+        self.lineEdit.setPlaceholderText("Buscar...")
 
     def realizar_busqueda(self):
         palabra_clave = self.lineEdit.text().strip()

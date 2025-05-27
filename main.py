@@ -28,7 +28,6 @@ class LoginDialog(QDialog):
             self.label_status.setText(f"Bienvenido, {user}")
             self.label_status.setStyleSheet("color: green;")
             self.accepted = True
-            QTimer.singleShot(800, self.accept)
         else:
             self.label_status.setText("Usuario o contraseña incorrectos")
             self.label_status.setStyleSheet("color: red;")
@@ -91,17 +90,40 @@ class MainWindow(QMainWindow):
         content_layout.addWidget(self.botones_widget)
         self.stack = QStackedWidget()
         self.views = {}  # Diccionario para lazy loading
-        self._load_view(0)
+        # SOLO carga la vista inicial (Home) al inicio, no todas
         content_layout.addWidget(self.stack)
+        main_layout.addWidget(content_widget)
         # Conectar solo los botones de BotonesHeader a las vistas que lo requieren
         self.botones_widget.btn_home.clicked.connect(lambda: self._load_view(0))
         self.botones_widget.btn_datos.clicked.connect(lambda: self._load_view(1))
         self.botones_widget.btn_historial.clicked.connect(lambda: self._load_view(2))
-        main_layout.addWidget(content_widget)
         # Conectar Sidebar a las vistas
         sidebar_widget._btns["Home"].clicked.connect(lambda: self._show_view_with_header(0))
         sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._show_view_without_header(3))
         sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._show_view_without_header(4))
+        # Carga la vista inicial (Home) después de conectar los botones
+        # Muestra un mensaje de carga bonito mientras se inicializa HomeWindow
+        self.loading_widget = QWidget()
+        loading_layout = QVBoxLayout(self.loading_widget)
+        loading_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        loading_label = QLabel("<b>Cargando panel principal...</b>")
+        loading_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        loading_label.setStyleSheet("font-size: 22px; color: #16A34A; margin-bottom: 16px;")
+        
+        loading_layout.addWidget(loading_label)
+        self.stack.addWidget(self.loading_widget)
+        self.stack.setCurrentWidget(self.loading_widget)
+        QTimer.singleShot(100, self._load_home_async)
+
+    def _load_home_async(self):
+        from Interfaz.home import HomeWindow
+        view = HomeWindow()
+        self.views[0] = view
+        self.stack.addWidget(view)
+        self.stack.setCurrentWidget(view)
+        # Elimina el mensaje de carga
+        self.stack.removeWidget(self.loading_widget)
+        self.loading_widget.deleteLater()
 
     def _show_view_with_header(self, index):
         self.botones_widget.show()
@@ -112,28 +134,34 @@ class MainWindow(QMainWindow):
         self._load_view(index)
 
     def _load_view(self, index):
-        # Lazy loading de vistas con importaciones bajo demanda
-        if index not in self.views:
-            if index == 0:
-                from Interfaz.home import HomeWindow
-                view = HomeWindow()
-            elif index == 1:
-                from Interfaz.datos import DatosView
-                view = DatosView()
-            elif index == 2:
-                from Interfaz.Calendar import CalendarWindow
-                view = CalendarWindow()
-            elif index == 3:
-                from Interfaz.configuracion import ConfiguracionWindow
-                view = ConfiguracionWindow()
-            elif index == 4:
-                from Interfaz.usuario import UsuarioWindow
-                view = UsuarioWindow()
-            else:
-                return
-            self.views[index] = view
-            self.stack.addWidget(view)
-        self.stack.setCurrentWidget(self.views[index])
+        if hasattr(self, '_loading_view') and self._loading_view:
+            return  # Ya se está cargando una vista, ignora clicks rápidos
+        self._loading_view = True
+        try:
+            if index not in self.views:
+                if index == 0:
+                    from Interfaz.home import HomeWindow
+                    view = HomeWindow()
+                elif index == 1:
+                    from Interfaz.datos import DatosView
+                    view = DatosView()
+                elif index == 2:
+                    from Interfaz.Calendar import CalendarWindow
+                    view = CalendarWindow()
+                elif index == 3:
+                    from Interfaz.configuracion import ConfiguracionWindow
+                    view = ConfiguracionWindow()
+                elif index == 4:
+                    from Interfaz.usuario import UsuarioWindow
+                    view = UsuarioWindow()
+                else:
+                    self._loading_view = False
+                    return
+                self.views[index] = view
+                self.stack.addWidget(view)
+            self.stack.setCurrentWidget(self.views[index])
+        finally:
+            self._loading_view = False
 
     def on_sidebar_toggled(self, expanded):
         if expanded:
