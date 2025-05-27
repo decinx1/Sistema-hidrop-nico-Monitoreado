@@ -329,7 +329,7 @@ QWidget#days_header_widget QLabel {
 /* --- Botones Header personalizados --- */
 QPushButton#btnHome, QPushButton#btnDatos, QPushButton#btnHistorial {
     background-color: #0078D4; /* Azul primario */
-    color: white;
+    color: black;
     border: none;
     border-radius: 4px;
     padding: 8px 16px;
