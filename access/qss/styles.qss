@@ -347,3 +347,7 @@ QPushButton#btnHome:hover, QPushButton#btnDatos:hover, QPushButton#btnHistorial:
     background-color: #005A9C; /* Azul más oscuro al pasar el mouse */
 }
 
+QPushButton#btnBuscar{
+    background-color: #0078D4; /* Azul primario */
+    color: black;
+}
