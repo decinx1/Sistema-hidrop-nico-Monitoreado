@@ -40,4 +40,4 @@ class ConfiguracionWindow(QWidget):
             QMessageBox.warning(self, "Error", f"No se pudo cambiar la resolución: {e}")
 
     def mostrar_soporte(self):
-        QMessageBox.information(self, "Soporte / Contacto", "¿Necesitas ayuda?\n\nEmail: soporte@hidroponia.com\nWhatsApp: +52 123 456 7890\nSitio web: www.hidroponia.com/soporte")
+        QMessageBox.information(self, "Soporte / Contacto", "¿Necesitas ayuda?\n\nEmail: soporte@hydrotech.com\nWhatsApp: +52 314 103 4991\n\nHorario de atención:\nLunes a Viernes: 9:00 AM - 6:00 PM\nSábados: 10:00 AM - 2:00 PM\nDomingos: Cerrado")

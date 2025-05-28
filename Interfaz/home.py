@@ -386,7 +386,6 @@ class PlotCanvas(FigureCanvas):
         self.axes.tick_params(axis='both', labelsize=11, colors=axis_color, width=1.5)
         self.axes.grid(True, linestyle='--', linewidth=1, alpha=0.18, color='#34495e')
         self.axes.set_xlabel("Tiempo", fontsize=13, color=axis_color, labelpad=15, fontweight='bold')
-        self.axes.set_ylabel("Valor", fontsize=13, color=axis_color, labelpad=15, fontweight='bold')
         # --- FIN MODERNIZA ESTILO ---
 
         # Filtrar datos inválidos (None, nan, inf) para evitar crash en interpolación
