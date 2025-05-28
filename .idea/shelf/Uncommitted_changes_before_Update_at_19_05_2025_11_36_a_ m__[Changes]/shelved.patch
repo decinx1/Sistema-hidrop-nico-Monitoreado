@@ -1,0 +1,625 @@
+Index: access/qss/styles.qss
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/* styles.qss */\r\n\r\n/* --- Estilos Generales para Ventanas --- */\r\nQMainWindow, QDialog {\r\n    background-color: #f4f4f9; /* Un gris muy claro para el fondo */\r\n    font-family: \"Segoe UI\", Arial, sans-serif; /* Fuente más moderna */\r\n    color: #333333; /* Color de texto principal */\r\n}\r\n\r\n/* --- Estilos para QLabel --- */\r\nQLabel {\r\n    font-size: 13px;\r\n    color: #333333;\r\n    padding: 4px;\r\n}\r\n\r\nQLabel#fecha_label_dialog { /* ID para la etiqueta de fecha en el diálogo */\r\n    font-size: 20px;\r\n    font-weight: bold;\r\n    color: #005A9C; /* Azul oscuro */\r\n    margin-bottom: 12px;\r\n    border-bottom: 1px solid #ddeeee;\r\n    padding-bottom: 8px;\r\n}\r\n\r\nQLabel#mensaje_no_datos { /* ID para el mensaje de \"no hay datos\" */\r\n    font-size: 15px;\r\n    font-style: italic;\r\n    color: #777777;\r\n    padding: 25px;\r\n}\r\n\r\nQLabel#pagina_label { /* Etiqueta \"Página X de Y\" */\r\n    font-size: 12px;\r\n    margin-left: 10px;\r\n    margin-right: 10px;\r\n    color: #555555;\r\n}\r\n\r\n/* Para las etiquetas de \"Desde:\", \"Hasta:\", \"Sensor:\", \"Mostrar:\" */\r\nQWidget > QHBoxLayout > QLabel, QWidget > QVBoxLayout > QLabel {\r\n    font-weight: normal;\r\n    font-size: 13px;\r\n    margin-right: 2px; /* Pequeño espacio antes del control */\r\n}\r\n\r\n\r\n/* --- Estilos para QPushButton --- */\r\nQPushButton {\r\n    background-color: #0078D4; /* Azul primario */\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    font-size: 13px;\r\n    border-radius: 4px;\r\n    min-height: 28px;\r\n}\r\n\r\nQPushButton:hover {\r\n    background-color: #005A9C; /* Azul más oscuro al pasar el mouse */\r\n}\r\n\r\nQPushButton:pressed {\r\n    background-color: #004C80; /* Azul aún más oscuro al presionar */\r\n}\r\n\r\nQPushButton:disabled {\r\n    background-color: #BDBDBD; /* Gris para deshabilitado */\r\n    color: #757575;\r\n}\r\n\r\n/* Botones de navegación del calendario (anterior/siguiente mes) */\r\nQPushButton#prev_btn, QPushButton#next_btn {\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n    padding: 6px 10px;\r\n    min-width: 45px;\r\n    background-color: #607D8B; /* Gris azulado */\r\n}\r\nQPushButton#prev_btn:hover, QPushButton#next_btn:hover {\r\n    background-color: #455A64; /* Más oscuro */\r\n}\r\n\r\n/* Botones de los días del calendario */\r\nQPushButton.day_button_base { /* Clase base para todos los días */\r\n    font-size: 13px;\r\n    padding: 0px; /* El tamaño se controla con min-size y sizePolicy */\r\n    border: 1px solid #DFDFDF;\r\n    background-color: #FFFFFF;\r\n    color: #333333;\r\n    border-radius: 3px;\r\n    font-weight: normal;\r\n}\r\n\r\nQPushButton.day_button_base:hover {\r\n    background-color: #E0F7FA; /* Celeste claro al pasar el mouse */\r\n    border: 1px solid #0078D4;\r\n}\r\n\r\nQPushButton.day_button_base:disabled { /* Días de otro mes o futuros */\r\n    background-color: #f8f8f8;\r\n    color: #AAAAAA;\r\n    border: 1px solid #EEEEEE;\r\n}\r\nQPushButton.day_button_base:disabled:hover {\r\n    background-color: #f8f8f8; /* Mantiene el color al pasar el mouse si está deshabilitado */\r\n    border: 1px solid #EEEEEE;\r\n}\r\n\r\n\r\nQPushButton#day_button_today { /* ID para el botón del día actual */\r\n    background-color: #4CAF50; /* Verde */\r\n    color: white;\r\n    font-weight: bold;\r\n    border: 1px solid #388E3C;\r\n}\r\nQPushButton#day_button_today:hover {\r\n    background-color: #388E3C;\r\n}\r\n\r\nQPushButton#day_button_past { /* ID para días pasados (con datos) */\r\n    background-color: #E3F2FD; /* Azul muy claro */\r\n    color: #0D47A1; /* Azul oscuro para el texto */\r\n    /* font-weight: bold; */ /* Opcional */\r\n}\r\nQPushButton#day_button_past:hover {\r\n    background-color: #BBDEFB;\r\n    border: 1px solid #0078D4;\r\n}\r\n\r\n\r\n/* --- Estilos para QComboBox --- */\r\nQComboBox {\r\n    padding: 6px 8px;\r\n    border: 1px solid #ABADB3;\r\n    border-radius: 3px;\r\n    background-color: white;\r\n    font-size: 13px;\r\n    min-height: 20px; /* Altura mínima consistente */\r\n    selection-background-color: #0078D4; /* Color de fondo del item seleccionado en el desplegable */\r\n    selection-color: white; /* Color de texto del item seleccionado en el desplegable */\r\n}\r\n\r\nQComboBox:hover {\r\n    border: 1px solid #0078D4;\r\n}\r\n\r\nQComboBox:focus {\r\n    border: 1px solid #005A9C;\r\n    /* box-shadow: 0 0 3px #005A9C;  No soportado directamente, pero la idea es resaltar */\r\n}\r\n\r\n\r\nQComboBox::drop-down {\r\n    subcontrol-origin: padding;\r\n    subcontrol-position: top right;\r\n    width: 22px;\r\n    border-left-width: 1px;\r\n    border-left-color: #ABADB3;\r\n    border-left-style: solid;\r\n    border-top-right-radius: 3px;\r\n    border-bottom-right-radius: 3px;\r\n    background-color: #f0f0f0;\r\n}\r\nQComboBox::drop-down:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\nQComboBox::down-arrow {\r\n    /* Para una flecha simple sin imagen: usa un carácter Unicode o dibuja con bordes */\r\n    /* Aquí un ejemplo con un carácter (puede no verse igual en todos lados) */\r\n    /* Otra opción es usar una imagen SVG o PNG */\r\n    image: url(icon_arrow_down.svg); /* Necesitarás un SVG o PNG */\r\n    width: 10px;\r\n    height: 10px;\r\n}\r\nQComboBox::down-arrow:on { /* Cuando el desplegable está abierto */\r\n    /* image: url(icon_arrow_up.svg); */\r\n}\r\n\r\n\r\nQComboBox QAbstractItemView { /* Estilo para la lista desplegable */\r\n    border: 1px solid #ABADB3;\r\n    background-color: white;\r\n    color: #333333;\r\n    padding: 4px;\r\n    outline: none; /* Quita el borde de foco en el desplegable */\r\n}\r\n\r\n/* --- Estilos para QSpinBox y QTimeEdit --- */\r\nQSpinBox, QTimeEdit {\r\n    padding: 6px 8px;\r\n    border: 1px solid #ABADB3;\r\n    border-radius: 3px;\r\n    background-color: white;\r\n    font-size: 13px;\r\n    min-height: 20px;\r\n}\r\nQSpinBox:hover, QTimeEdit:hover {\r\n    border: 1px solid #0078D4;\r\n}\r\nQSpinBox:focus, QTimeEdit:focus {\r\n    border: 1px solid #005A9C;\r\n}\r\n\r\n\r\nQSpinBox::up-button, QSpinBox::down-button,\r\nQTimeEdit::up-button, QTimeEdit::down-button {\r\n    subcontrol-origin: border;\r\n    width: 18px;\r\n    border-left: 1px solid #ABADB3;\r\n    background-color: #f0f0f0;\r\n    border-radius: 0px; /* Para que se unan al borde */\r\n}\r\nQSpinBox::up-button:hover, QSpinBox::down-button:hover,\r\nQTimeEdit::up-button:hover, QTimeEdit::down-button:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\nQSpinBox::up-button, QTimeEdit::up-button {\r\n    subcontrol-position: top right;\r\n    border-top-right-radius: 2px; /* Redondea solo la esquina superior del botón */\r\n}\r\n\r\nQSpinBox::down-button, QTimeEdit::down-button {\r\n    subcontrol-position: bottom right;\r\n    border-bottom-right-radius: 2px; /* Redondea solo la esquina inferior del botón */\r\n}\r\n\r\nQSpinBox::up-arrow, QTimeEdit::up-arrow {\r\n    /* image: url(icon_arrow_up_small.svg); */\r\n    /* Alternativa con bordes si no tienes imagen */\r\n    border-left: 4px solid transparent;\r\n    border-right: 4px solid transparent;\r\n    border-bottom: 5px solid #555;\r\n    width: 0px;\r\n    height: 0px;\r\n    margin: 0 auto; /* Centra la flecha */\r\n}\r\n\r\nQSpinBox::down-arrow, QTimeEdit::down-arrow {\r\n    /* image: url(icon_arrow_down_small.svg); */\r\n    /* Alternativa con bordes si no tienes imagen */\r\n    border-left: 4px solid transparent;\r\n    border-right: 4px solid transparent;\r\n    border-top: 5px solid #555;\r\n    width: 0px;\r\n    height: 0px;\r\n    margin: 0 auto; /* Centra la flecha */\r\n}\r\n\r\n\r\n/* --- Estilos para QTableWidget --- */\r\nQTableWidget {\r\n    border: 1px solid #C9C9C9;\r\n    gridline-color: #DCDCDC;\r\n    font-size: 13px;\r\n    background-color: #FFFFFF;\r\n    alternate-background-color: #F7F9FC; /* Color para filas alternas */\r\n    selection-background-color: #AED6F1; /* Azul claro para la selección */\r\n    selection-color: #1C1C1C; /* Color de texto oscuro para la selección */\r\n}\r\nQTableWidget:focus {\r\n    border: 1px solid #0078D4;\r\n}\r\n\r\nQTableWidget::item {\r\n    padding: 7px 5px; /* Más padding vertical */\r\n    border-bottom: 1px solid #EAEAEA; /* Línea sutil entre filas */\r\n    border-right: 1px dotted #EAEAEA; /* Línea punteada sutil entre columnas */\r\n}\r\nQTableWidget::item:selected {\r\n    background-color: #0078D4; /* Azul primario para fondo de celda seleccionada */\r\n    color: white; /* Texto blanco para celda seleccionada */\r\n}\r\n\r\n\r\nQHeaderView::section {\r\n    background-color: #E8E8E8; /* Gris claro para el encabezado */\r\n    color: #222222; /* Texto oscuro */\r\n    padding: 7px 5px;\r\n    border: none; /* Quitar bordes individuales de sección */\r\n    border-bottom: 1px solid #B0B0B0; /* Línea inferior sólida */\r\n    font-size: 13px;\r\n    font-weight: bold;\r\n}\r\n\r\nQHeaderView::section:horizontal {\r\n    border-right: 1px solid #D0D0D0; /* Separador vertical entre encabezados */\r\n}\r\nQHeaderView::section:horizontal:last {\r\n    border-right: none; /* No poner borde en la última sección */\r\n}\r\n\r\nQHeaderView::section:vertical {\r\n    border-bottom: 1px solid #D0D0D0; /* Separador horizontal */\r\n}\r\nQHeaderView::section:vertical:last {\r\n    border-bottom: none;\r\n}\r\n\r\n/* --- Contenedores Específicos (opcional) --- */\r\nQWidget#header_widget { /* Contenedor del encabezado del calendario */\r\n    background-color: #E1E8ED; /* Azul grisáceo muy claro */\r\n    padding: 8px;\r\n    border-radius: 4px;\r\n    margin-bottom: 8px;\r\n}\r\n\r\nQWidget#days_header_widget { /* Contenedor de los nombres de los días de la semana */\r\n    background-color: #F5F5F5;\r\n    padding: 6px;\r\n    border-radius: 3px;\r\n    margin-bottom: 5px;\r\n}\r\nQWidget#days_header_widget QLabel {\r\n    font-weight: bold;\r\n    color: #555;\r\n}\r\n\r\n/* Clase para los layouts de filtros y paginación en DayDialog */\r\n.controls_layout QWidget { /* Para que los márgenes no se apliquen a los widgets internos sino al layout */\r\n    margin-right: 8px;\r\n}\r\n.controls_layout QLabel {\r\n    margin-right: 3px;\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/access/qss/styles.qss b/access/qss/styles.qss
+--- a/access/qss/styles.qss	(revision 4038d929d386ae39d8c93aafb3ba61fdb87598ca)
++++ b/access/qss/styles.qss	(date 1747676163096)
+@@ -1,5 +1,7 @@
+ /* styles.qss */
+ 
++
++
+ /* --- Estilos Generales para Ventanas --- */
+ QMainWindow, QDialog {
+     background-color: #f4f4f9; /* Un gris muy claro para el fondo */
+@@ -326,3 +328,5 @@
+     margin-right: 3px;
+ }
+ 
++
++
+Index: Interfaz/sidebar.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nfrom PyQt6.QtWidgets import (\r\n    QWidget, QVBoxLayout, QHBoxLayout, QPushButton,\r\n    QSizePolicy, QToolButton, QLabel, QFrame\r\n)\r\nfrom PyQt6.QtGui import QIcon, QPixmap, QPalette, QColor, QFont\r\nfrom PyQt6.QtCore import (\r\n    QSize, QPropertyAnimation, QEasingCurve,\r\n    pyqtSignal, Qt\r\n)\r\n\r\n\r\nclass Sidebar(QWidget):\r\n    \"\"\"Sidebar retráctil con logo, botones de menú y botón de salida.\"\"\"\r\n    toggled = pyqtSignal(bool)\r\n\r\n    def __init__(\r\n        self,\r\n        icon_folder: str = None,\r\n        menu_items: list[tuple[str, str]] = None,\r\n        expanded_width: int = 240,\r\n        collapsed_width: int = 60,\r\n        animation_duration: int = 300,\r\n        logo_filename: str = \"logeishon 2.png\",\r\n        parent=None\r\n    ):\r\n        super().__init__(parent)\r\n\r\n        self._icon_folder = icon_folder or os.path.join(os.path.dirname(__file__), \"icons\")\r\n\r\n        self._items = menu_items or [\r\n            (\"Home\", \"home.png\"),\r\n            (\"Configuración\", \"config.png\"),\r\n            (\"Usuario\", \"Usuario.png\"),\r\n            (\"Correo\", \"Correoo.png\"),\r\n            (\"Notificaciones\", \"notii.png\"),\r\n        ]\r\n\r\n        self._w_exp, self._w_col = expanded_width, collapsed_width\r\n        self._anim_dur = animation_duration\r\n        self._is_expanded = True\r\n\r\n        self.setFixedWidth(self._w_exp)\r\n\r\n        # Color de fondo con paleta\r\n        palette = self.palette()\r\n        palette.setColor(QPalette.ColorRole.Window, QColor(\"#E8F5E9\"))\r\n        self.setAutoFillBackground(True)\r\n        self.setPalette(palette)\r\n\r\n        # Setup colors\r\n        self.bg_color = \"#E8F5E9\"\r\n        self.text_color = \"#1E4620\"\r\n        self.accent_color = \"#4CAF50\"\r\n        self.hover_color = \"#C8E6C9\"\r\n        self.selected_color = \"#81C784\"\r\n        self.button_bg_color = \"#A5D6A7\"\r\n\r\n        # Setup fonts\r\n        self.title_font = QFont()\r\n        self.title_font.setPointSize(12)\r\n        self.title_font.setBold(True)\r\n\r\n        self.menu_font = QFont()\r\n        self.menu_font.setPointSize(10)\r\n\r\n        # Layout principal vertical\r\n        self._layout = QVBoxLayout(self)\r\n        self._layout.setContentsMargins(0, 0, 0, 0)\r\n        self._layout.setSpacing(0)\r\n\r\n        # Header con logo y nombre de la app\r\n        self._setup_header(logo_filename)\r\n\r\n        # Menú de botones\r\n        self._btns = {}\r\n        for text, fname in self._items:\r\n            self.add_item(text, fname)\r\n\r\n        self._layout.addStretch()\r\n\r\n        # Botón de salida\r\n        self._setup_footer()\r\n\r\n        # Aplicar estilos a los botones\r\n        self._apply_styles()\r\n\r\n    def _setup_header(self, logo_filename):\r\n        header = QWidget()\r\n        header.setObjectName(\"sidebarHeader\")\r\n        header.setMinimumHeight(80)\r\n\r\n        header_layout = QHBoxLayout(header)\r\n        header_layout.setContentsMargins(16, 16, 16, 16)\r\n        header_layout.setSpacing(10)\r\n\r\n        self._logo_path = os.path.join(self._icon_folder, logo_filename)\r\n        self._logo_lbl = QLabel()\r\n        if os.path.exists(self._logo_path):\r\n            self._set_logo_pixmap(expanded=True)\r\n        self._logo_lbl.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)\r\n        self._logo_lbl.setFixedSize(40, 40)\r\n        header_layout.addWidget(self._logo_lbl)\r\n\r\n        self._app_name = QLabel(\"Hydrotech\")\r\n        self._app_name.setFont(self.title_font)\r\n        self._app_name.setStyleSheet(f\"color: {self.text_color};\")\r\n        self._app_name.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)\r\n        header_layout.addWidget(self._app_name, 1)\r\n\r\n        self._btn_toggle = QToolButton()\r\n        toggle_icon = os.path.join(self._icon_folder, \"menu.png\")\r\n        if os.path.exists(toggle_icon):\r\n            self._btn_toggle.setIcon(QIcon(toggle_icon))\r\n        self._btn_toggle.setIconSize(QSize(24, 24))\r\n        self._btn_toggle.setFixedSize(32, 32)\r\n        self._btn_toggle.setStyleSheet(f\"\"\"\r\n            QToolButton {{\r\n                border: none;\r\n                background-color: transparent;\r\n                color: {self.text_color};\r\n            }}\r\n            QToolButton:hover {{\r\n                background-color: {self.hover_color};\r\n                border-radius: 4px;\r\n            }}\r\n        \"\"\")\r\n        self._btn_toggle.clicked.connect(self.toggle)\r\n        header_layout.addWidget(self._btn_toggle)\r\n\r\n        self._layout.addWidget(header)\r\n\r\n        separator = QFrame()\r\n        separator.setFrameShape(QFrame.Shape.HLine)\r\n        separator.setFrameShadow(QFrame.Shadow.Sunken)\r\n        separator.setStyleSheet(f\"background-color: {self.selected_color}; max-height: 1px;\")\r\n        self._layout.addWidget(separator)\r\n\r\n    def _setup_footer(self):\r\n        footer = QWidget()\r\n        footer.setObjectName(\"sidebarFooter\")\r\n        footer.setMinimumHeight(60)\r\n        footer_layout = QVBoxLayout(footer)\r\n        footer_layout.setContentsMargins(8, 8, 8, 16)\r\n\r\n        separator = QFrame()\r\n        separator.setFrameShape(QFrame.Shape.HLine)\r\n        separator.setFrameShadow(QFrame.Shadow.Sunken)\r\n        separator.setStyleSheet(f\"background-color: {self.selected_color}; max-height: 1px;\")\r\n        footer_layout.addWidget(separator)\r\n\r\n        self._btn_exit = QPushButton(\"Salir\" if self._is_expanded else \"\")\r\n        exit_icon = os.path.join(self._icon_folder, \"exit.png\")\r\n        if os.path.exists(exit_icon):\r\n            self._btn_exit.setIcon(QIcon(exit_icon))\r\n        self._btn_exit.setIconSize(QSize(20, 20))\r\n        self._btn_exit.setMinimumHeight(48)\r\n        self._btn_exit.setFont(self.menu_font)\r\n        self._btn_exit.clicked.connect(self._handle_exit)\r\n        footer_layout.addWidget(self._btn_exit)\r\n\r\n        self._layout.addWidget(footer)\r\n\r\n    def add_item(self, text: str, icon_file: str, callback=None):\r\n        btn = QPushButton(text if self._is_expanded else \"\")\r\n        path = os.path.join(self._icon_folder, icon_file)\r\n        if os.path.exists(path):\r\n            btn.setIcon(QIcon(path))\r\n        btn.setIconSize(QSize(20, 20))\r\n        btn.setCheckable(True)\r\n        btn.setAutoExclusive(True)\r\n        btn.setMinimumHeight(48)\r\n        btn.setFont(self.menu_font)\r\n        btn.setSizePolicy(\r\n            QSizePolicy.Policy.Expanding,\r\n            QSizePolicy.Policy.Preferred\r\n        )\r\n        if callback:\r\n            btn.clicked.connect(callback)\r\n        self._layout.addWidget(btn)\r\n        self._btns[text] = btn\r\n        return btn\r\n\r\n    def _apply_styles(self):\r\n        button_style = f\"\"\"\r\n            QPushButton {{\r\n                background-color: {self.button_bg_color};\r\n                color: {self.text_color};\r\n                border: none;\r\n                border-radius: 6px;\r\n                text-align: left;\r\n                padding: 8px 12px;\r\n            }}\r\n            QPushButton:hover {{\r\n                background-color: {self.hover_color};\r\n            }}\r\n            QPushButton:checked {{\r\n                background-color: {self.selected_color};\r\n                color: {self.text_color};\r\n            }}\r\n        \"\"\"\r\n\r\n        for btn in self._btns.values():\r\n            btn.setStyleSheet(button_style)\r\n\r\n        self._btn_exit.setStyleSheet(f\"\"\"\r\n            QPushButton {{\r\n                background-color: {self.button_bg_color};\r\n                color: {self.text_color};\r\n                border: none;\r\n                border-radius: 6px;\r\n                text-align: left;\r\n                padding: 8px 12px;\r\n            }}\r\n            QPushButton:hover {{\r\n                background-color: #FFCDD2;\r\n                color: #B71C1C;\r\n            }}\r\n        \"\"\")\r\n\r\n    def toggle(self):\r\n        start, end = (\r\n            (self._w_exp, self._w_col)\r\n            if self._is_expanded else\r\n            (self._w_col, self._w_exp)\r\n        )\r\n        anim = QPropertyAnimation(self, b\"minimumWidth\", self)\r\n        anim.setStartValue(start)\r\n        anim.setEndValue(end)\r\n        anim.setDuration(self._anim_dur)\r\n        anim.setEasingCurve(QEasingCurve.Type.InOutQuint)\r\n        anim.finished.connect(self._on_anim_done)\r\n        anim.start()\r\n\r\n        self._is_expanded = not self._is_expanded\r\n        self.toggled.emit(self._is_expanded)\r\n        self._set_logo_pixmap(expanded=self._is_expanded)\r\n        self._app_name.setVisible(self._is_expanded)\r\n\r\n    def _set_logo_pixmap(self, expanded: bool):\r\n        size = 40 if expanded else 32\r\n        pix = QPixmap(self._logo_path).scaled(\r\n            size, size,\r\n            Qt.AspectRatioMode.KeepAspectRatio,\r\n            Qt.TransformationMode.SmoothTransformation\r\n        )\r\n        self._logo_lbl.setPixmap(pix)\r\n\r\n    def _on_anim_done(self):\r\n        for text, btn in self._btns.items():\r\n            btn.setText(text if self._is_expanded else \"\")\r\n        self._btn_exit.setText(\"Salir\" if self._is_expanded else \"\")\r\n\r\n    def _handle_exit(self):\r\n        self.window().close()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Interfaz/sidebar.py b/Interfaz/sidebar.py
+--- a/Interfaz/sidebar.py	(revision 4038d929d386ae39d8c93aafb3ba61fdb87598ca)
++++ b/Interfaz/sidebar.py	(date 1747676163090)
+@@ -15,19 +15,18 @@
+     toggled = pyqtSignal(bool)
+ 
+     def __init__(
+-        self,
+-        icon_folder: str = None,
+-        menu_items: list[tuple[str, str]] = None,
+-        expanded_width: int = 240,
+-        collapsed_width: int = 60,
+-        animation_duration: int = 300,
+-        logo_filename: str = "logeishon 2.png",
+-        parent=None
++            self,
++            icon_folder: str = None,
++            menu_items: list[tuple[str, str]] = None,
++            expanded_width: int = 240,
++            collapsed_width: int = 75,
++            animation_duration: int = 300,
++            logo_filename: str = "logeishon 2.png",
++            parent=None
+     ):
+         super().__init__(parent)
+ 
+         self._icon_folder = icon_folder or os.path.join(os.path.dirname(__file__), "icons")
+-
+         self._items = menu_items or [
+             ("Home", "home.png"),
+             ("Configuración", "config.png"),
+@@ -42,214 +41,288 @@
+ 
+         self.setFixedWidth(self._w_exp)
+ 
+-        # Color de fondo con paleta
+         palette = self.palette()
+         palette.setColor(QPalette.ColorRole.Window, QColor("#E8F5E9"))
+         self.setAutoFillBackground(True)
+         self.setPalette(palette)
+ 
+-        # Setup colors
+-        self.bg_color = "#E8F5E9"
+         self.text_color = "#1E4620"
+-        self.accent_color = "#4CAF50"
+-        self.hover_color = "#C8E6C9"
+-        self.selected_color = "#81C784"
+-        self.button_bg_color = "#A5D6A7"
++        self.hover_color = "#C8E6C9"  # Un color de hover sutil para el área del ícono colapsado
++        self.selected_color = "#81C784"  # Para ícono seleccionado en modo colapsado
++        self.button_bg_color = "#A5D6A7"  # Para modo expandido
+ 
+-        # Setup fonts
+         self.title_font = QFont()
+         self.title_font.setPointSize(12)
+         self.title_font.setBold(True)
+ 
+         self.menu_font = QFont()
+         self.menu_font.setPointSize(10)
++        self.button_min_height = 48  # Guardar el min_height para usar en QSS
+ 
+-        # Layout principal vertical
+         self._layout = QVBoxLayout(self)
+         self._layout.setContentsMargins(0, 0, 0, 0)
+         self._layout.setSpacing(0)
+ 
+-        # Header con logo y nombre de la app
+         self._setup_header(logo_filename)
+-
+-        # Menú de botones
+         self._btns = {}
+         for text, fname in self._items:
+             self.add_item(text, fname)
+-
+         self._layout.addStretch()
+-
+-        # Botón de salida
+         self._setup_footer()
+-
+-        # Aplicar estilos a los botones
+         self._apply_styles()
+ 
+-    def _setup_header(self, logo_filename):
+-        header = QWidget()
+-        header.setObjectName("sidebarHeader")
+-        header.setMinimumHeight(80)
+-
+-        header_layout = QHBoxLayout(header)
+-        header_layout.setContentsMargins(16, 16, 16, 16)
+-        header_layout.setSpacing(10)
++    def _setup_header(self, logo_filename: str):
++        header_widget = QWidget()
++        header_widget.setObjectName("sidebarHeader")
++        self._header_layout = QHBoxLayout(header_widget)
+ 
+         self._logo_path = os.path.join(self._icon_folder, logo_filename)
+         self._logo_lbl = QLabel()
+-        if os.path.exists(self._logo_path):
+-            self._set_logo_pixmap(expanded=True)
+         self._logo_lbl.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+-        self._logo_lbl.setFixedSize(40, 40)
+-        header_layout.addWidget(self._logo_lbl)
+ 
+         self._app_name = QLabel("Hydrotech")
+         self._app_name.setFont(self.title_font)
+         self._app_name.setStyleSheet(f"color: {self.text_color};")
+         self._app_name.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+-        header_layout.addWidget(self._app_name, 1)
+ 
+         self._btn_toggle = QToolButton()
+-        toggle_icon = os.path.join(self._icon_folder, "menu.png")
+-        if os.path.exists(toggle_icon):
+-            self._btn_toggle.setIcon(QIcon(toggle_icon))
++        toggle_icon_path = os.path.join(self._icon_folder, "menu.png")
++        if os.path.exists(toggle_icon_path):
++            self._btn_toggle.setIcon(QIcon(toggle_icon_path))
+         self._btn_toggle.setIconSize(QSize(24, 24))
+         self._btn_toggle.setFixedSize(32, 32)
+         self._btn_toggle.setStyleSheet(f"""
+-            QToolButton {{
+-                border: none;
+-                background-color: transparent;
+-                color: {self.text_color};
+-            }}
+-            QToolButton:hover {{
+-                background-color: {self.hover_color};
+-                border-radius: 4px;
+-            }}
++            QToolButton {{ border: none; background-color: transparent; }}
++            QToolButton:hover {{ background-color: {self.hover_color}; border-radius: 4px; }}
+         """)
+         self._btn_toggle.clicked.connect(self.toggle)
+-        header_layout.addWidget(self._btn_toggle)
+ 
+-        self._layout.addWidget(header)
++        self._header_layout.addWidget(self._logo_lbl)
++        self._header_layout.addWidget(self._app_name, 1)
++        self._header_layout.addWidget(self._btn_toggle)
+ 
++        self._apply_header_layout_styles()
++        self._set_logo_pixmap(self._is_expanded)
++        self._app_name.setVisible(self._is_expanded)
++
++        self._layout.addWidget(header_widget)
+         separator = QFrame()
+         separator.setFrameShape(QFrame.Shape.HLine)
+         separator.setFrameShadow(QFrame.Shadow.Sunken)
+         separator.setStyleSheet(f"background-color: {self.selected_color}; max-height: 1px;")
+         self._layout.addWidget(separator)
+ 
++    def _apply_header_layout_styles(self):
++        if self._is_expanded:
++            self._header_layout.setSpacing(10)
++            self._header_layout.setContentsMargins(16, 16, 16, 16)
++        else:
++            self._header_layout.setSpacing(2)
++            self._header_layout.setContentsMargins(5, 5, 5, 5)
++
++    def add_item(self, text: str, icon_file: str, callback: callable = None):
++        btn = QPushButton(text if self._is_expanded else "")
++        icon_path = os.path.join(self._icon_folder, icon_file)
++        if os.path.exists(icon_path):
++            btn.setIcon(QIcon(icon_path))
++        btn.setIconSize(QSize(20, 20))
++        btn.setCheckable(True)
++        btn.setAutoExclusive(True)
++        btn.setMinimumHeight(self.button_min_height)
++        btn.setFont(self.menu_font)
++        btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
++        if callback:
++            btn.clicked.connect(callback)
++        self._layout.addWidget(btn)
++        self._btns[text] = btn
++        return btn
++
+     def _setup_footer(self):
+-        footer = QWidget()
+-        footer.setObjectName("sidebarFooter")
+-        footer.setMinimumHeight(60)
+-        footer_layout = QVBoxLayout(footer)
++        footer_widget = QWidget()
++        footer_widget.setObjectName("sidebarFooter")
++        footer_layout = QVBoxLayout(footer_widget)
+         footer_layout.setContentsMargins(8, 8, 8, 16)
+-
+         separator = QFrame()
+         separator.setFrameShape(QFrame.Shape.HLine)
+         separator.setFrameShadow(QFrame.Shadow.Sunken)
+         separator.setStyleSheet(f"background-color: {self.selected_color}; max-height: 1px;")
+         footer_layout.addWidget(separator)
+-
+         self._btn_exit = QPushButton("Salir" if self._is_expanded else "")
+-        exit_icon = os.path.join(self._icon_folder, "exit.png")
+-        if os.path.exists(exit_icon):
+-            self._btn_exit.setIcon(QIcon(exit_icon))
++        exit_icon_path = os.path.join(self._icon_folder, "exit.png")
++        if os.path.exists(exit_icon_path):
++            self._btn_exit.setIcon(QIcon(exit_icon_path))
+         self._btn_exit.setIconSize(QSize(20, 20))
+-        self._btn_exit.setMinimumHeight(48)
++        self._btn_exit.setMinimumHeight(self.button_min_height)
+         self._btn_exit.setFont(self.menu_font)
+         self._btn_exit.clicked.connect(self._handle_exit)
+         footer_layout.addWidget(self._btn_exit)
++        self._layout.addWidget(footer_widget)
+ 
+-        self._layout.addWidget(footer)
++    def _generate_button_stylesheet(self, checked: bool, expanded: bool, is_exit_button: bool = False) -> str:
++        text_align = "left" if expanded else "center"
++        padding = f"8px {'12px' if expanded else '5px'}"  # 5px horizontal padding when collapsed
+ 
+-    def add_item(self, text: str, icon_file: str, callback=None):
+-        btn = QPushButton(text if self._is_expanded else "")
+-        path = os.path.join(self._icon_folder, icon_file)
+-        if os.path.exists(path):
+-            btn.setIcon(QIcon(path))
+-        btn.setIconSize(QSize(20, 20))
+-        btn.setCheckable(True)
+-        btn.setAutoExclusive(True)
+-        btn.setMinimumHeight(48)
+-        btn.setFont(self.menu_font)
+-        btn.setSizePolicy(
+-            QSizePolicy.Policy.Expanding,
+-            QSizePolicy.Policy.Preferred
+-        )
+-        if callback:
+-            btn.clicked.connect(callback)
+-        self._layout.addWidget(btn)
+-        self._btns[text] = btn
+-        return btn
++        bg_color = self.button_bg_color if expanded else "transparent"
++        text_color_val = self.text_color  # Renombrar para evitar conflicto con self.text_color
++        hover_bg_color_val = self.hover_color
++        hover_text_color_val = self.text_color
++        border_str = "border: none;"
++        # Usar el radio de la clase si se quiere, o 0px para colapsado si interfiere visualmente
++        border_radius_str = "border-radius: 6px;"
++        # if not expanded:
++        #     border_radius_str = "border-radius: 0px;"
+ 
+-    def _apply_styles(self):
+-        button_style = f"""
++        if is_exit_button:
++            if expanded:
++                hover_bg_color_val = "#FFCDD2"
++                hover_text_color_val = "#B71C1C"
++            else:  # Exit button, collapsed
++                # hover_bg_color_val = self.hover_color # Ya es transparente, el hover puede ser sutil
++                # O un color específico si quieres que el área del ícono de salir resalte en hover
++                hover_bg_color_val = "rgba(200, 200, 200, 0.3)"  # Ejemplo: un gris muy sutil y transparente
++
++        # Estilo base
++        style = f"""
+             QPushButton {{
+-                background-color: {self.button_bg_color};
+-                color: {self.text_color};
+-                border: none;
+-                border-radius: 6px;
+-                text-align: left;
+-                padding: 8px 12px;
++                background-color: {bg_color};
++                color: {text_color_val};
++                {border_str}
++                {border_radius_str}
++                text-align: {text_align};
++                padding: {padding};
++                font-size: {self.menu_font.pointSize()}px;
++                min-height: {self.button_min_height}px;
+             }}
+             QPushButton:hover {{
+-                background-color: {self.hover_color};
++                background-color: {hover_bg_color_val};
++                color: {hover_text_color_val};
+             }}
+-            QPushButton:checked {{
+-                background-color: {self.selected_color};
+-                color: {self.text_color};
+-            }}
+-        """
+-
+-        for btn in self._btns.values():
+-            btn.setStyleSheet(button_style)
+-
+-        self._btn_exit.setStyleSheet(f"""
+-            QPushButton {{
+-                background-color: {self.button_bg_color};
+-                color: {self.text_color};
+-                border: none;
+-                border-radius: 6px;
+-                text-align: left;
+-                padding: 8px 12px;
+-            }}
+-            QPushButton:hover {{
+-                background-color: #FFCDD2;
+-                color: #B71C1C;
+-            }}
+-        """)
+-
+-    def toggle(self):
+-        start, end = (
+-            (self._w_exp, self._w_col)
+-            if self._is_expanded else
+-            (self._w_col, self._w_exp)
+-        )
+-        anim = QPropertyAnimation(self, b"minimumWidth", self)
+-        anim.setStartValue(start)
+-        anim.setEndValue(end)
+-        anim.setDuration(self._anim_dur)
+-        anim.setEasingCurve(QEasingCurve.Type.InOutQuint)
+-        anim.finished.connect(self._on_anim_done)
+-        anim.start()
++        """
++
++        # Estilo para :checked
++        if not is_exit_button:
++            if expanded:
++                if checked:  # Solo aplicar estilo de fondo si está chequeado Y expandido
++                    bg_color_checked = self.selected_color
++                else:  # Si no está chequeado pero expandido, usa el color de botón normal
++                    bg_color_checked = self.button_bg_color
++
++                style += f"""
++                QPushButton:checked {{
++                    background-color: {self.selected_color}; 
++                    color: {text_color_val};
++                }}
++                """
++            else:  # Collapsed y checkeable
++                # El fondo ya es transparente desde la regla base.
++                # Cambiamos el color del ícono si está 'checked'.
++                selected_icon_color = self.selected_color  # ej. #81C784
++                # O podrías querer un color de texto diferente para el ícono seleccionado
++                # selected_icon_color = "#FFFFFF" # Blanco sobre el selected_color si tuviera fondo
++                style += f"""
++                QPushButton:checked {{
++                    background-color: transparent; /* Asegurar transparencia */
++                    color: {selected_icon_color}; /* Ícono cambia de color */
++                }}
++                """
++        return style
+ 
+-        self._is_expanded = not self._is_expanded
+-        self.toggled.emit(self._is_expanded)
+-        self._set_logo_pixmap(expanded=self._is_expanded)
+-        self._app_name.setVisible(self._is_expanded)
+-
+-    def _set_logo_pixmap(self, expanded: bool):
+-        size = 40 if expanded else 32
+-        pix = QPixmap(self._logo_path).scaled(
+-            size, size,
+-            Qt.AspectRatioMode.KeepAspectRatio,
+-            Qt.TransformationMode.SmoothTransformation
+-        )
+-        self._logo_lbl.setPixmap(pix)
++    def _apply_styles(self):
++        for btn_text, btn in self._btns.items():
++            btn.setStyleSheet(self._generate_button_stylesheet(btn.isChecked(), self._is_expanded))
++        self._btn_exit.setStyleSheet(self._generate_button_stylesheet(False, self._is_expanded, is_exit_button=True))
+ 
+     def _on_anim_done(self):
+         for text, btn in self._btns.items():
+             btn.setText(text if self._is_expanded else "")
++            btn.setStyleSheet(self._generate_button_stylesheet(btn.isChecked(), self._is_expanded))
++            btn.adjustSize()  # <--- IMPORTANTE
++
+         self._btn_exit.setText("Salir" if self._is_expanded else "")
++        self._btn_exit.setStyleSheet(self._generate_button_stylesheet(False, self._is_expanded, is_exit_button=True))
++        self._btn_exit.adjustSize()  # <--- IMPORTANTE
++
++        self._apply_header_layout_styles()
++        # self.layout().activate() # Puede o no ser necesario
++
++    def _set_logo_pixmap(self, expanded: bool):
++        size = 40 if expanded else 30
++        if os.path.exists(self._logo_path):
++            pixmap = QPixmap(self._logo_path).scaled(
++                size, size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
++            )
++            self._logo_lbl.setPixmap(pixmap)
++        else:
++            self._logo_lbl.clear()
++            self._logo_lbl.setText("NL")  # Placeholder si no hay logo
++        self._logo_lbl.setFixedSize(size, size)
++
++    def toggle(self):
++        current_width = self.width()
++        target_width = self._w_col if self._is_expanded else self._w_exp
++
++        if hasattr(self, '_animation') and self._animation.state() == QPropertyAnimation.State.Running:
++            return
++
++        self._is_expanded = not self._is_expanded
++
++        self._app_name.setVisible(self._is_expanded)
++        self._set_logo_pixmap(expanded=self._is_expanded)
++        # self._apply_header_layout_styles() # Aplicar antes o después de la animación puede variar el efecto visual
++
++        self._animation = QPropertyAnimation(self, b"minimumWidth", self)  # Animar minimumWidth
++        self._animation.setStartValue(current_width)
++        self._animation.setEndValue(target_width)
++        self._animation.setDuration(self._anim_dur)
++        self._animation.setEasingCurve(QEasingCurve.Type.InOutQuint)
++        self._animation.finished.connect(self._on_anim_done)
++        self._animation.start()
++
++        self.toggled.emit(self._is_expanded)
+ 
+     def _handle_exit(self):
+-        self.window().close()
+\ No newline at end of file
++        if self.window():
++            self.window().close()
++
++
++# --- Código de prueba (colocar al final de tu archivo o en otro archivo) ---
++if __name__ == '__main__':
++    import sys
++    from PyQt6.QtWidgets import QApplication, QMainWindow, QDockWidget, QLabel
++
++    app = QApplication(sys.argv)
++
++    # --- Cargar QSS Global (simulación, ya que no tengo tu archivo qss aquí) ---
++    # global_qss = """
++    # QPushButton {
++    #     background-color: #0078D4; /* Azul primario del QSS global */
++    #     color: white;
++    #     border: 1px solid black; /* Borde del QSS global */
++    #     padding: 8px 16px; /* Padding del QSS global */
++    #     font-size: 13px;
++    #     border-radius: 4px;
++    #     min-height: 28px;
++    # }
++    # /* ... otros estilos ... */
++    # """
++    # app.setStyleSheet(global_qss) # Si tienes un QSS global, cárgalo así
++
++    main_window = QMainWindow()
++    main_window.setWindowTitle("Test Sidebar")
++    main_window.setGeometry(300, 300, 800, 600)
++
++    # icon_path = "/ruta/absoluta/a/tus/iconos" # Descomenta y usa si es necesario
++    # sidebar_widget = Sidebar(icon_folder=icon_path)
++    sidebar_widget = Sidebar()
++
++    dock_widget = QDockWidget("Menú", main_window)
++    dock_widget.setWidget(sidebar_widget)
++    dock_widget.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
++    main_window.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dock_widget)
++
++    central_label = QLabel("Contenido Principal de la Aplicación")
++    central_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
++    main_window.setCentralWidget(central_label)
++
++    main_window.show()
++    sys.exit(app.exec())
+\ No newline at end of file
+Index: Main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import sys\r\nfrom PyQt6.QtWidgets import QApplication\r\nfrom Calendar import CalendarWindow  # Importacion del hisotrial 'calendar'\r\n\r\ndef main():\r\n    app = QApplication(sys.argv)\r\n    window = CalendarWindow()\r\n    window.showMaximized()\r\n    sys.exit(app.exec())\r\n\r\nif __name__ == \"__main__\":\r\n    main()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Main.py b/Main.py
+--- a/Main.py	(revision 4038d929d386ae39d8c93aafb3ba61fdb87598ca)
++++ b/Main.py	(date 1747676163090)
+@@ -1,12 +1,118 @@
+ import sys
+-from PyQt6.QtWidgets import QApplication
+-from Calendar import CalendarWindow  # Importacion del hisotrial 'calendar'
++import os
++
++from PyQt6.QtWidgets import (
++    QApplication, QMainWindow, QWidget, QVBoxLayout,
++    QHBoxLayout, QStackedWidget, QLabel
++)
++from PyQt6.uic import loadUi
++from PyQt6.QtCore import QFile, QIODevice, QTextStream
++from PyQt6.QtCore import Qt
++from Interfaz.home import HomeWindow 
++from Interfaz.datos import DatosView 
++from Interfaz.sidebar import Sidebar
++from Interfaz.botonesheader import BotonesHeader
++from Interfaz.Calendar import CalendarWindow
++
++class MainWindow(QMainWindow):
++    def __init__(self):
++        super().__init__()
++
++        self.setWindowTitle("HydroTech")
++
++        # Widget central
++        central_widget = QWidget()
++        self.setCentralWidget(central_widget)
++
++        # Layout principal horizontal
++        main_layout = QHBoxLayout(central_widget)
++        main_layout.setContentsMargins(0, 0, 0, 0)
++        main_layout.setSpacing(0)
++
++        # ─── Área de contenido principal ───────────────────────────
++        content_widget = QWidget()
++        content_layout = QVBoxLayout(content_widget)
++        content_layout.setContentsMargins(0, 0, 0, 0)
++        content_layout.setSpacing(0)
++
++        sidebar_widget = Sidebar()
++        main_layout.addWidget(sidebar_widget)
++        
++        # Parte superior: botones
++        botones_widget = BotonesHeader()
++        content_layout.addWidget(botones_widget)
++
++        # Parte inferior: área de vistas
++        self.stack = QStackedWidget()
++        home_view = HomeWindow()
++        datos_view = DatosView()
++        historial_view = CalendarWindow()
++
++        self.stack.addWidget(home_view)  # 0
++        self.stack.addWidget(datos_view)  # 1
++        self.stack.addWidget(historial_view)  # 2
+ 
+-def main():
++        content_layout.addWidget(self.stack)
++
++        # Conectar los botones para cambiar la vista
++        botones_widget.btn_home.clicked.connect(lambda: self.stack.setCurrentIndex(0))
++        botones_widget.btn_datos.clicked.connect(lambda: self.stack.setCurrentIndex(1))
++        botones_widget.btn_historial.clicked.connect(lambda: self.stack.setCurrentIndex(2))
++
++        # Agrega el área de contenido al layout principal
++        main_layout.addWidget(content_widget)
++
++    def on_sidebar_toggled(self, expanded):
++    # Aquí podrías hacer que el contenido se expanda o se ajuste
++        if expanded:
++            print("Sidebar expandida")
++        else:
++            print("Sidebar retraída")
++    
++    # Aquí puedes forzar un resize si es necesario
++        self.adjustSize()
++
++    def _on_sidebar_toggled_with_message(self, expanded):
++        if expanded:
++            self.stack.setCurrentIndex(0)  # Home
++            print("Home")
++        else:
++            self.stack.setCurrentIndex(2)  # Configuración
++            print("Configuración")
++
++    def _create_centered_page(self, html_text):
++        page = QWidget()
++        layout = QVBoxLayout(page)
++        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
++        label = QLabel(html_text)
++        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
++        layout.addWidget(label)
++        return page
++
++
++if __name__ == "__main__":
+     app = QApplication(sys.argv)
+-    window = CalendarWindow()
++        # --- Cargar Hoja de Estilos ---
++    try:
++        script_dir = os.path.dirname(os.path.abspath(__file__))
++        qss_relative_path = os.path.join("access", "qss", "styles.qss")
++        qss_path = os.path.abspath(os.path.join(script_dir, qss_relative_path))
++        qss_file = QFile(qss_path)
++
++        if not qss_file.exists():
++            print(f"ERROR: El archivo de hoja de estilos NO EXISTE en la ruta: {qss_path}")
++        elif qss_file.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text):
++            stream = QTextStream(qss_file)
++            app.setStyleSheet(stream.readAll())
++            qss_file.close()
++            print(f"Hoja de estilos '{qss_path}' cargada correctamente.")
++        else:
++            print(f"ERROR: No se pudo abrir la hoja de estilos '{qss_path}'. Razón: {qss_file.errorString()}")
++
++    except Exception as e:
++        print(f"Excepción durante la carga de la hoja de estilos: {e}")
++    # --- Fin Carga de Estilos ---
++    
++    window = MainWindow()
+     window.showMaximized()
+-    sys.exit(app.exec())
+-
+-if __name__ == "__main__":
+-    main()
++    sys.exit(app.exec())
+\ No newline at end of file

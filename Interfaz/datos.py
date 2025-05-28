@@ -58,10 +58,10 @@ class DatosView(QMainWindow):
         self.model.setHorizontalHeaderLabels(["Nombre", "Datos", "Detalles"])
 
         data = [
-            ["PH", ""],
-            ["Nutrientes", ""],
-            ["Flujo del agua", ""],
-            ["Nivel del agua", ""],
+            ["PH", "Indica si el agua es ácida, neutra o alcanila. un pH correcto ayuda a la absorción de nutrientes."],
+            ["Nutrientes", "Son las sustancias disueltas en el agua que las plantas necesitan para crecer, como nitrógeno, fósforo y potasio."],
+            ["Flujo del agua", "Es el movimiento del agua a través del sistema de riego, asegurando que las plantas reciban la cantidad adecuada."],
+            ["Nivel del agua", "El volumen de agua disponible en el sistema, importante para mantener la salud de las plantas."],
         ]
 
         for row_data in data:
@@ -112,18 +112,75 @@ class DatosView(QMainWindow):
     def show_details_modal(self, nombre, texto_detalle):
         modal = QDialog(self)
         modal.setWindowTitle("Detalles")
-        modal.setFixedSize(400, 300)
+        modal.setFixedSize(420, 320)
         modal.setWindowModality(Qt.WindowModality.ApplicationModal)
+        modal.setStyleSheet("""
+            QDialog {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #f5f7fa, stop:1 #c3cfe2);
+                border: 2px solid #6a8caf;
+                box-shadow: 0px 8px 32px rgba(60, 60, 100, 0.18);
+            }
+        """)
 
         layout = QVBoxLayout(modal)
-        details_label = QLabel(f"<b>{nombre}</b><br><br>{texto_detalle}")
+        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setSpacing(18)
+
+        # Título estilizado
+        title = QLabel(nombre)
+        title.setStyleSheet("""
+            QLabel {
+                font-size: 22px;
+                font-weight: bold;
+                color: #2a3b4c;
+                letter-spacing: 1px;
+            }
+        """)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
+
+        # Línea decorativa
+        line = QFrame()
+        line.setFrameShape(QFrame.Shape.HLine)
+        line.setFrameShadow(QFrame.Shadow.Sunken)
+        line.setStyleSheet("background: #6a8caf; min-height:2px; max-height:2px; border:none;")
+        layout.addWidget(line)
+
+        # Texto de detalles
+        details_label = QLabel(texto_detalle)
         details_label.setWordWrap(True)
+        details_label.setStyleSheet("""
+            QLabel {
+                font-size: 15px;
+                color: #223344;
+                padding: 8px 0 8px 0;
+                line-height: 1.5em;
+            }
+        """)
         layout.addWidget(details_label)
+
+        # Botón de cerrar estilizado
+        from PyQt6.QtWidgets import QPushButton
+        close_btn = QPushButton("Cerrar")
+        close_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        close_btn.setStyleSheet("""
+            QPushButton {
+                background: #6a8caf;
+                color: white;
+                font-size: 15px;
+                border-radius: 10px;
+                padding: 8px 24px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background: #466080;
+            }
+        """)
+        close_btn.clicked.connect(modal.accept)
+        layout.addWidget(close_btn, alignment=Qt.AlignmentFlag.AlignRight)
 
         opacity_effect = QGraphicsOpacityEffect()
         modal.setGraphicsEffect(opacity_effect)
-
-        # GUARDAR la animación en self para evitar que se destruya
         self.animation = QPropertyAnimation(opacity_effect, b"opacity")
         self.animation.setDuration(400)
         self.animation.setStartValue(0.0)
@@ -141,10 +198,29 @@ class DatosView(QMainWindow):
         nombre = self.model.item(fila, 0).text()
 
         detalles = {
-            "PH": "Detalles de PH: ...",
-            "Nutrientes": "Detalles de Nutrientes: ...",
-            "Flujo del agua": "Detalles flujo de agua: ...",
-            "Nivel del agua": "Detalles de nivel de agua: ...",
+            "PH": (
+                "El pH indica el nivel de acidez o alcalinidad del agua. "
+                "Un pH adecuado (5.5 a 6.5 para la mayoría de cultivos hidropónicos) "
+                "es fundamental para la absorción óptima de nutrientes. "
+                "Valores fuera de rango pueden causar deficiencias o toxicidades en las plantas. "
+                "Se recomienda medirlo diariamente y ajustar con soluciones reguladoras si es necesario."
+            ),
+            "Nutrientes": (
+                "Los nutrientes esenciales incluyen nitrógeno (N), fósforo (P), potasio (K), calcio (Ca), magnesio (Mg) y micronutrientes. "
+                "La concentración y el equilibrio de estos elementos determinan el crecimiento y la salud de las plantas. "
+                "Un exceso o carencia puede provocar síntomas visibles como clorosis, necrosis o bajo rendimiento. "
+                "Es importante renovar la solución nutritiva periódicamente y monitorear la conductividad eléctrica (CE)."
+            ),
+            "Flujo del agua": (
+                "El flujo de agua asegura la oxigenación y distribución uniforme de nutrientes. "
+                "Un flujo insuficiente puede causar zonas muertas y acumulación de sales, mientras que un flujo excesivo puede dañar raíces. "
+                "Se recomienda mantener un flujo constante y revisar periódicamente las bombas y tuberías para evitar obstrucciones."
+            ),
+            "Nivel del agua": (
+                "El nivel de agua debe mantenerse estable para evitar que las raíces se sequen o se ahoguen. "
+                "Un nivel bajo puede exponer raíces al aire y causar estrés hídrico, mientras que un nivel alto puede reducir la oxigenación. "
+                "Es recomendable usar sensores o inspección visual diaria para ajustar el nivel según las necesidades del sistema y la etapa de cultivo."
+            ),
         }
 
         texto_detalle = detalles.get(nombre, "No hay detalles disponibles para este sensor.")

@@ -237,12 +237,19 @@ class HomeWindow(QWidget):
     def inicializar_series(self):
         # Obtiene los datos iniciales (BD o simulados)
         datos = self.obtener_datos_recientes()
-        # Asegura longitud 20
-        for k in datos:
-            if len(datos[k]) < 20:
+
+        # --- BUCLE FOR AÑADIDO ---
+        # Iteramos sobre cada llave ('ph', 'temperatura', 'ce', 'nivel')
+        for k in datos.keys():
+            # --- CÓDIGO DE RELLENO (DENTRO DEL BUCLE) ---
+            if not datos[k]:
+                # Si la lista está VACÍA, rellénala con 20 ceros
+                datos[k] = [0] * 20
+            elif len(datos[k]) < 20:
+                # Si NO está vacía PERO es más corta de 20, rellénala con su primer elemento
                 datos[k] = [datos[k][0]] * (20 - len(datos[k])) + datos[k]
-            else:
-                datos[k] = datos[k][-20:]
+            # --- FIN CÓDIGO DE RELLENO ---
+
         return datos
 
     def actualizar_en_tiempo_real(self):
@@ -259,10 +266,19 @@ class HomeWindow(QWidget):
 
     def closeEvent(self, event):
         # Detener el hilo de la base de datos al cerrar
-        if self.worker_thread and self.worker:
-            self.worker.stop()
-            self.worker_thread.quit()
-            self.worker_thread.wait()
+        if hasattr(self, 'worker_thread') and self.worker_thread is not None:
+            if hasattr(self, 'worker') and self.worker is not None:
+                try:
+                    self.worker.stop()
+                except Exception:
+                    pass
+            try:
+                self.worker_thread.quit()
+                self.worker_thread.wait(2000)  # Espera hasta 2 segundos
+            except Exception:
+                pass
+            self.worker_thread = None
+            self.worker = None
         super().closeEvent(event)
 
     def solicitar_actualizacion_datos(self):
@@ -357,68 +373,72 @@ class PlotCanvas(FigureCanvas):
 
     def plot(self, title, data):
         self.axes.clear()
+        # --- MODERNIZA ESTILO DE LA GRÁFICA ---
+        self.figure.set_facecolor('#e8ecf3')  # gris-azulado suave
+        self.axes.set_facecolor('#f5f7fa')  # blanco azulado
+        axis_color = '#6a8caf'
+        self.axes.spines['left'].set_color(axis_color)
+        self.axes.spines['bottom'].set_color(axis_color)
+        self.axes.spines['left'].set_linewidth(2)
+        self.axes.spines['bottom'].set_linewidth(2)
+        self.axes.spines['top'].set_visible(False)
+        self.axes.spines['right'].set_visible(False)
+        self.axes.tick_params(axis='both', labelsize=11, colors=axis_color, width=1.5)
+        self.axes.grid(True, linestyle='--', linewidth=1, alpha=0.18, color='#34495e')
+        self.axes.set_xlabel("Tiempo", fontsize=13, color=axis_color, labelpad=15, fontweight='bold')
+        # --- FIN MODERNIZA ESTILO ---
+
         # Filtrar datos inválidos (None, nan, inf) para evitar crash en interpolación
         if data:
             x = np.arange(len(data))
             y = np.array(data, dtype=float)
-            # Filtra nan e inf
             mask = np.isfinite(y)
             x = x[mask]
             y = y[mask]
         else:
             x = np.array([])
             y = np.array([])
-        if len(x) > 1:
+        # --- CORRECCIÓN: solo interpola si hay al menos 2 puntos ---
+        if len(x) >= 2:
             xnew = np.linspace(x.min(), x.max(), 300)
             spl = make_interp_spline(x, y, k=2)
             y_smooth = spl(xnew)
-        else:
-            xnew, y_smooth = x, y
-        if len(x) > 0:
-            self.axes.plot(xnew, y_smooth, color='#3498db', linewidth=3, solid_capstyle='round')
-        self.axes.set_facecolor('#ffffff')
-        self.axes.grid(True, linestyle='--', linewidth=0.5, alpha=0.6, color='#0000FF')
-        [self.axes.spines[side].set_visible(False) for side in ['top', 'right']]
-        self.axes.spines['left'].set_color('#cccccc')
-        self.axes.spines['bottom'].set_color('#cccccc')
-        # Eje X: muestra tiempo relativo si hay suficientes datos
+            self.axes.plot(xnew, y_smooth, color='#3498db', linewidth=3, solid_capstyle='round', zorder=3)
+        elif len(x) == 1:
+            self.axes.plot(x, y, 'o', color='#3498db', markersize=8, zorder=3)
         if len(x) > 1:
             minutos = 8
             labels = [f"-{(len(x)-i-1)*minutos}min" for i in range(len(x))]
             step = max(1, len(x)//6)
             self.axes.set_xticks(x[::step])
-            self.axes.set_xticklabels(labels[::step], rotation=30, fontsize=9)
-        self.axes.set_xlabel("Tiempo", fontsize=12, color='#34495e', labelpad=15)
-        self.axes.set_ylabel("Valor", fontsize=12, color='#34495e', labelpad=15)
-        self.axes.tick_params(axis='both', labelsize=10, colors='#34495e')
-
+            self.axes.set_xticklabels(labels[::step], rotation=30, fontsize=10, color=axis_color)
+        # Coloreado de rangos: rojo (peligro), amarillo (advertencia), verde (ok)
         if title.lower().startswith("ph"):
-            self.axes.axhspan(0, 5.5, facecolor="#FF0000", alpha=0.4)
-            self.axes.axhspan(5.5, 6.0, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(6.0, 6.8, facecolor="#00C853", alpha=0.4)
-            self.axes.axhspan(6.8, 7.5, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(7.5, 14, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(0, 5.5, facecolor="#FF0000", alpha=0.4)      # rojo
+            self.axes.axhspan(5.5, 6.0, facecolor="#f1c40f", alpha=0.4)    # amarillo
+            self.axes.axhspan(6.0, 6.8, facecolor="#00C853", alpha=0.4)    # verde
+            self.axes.axhspan(6.8, 7.5, facecolor="#f1c40f", alpha=0.4)    # amarillo
+            self.axes.axhspan(7.5, 14, facecolor="#FF0000", alpha=0.4)     # rojo
             self.axes.set_ylim(0, 14)
         elif "temperatura" in title.lower():
-            self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)
-            self.axes.axhspan(10, 18, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(18, 24, facecolor="#00C853", alpha=0.4)
-            self.axes.axhspan(24, 30, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(30, 50, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)       # rojo
+            self.axes.axhspan(10, 4, facecolor="#f1c40f", alpha=0.4)      # amarillo
+            self.axes.axhspan(4, 24, facecolor="#00C853", alpha=0.4)      # verde
+            self.axes.axhspan(24, 30, facecolor="#f1c40f", alpha=0.4)      # amarillo
+            self.axes.axhspan(30, 50, facecolor="#FF0000", alpha=0.4)      # rojo
             self.axes.set_ylim(0, 40)
         elif "ce" in title.lower():
-            self.axes.axhspan(0, 1, facecolor="#FF0000", alpha=0.4)
-            self.axes.axhspan(1, 1.5, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(1.5, 2.0, facecolor="#00C853", alpha=0.4)
-            self.axes.axhspan(2.0, 2.5, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(2.5, 5, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(0, 1, facecolor="#FF0000", alpha=0.4)        # rojo
+            self.axes.axhspan(1, 1.5, facecolor="#f1c40f", alpha=0.4)      # amarillo
+            self.axes.axhspan(1.5, 2.0, facecolor="#00C853", alpha=0.4)    # verde
+            self.axes.axhspan(2.0, 2.5, facecolor="#f1c40f", alpha=0.4)    # amarillo
+            self.axes.axhspan(2.5, 5, facecolor="#FF0000", alpha=0.4)      # rojo
             self.axes.set_ylim(0, 4)
         elif "nivel" in title.lower():
-            self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)
-            self.axes.axhspan(10, 15, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(15, 25, facecolor="#00C853", alpha=0.4)
-            self.axes.axhspan(25, 30, facecolor="#f1c40f", alpha=0.4)
-            self.axes.axhspan(30, 35, facecolor="#FF0000", alpha=0.4)
+            self.axes.axhspan(0, 10, facecolor="#FF0000", alpha=0.4)       # rojo
+            self.axes.axhspan(10, 15, facecolor="#f1c40f", alpha=0.4)      # amarillo
+            self.axes.axhspan(15, 25, facecolor="#00C853", alpha=0.4)      # verde
+            self.axes.axhspan(25, 30, facecolor="#f1c40f", alpha=0.4)      # amarillo
+            self.axes.axhspan(30, 35, facecolor="#FF0000", alpha=0.4)      # rojo
             self.axes.set_ylim(0, 35)
-
         self.draw()
