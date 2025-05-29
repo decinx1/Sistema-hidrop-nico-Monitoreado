@@ -209,10 +209,10 @@ if __name__ == "__main__":
     # --- Fin Carga de Estilos ---
 
     # Mostrar ventana de login/registro y luego dashboard
-    auth = AuthWindow()
-    auth.show()
-    app.exec()
+    # auth = AuthWindow()
+    # auth.show()
+    # app.exec()
     # Para pruebas sin login, puedes iniciar el dashboard directamente:
-    #main_window = MainWindow()
-    #main_window.showMaximized()
-    #app.exec()
+    main_window = MainWindow()
+    main_window.showMaximized()
+    app.exec()

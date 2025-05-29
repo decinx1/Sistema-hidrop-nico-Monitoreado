@@ -1,11 +1,51 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout,
     QDialog, QHBoxLayout, QComboBox, QSpinBox, QTableWidget, QTableWidgetItem,
-    QTimeEdit, QLineEdit, QMessageBox
+    QTimeEdit, QLineEdit, QMessageBox, QMenuBar, QStatusBar, QCalendarWidget
 )
 from PyQt6.QtCore import Qt, QDate, QTime
 from Interfaz.conexion_cliente import obtener_datos_por_fecha
 from functools import partial
+
+
+class CalendarUI(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("MainWindow")
+        self.setGeometry(0, 0, 744, 674)
+
+        # Central widget and layout
+        self.centralwidget = QWidget(self)
+        self.setCentralWidget(self.centralwidget)
+        self.verticalLayout = QVBoxLayout(self.centralwidget)
+
+        # Inner widget and layout
+        self.widget = QWidget(self.centralwidget)
+        self.verticalLayout_2 = QVBoxLayout(self.widget)
+        self.widget.setLayout(self.verticalLayout_2)
+        self.verticalLayout.addWidget(self.widget)
+
+        # Search line edit
+        self.lineEditSearch = QLineEdit(self.widget)
+        self.lineEditSearch.setPlaceholderText("Ingrese el criterio de búsqueda")
+        self.verticalLayout_2.addWidget(self.lineEditSearch)
+
+        # Search button
+        self.pushButtonSearch = QPushButton("Buscar", self.widget)
+        self.verticalLayout_2.addWidget(self.pushButtonSearch)
+
+        # Calendar widget
+        self.calendarWidget = QCalendarWidget(self.widget)
+        self.verticalLayout_2.addWidget(self.calendarWidget)
+
+        # Menu bar
+        self.menubar = QMenuBar(self)
+        self.menubar.setGeometry(0, 0, 744, 22)
+        self.setMenuBar(self.menubar)
+
+        # Status bar
+        self.statusbar = QStatusBar(self)
+        self.setStatusBar(self.statusbar)
 
 
 class DayDialog(QDialog):
