@@ -2,45 +2,98 @@ from PyQt6.QtWidgets import (
     QWidget, QButtonGroup, QStackedWidget, QDialog, QVBoxLayout,
     QLabel, QTableWidget, QTableWidgetItem, QMessageBox, QLineEdit, QPushButton, QHBoxLayout
 )
-from PyQt6.uic import loadUi
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from datetime import datetime
 from Interfaz.conexion_cliente import obtener_todas_las_fechas_y_datos
 
 
-class BotonesHeader(QWidget):
+class BotonesHeaderUI(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        # Cargar el diseño desde el archivo UI
-        loadUi("ui/botonesHead.ui", self)
+        self.setObjectName("Form")
+        self.setGeometry(0, 0, 400, 300)
+        self.setWindowTitle("Form")
+        self.setStyleSheet("""/* Header completo: botones + buscador */
+QPushButton {
+    padding: 8px 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+QPushButton:hover {
+    border: 2px solid #7db9e8;
+    background-color: #f1f1f1;
+}
+QPushButton:checked {
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+}
+QLineEdit {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+""")
+        # Layout principal
+        self.horizontalLayout_2 = QHBoxLayout(self)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        # Widget contenedor
+        self.widget = QWidget(self)
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QHBoxLayout(self.widget)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        # Botón Gráficas
+        self.btnHome = QPushButton("Gráficas", self.widget)
+        self.btnHome.setObjectName("btnHome")
+        self.btnHome.setCheckable(True)
+        self.horizontalLayout.addWidget(self.btnHome)
+        # Botón Datos
+        self.btnDatos = QPushButton("Datos", self.widget)
+        self.btnDatos.setObjectName("btnDatos")
+        self.btnDatos.setCheckable(True)
+        self.horizontalLayout.addWidget(self.btnDatos)
+        # Botón Historial
+        self.btnHistorial = QPushButton("Historial", self.widget)
+        self.btnHistorial.setObjectName("btnHistorial")
+        self.btnHistorial.setCheckable(True)
+        self.horizontalLayout.addWidget(self.btnHistorial)
+        # Campo de texto para búsqueda
+        self.lineEdit = QLineEdit(self.widget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit.setPlaceholderText("Buscar...")
+        self.lineEdit.setMinimumHeight(35)
+        self.lineEdit.setMaximumWidth(500)
+        self.horizontalLayout.addWidget(self.lineEdit)
+        # Botón de búsqueda
+        self.btnBuscar = QPushButton("Buscar", self.widget)
+        self.btnBuscar.setObjectName("btnBuscar")
+        self.horizontalLayout.addWidget(self.btnBuscar)
+        # Añadir layout al widget principal
+        self.horizontalLayout_2.addWidget(self.widget)
+
         # Grupo de botones
         self.button_group = QButtonGroup(self)
-        self.btn_home = self.findChild(QWidget, "btnHome")
-        self.btn_datos = self.findChild(QWidget, "btnDatos")
-        self.btn_historial = self.findChild(QWidget, "btnHistorial")
-        self.button_group.addButton(self.btn_home)
-        self.button_group.addButton(self.btn_datos)
-        self.button_group.addButton(self.btn_historial)
-        self.btn_home.setChecked(True)
+        self.button_group.addButton(self.btnHome)
+        self.button_group.addButton(self.btnDatos)
+        self.button_group.addButton(self.btnHistorial)
+        self.btnHome.setChecked(True)
         self.button_group.setExclusive(True)
         self.button_group.buttonClicked.connect(self._on_button_clicked)
         # Asignar iconos solo si existen (evita retrasos si no existen)
         import os
         iconos = {
-            self.btn_home: "Interfaz/icons/grafica.png",
-            self.btn_datos: "Interfaz/icons/info.png",
-            self.btn_historial: "Interfaz/icons/historial.png"
+            self.btnHome: "Interfaz/icons/grafica.png",
+            self.btnDatos: "Interfaz/icons/info.png",
+            self.btnHistorial: "Interfaz/icons/historial.png"
         }
         for btn, icon_path in iconos.items():
             if os.path.exists(icon_path):
                 btn.setIcon(QIcon(icon_path))
         # Botón de búsqueda
-        self.btn_buscar = self.findChild(QPushButton, "btnBuscar")
-        self.btn_buscar.setStyleSheet("background-color: #4CAF50; color: white;")  # <-- LÍNEA AGREGADA
-        self.btn_buscar.clicked.connect(self.realizar_busqueda)
-        # Campo de texto
-        self.lineEdit = self.findChild(QLineEdit, "lineEdit")
-        self.lineEdit.setPlaceholderText("Buscar por fecha (dd/mm/yyyy) o palabra (ejemplo: ph, temperatura)")
+        self.btnBuscar.setStyleSheet("background-color: #4CAF50; color: white;")  # <-- LÍNEA AGREGADA
+        self.btnBuscar.clicked.connect(self.realizar_busqueda)
 
     def realizar_busqueda(self):
         palabra_clave = self.lineEdit.text().strip()
@@ -96,11 +149,11 @@ class BotonesHeader(QWidget):
 
     def _on_button_clicked(self, button):
         # Puedes personalizar la acción según el botón presionado
-        if button == self.btn_home:
+        if button == self.btnHome:
             print("Botón Home presionado")
-        elif button == self.btn_datos:
+        elif button == self.btnDatos:
             print("Botón Datos presionado")
-        elif button == self.btn_historial:
+        elif button == self.btnHistorial:
             print("Botón Historial presionado")
         # Aquí puedes emitir señales o llamar funciones para cambiar la vista
 

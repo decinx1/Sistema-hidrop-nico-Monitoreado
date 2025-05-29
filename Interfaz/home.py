@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-    QScrollArea, QFrame, QSizePolicy, QToolTip
+    QMainWindow, QWidget, QVBoxLayout, QGridLayout, QGraphicsView, QMenuBar, QStatusBar, QLabel, QHBoxLayout, QFrame, QSizePolicy, QToolTip
 )
 from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal, QObject
 from PyQt6.QtGui import QPixmap
@@ -55,19 +54,57 @@ class DataFetchWorker(QObject):
                     datos[sensor] = valores[-20:] if valores else []
         self.data_ready.emit(datos)
 
-class HomeWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-
-        # Configuración del scroll principal
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-
-        # Contenedor principal
-        container = QWidget()
-        self.main_layout = QVBoxLayout(container)
-        self.main_layout.setContentsMargins(20, 20, 20, 20)
-        self.main_layout.setSpacing(40)
+class HomeWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setObjectName("MainWindow")
+        self.setGeometry(0, 0, 800, 600)
+        self.setWindowTitle("HydroTech")
+        self.setStyleSheet("")
+        # Central widget
+        self.centralwidget = QWidget(self)
+        self.centralwidget.setObjectName("centralwidget")
+        # --- SCROLL AREA para todo el contenido central ---
+        from PyQt6.QtWidgets import QScrollArea
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_content = QWidget()
+        self.scroll_area.setWidget(self.scroll_content)
+        self.setCentralWidget(self.scroll_area)
+        # Main vertical layout
+        self.verticalLayout_2 = QVBoxLayout(self.scroll_content)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        # Main layout para las cards y secciones
+        self.main_layout = QVBoxLayout()
+        self.verticalLayout_2.addLayout(self.main_layout)
+        # Widget para los gráficos (legacy, si lo usas en otro lado)
+        self.temp_Grafico = QWidget(self.scroll_content)
+        self.temp_Grafico.setObjectName("temp_Grafico")
+        self.gridLayout = QGridLayout(self.temp_Grafico)
+        self.gridLayout.setObjectName("gridLayout")
+        # Gráficos
+        self.pH_Grafico = QGraphicsView(self.temp_Grafico)
+        self.pH_Grafico.setObjectName("pH_Grafico")
+        self.gridLayout.addWidget(self.pH_Grafico, 0, 0)
+        self.temp_Grafica = QGraphicsView(self.temp_Grafico)
+        self.temp_Grafica.setObjectName("temp_Grafica")
+        self.gridLayout.addWidget(self.temp_Grafica, 0, 1)
+        self.CE_Grafica = QGraphicsView(self.temp_Grafico)
+        self.CE_Grafica.setObjectName("CE_Grafica")
+        self.gridLayout.addWidget(self.CE_Grafica, 1, 0)
+        self.ultrasonico_Grafica = QGraphicsView(self.temp_Grafico)
+        self.ultrasonico_Grafica.setObjectName("ultrasonico_Grafica")
+        self.gridLayout.addWidget(self.ultrasonico_Grafica, 1, 1)
+        # --- Si quieres el diseño clásico del .ui, muestra el grid de gráficos arriba ---
+        # self.verticalLayout_2.addWidget(self.temp_Grafico)
+        # Menubar y statusbar
+        self.menubar = QMenuBar(self)
+        self.menubar.setObjectName("menubar")
+        self.menubar.setGeometry(0, 0, 800, 22)
+        self.setMenuBar(self.menubar)
+        self.statusbar = QStatusBar(self)
+        self.statusbar.setObjectName("statusbar")
+        self.setStatusBar(self.statusbar)
 
         # --- NUEVO: Cargar datos reales o simular si no hay conexión ---
         self.datos_recientes = self.obtener_datos_recientes()
@@ -121,12 +158,6 @@ class HomeWindow(QWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self.solicitar_actualizacion_datos)
         self.timer.start(8000)  # Cada 8 segundos
-
-        # Configuración final del layout
-        scroll_area.setWidget(container)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(scroll_area)
 
     def add_section_title(self, text):
         label = QLabel(text)

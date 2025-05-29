@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d26b1d94-a60f-4fe4-b060-d92551513297" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Sistema-hidrop-nico-Monitoreado.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Sistema-hidrop-nico-Monitoreado.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interfaz/Calendar.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaz/Calendar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interfaz/botonesheader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaz/botonesheader.py" afterDir="false" />
-    </list>
+    <list default="true" id="d26b1d94-a60f-4fe4-b060-d92551513297" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,23 +27,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Calendar.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.conexion_cliente.executor": "Run",
-    "Python.home.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.sidebar.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "trabajo-recuperado",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/decinx/OneDrive/Escritorio/uni/Sistema-hidrop-nico-Monitoreado",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Calendar.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.conexion_cliente.executor&quot;: &quot;Run&quot;,
+    &quot;Python.home.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sidebar.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Luis&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/decinx/OneDrive/Escritorio/uni/Sistema-hidrop-nico-Monitoreado&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.Main">
     <configuration name="Calendar" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Sistema-hidrop-nico-Monitoreado" />
