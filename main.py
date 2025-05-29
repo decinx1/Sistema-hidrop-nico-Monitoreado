@@ -9,6 +9,10 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
 
+# Importar LoginForm en vez de LoginFormUI
+from Interfaz.login import LoginForm
+from Interfaz.register import RegisterForm
+
 
 class LoginDialog(QDialog):
     def __init__(self):
@@ -46,9 +50,7 @@ class AuthWindow(QMainWindow):
         self.setFixedSize(400, 400)
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
-        # Importaciones bajo demanda
-        from Interfaz.login import LoginForm
-        from Interfaz.register import RegisterForm
+        # Usar LoginForm (con diseño y lógica restaurados) en vez de LoginFormUI
         self.login_form = LoginForm(self)
         self.register_form = RegisterForm(self)
         self.stack.addWidget(self.login_form)  # índice 0
