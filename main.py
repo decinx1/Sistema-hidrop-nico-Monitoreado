@@ -17,19 +17,39 @@ from Interfaz.register import RegisterForm
 class LoginDialog(QDialog):
     def __init__(self):
         super().__init__()
-        # Eliminado: loadUi(os.path.join("ui", "ui_login.ui"), self)
         self.setWindowTitle("Inicio de Sesión")
         self.staticUser = "hydroadmin"
         self.staticPass = "123"
-        # Aquí deberías crear los widgets manualmente si no usas .ui
-        # Por ejemplo:
-        # self.lineEdit_user = QLineEdit(self)
-        # self.lineEdit_pass = QLineEdit(self)
-        # self.pushButton = QPushButton("Iniciar sesión", self)
-        # self.label_status = QLabel("", self)
-        # ...y organizar con layouts
-        # self.pushButton.clicked.connect(self.check_login)
         self.accepted = False
+
+        # Crear widgets manualmente
+        layout = QVBoxLayout(self)
+        self.label_title = QLabel("Inicio de Sesión")
+        self.label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_title.setStyleSheet("font-size: 18px; font-weight: bold; margin-bottom: 10px;")
+        layout.addWidget(self.label_title)
+
+        self.lineEdit_user = QLabel("Usuario:")
+        layout.addWidget(self.lineEdit_user)
+        self.input_user = QWidget()
+        from PyQt6.QtWidgets import QLineEdit
+        self.lineEdit_user = QLineEdit()
+        layout.addWidget(self.lineEdit_user)
+
+        self.lineEdit_pass_label = QLabel("Contraseña:")
+        layout.addWidget(self.lineEdit_pass_label)
+        self.lineEdit_pass = QLineEdit()
+        self.lineEdit_pass.setEchoMode(QLineEdit.EchoMode.Password)
+        layout.addWidget(self.lineEdit_pass)
+
+        from PyQt6.QtWidgets import QPushButton
+        self.pushButton = QPushButton("Iniciar sesión")
+        layout.addWidget(self.pushButton)
+        self.label_status = QLabel("")
+        self.label_status.setStyleSheet("color: red;")
+        layout.addWidget(self.label_status)
+
+        self.pushButton.clicked.connect(self.check_login)
 
     def check_login(self):
         user = self.lineEdit_user.text()
