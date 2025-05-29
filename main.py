@@ -85,8 +85,8 @@ class MainWindow(QMainWindow):
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
         # BotonesHeader con importación bajo demanda
-        from Interfaz.botonesheader import BotonesHeader
-        self.botones_widget = BotonesHeader()
+        from Interfaz.botonesheader import BotonesHeaderUI
+        self.botones_widget = BotonesHeaderUI()
         content_layout.addWidget(self.botones_widget)
         self.stack = QStackedWidget()
         self.views = {}  # Diccionario para lazy loading
@@ -94,9 +94,9 @@ class MainWindow(QMainWindow):
         content_layout.addWidget(self.stack)
         main_layout.addWidget(content_widget)
         # Conectar solo los botones de BotonesHeader a las vistas que lo requieren
-        self.botones_widget.btn_home.clicked.connect(lambda: self._load_view(0))
-        self.botones_widget.btn_datos.clicked.connect(lambda: self._load_view(1))
-        self.botones_widget.btn_historial.clicked.connect(lambda: self._load_view(2))
+        self.botones_widget.btnHome.clicked.connect(lambda: self._load_view(0))
+        self.botones_widget.btnDatos.clicked.connect(lambda: self._load_view(1))
+        self.botones_widget.btnHistorial.clicked.connect(lambda: self._load_view(2))
         # Conectar Sidebar a las vistas
         sidebar_widget._btns["Home"].clicked.connect(lambda: self._show_view_with_header(0))
         sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._show_view_without_header(3))
@@ -209,10 +209,10 @@ if __name__ == "__main__":
     # --- Fin Carga de Estilos ---
 
     # Mostrar ventana de login/registro y luego dashboard
-    auth = AuthWindow()
-    auth.show()
-    app.exec()
+    # auth = AuthWindow()
+    # auth.show()
+    # app.exec()
     # Para pruebas sin login, puedes iniciar el dashboard directamente:
-    #main_window = MainWindow()
-    #main_window.showMaximized()
-    #app.exec()
+    main_window = MainWindow()
+    main_window.showMaximized()
+    app.exec()
