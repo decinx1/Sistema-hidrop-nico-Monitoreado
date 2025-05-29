@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
     QHBoxLayout, QStackedWidget, QLabel, QDialog
 )
-from PyQt6.uic import loadUi
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
 
@@ -14,11 +13,18 @@ from PyQt6.QtCore import Qt
 class LoginDialog(QDialog):
     def __init__(self):
         super().__init__()
-        loadUi(os.path.join("ui", "ui_login.ui"), self)
+        # Eliminado: loadUi(os.path.join("ui", "ui_login.ui"), self)
         self.setWindowTitle("Inicio de Sesión")
         self.staticUser = "hydroadmin"
         self.staticPass = "123"
-        self.pushButton.clicked.connect(self.check_login)
+        # Aquí deberías crear los widgets manualmente si no usas .ui
+        # Por ejemplo:
+        # self.lineEdit_user = QLineEdit(self)
+        # self.lineEdit_pass = QLineEdit(self)
+        # self.pushButton = QPushButton("Iniciar sesión", self)
+        # self.label_status = QLabel("", self)
+        # ...y organizar con layouts
+        # self.pushButton.clicked.connect(self.check_login)
         self.accepted = False
 
     def check_login(self):
