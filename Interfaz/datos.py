@@ -1,11 +1,10 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QTableView, QHeaderView, QLabel,
     QVBoxLayout, QDialog, QGraphicsOpacityEffect,
-    QStyledItemDelegate, QFrame, QSizePolicy, QHBoxLayout
+    QStyledItemDelegate, QFrame, QSizePolicy, QHBoxLayout, QPushButton
 )
 from PyQt6.QtGui import QStandardItemModel, QStandardItem, QPainter, QColor, QPen, QBrush, QIcon
 from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRectF, QSize
-from PyQt6.uic import loadUi
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import os
@@ -51,9 +50,30 @@ class RoundedTextDelegate(QStyledItemDelegate):
 class DatosView(QMainWindow):
     def __init__(self):
         super().__init__()
-        loadUi("ui/datos.ui", self)
+        self.setWindowTitle("MainWindow")
+        self.resize(800, 600)
 
-        self.table = self.findChild(QTableView, "tableView")
+        # Central widget y layout principal
+        central_widget = QFrame(self)
+        main_layout = QVBoxLayout(central_widget)
+        main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setCentralWidget(central_widget)
+
+        # Content widget y layout horizontal
+        content_widget = QFrame(central_widget)
+        content_layout = QHBoxLayout(content_widget)
+        main_layout.addWidget(content_widget)
+
+        # Tabla widget y layout horizontal (spacing 0)
+        tabla_widget = QFrame(content_widget)
+        tabla_layout = QHBoxLayout(tabla_widget)
+        tabla_layout.setSpacing(0)
+        content_layout.addWidget(tabla_widget)
+
+        # QTableView
+        self.table = QTableView(tabla_widget)
+        tabla_layout.addWidget(self.table)
+
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Nombre", "Datos", "Detalles"])
 
@@ -92,22 +112,13 @@ class DatosView(QMainWindow):
 
         self.table.clicked.connect(self.on_table_click)
 
-        # Crear un layout principal para organizar la tabla y la escala
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.table)
-
         # Agregar la escala visual de pH debajo de la tabla
-        QLabel("Escala de pH").setObjectName("sectionTitle")
-        main_layout.addWidget(QLabel("Escala de pH"), alignment=Qt.AlignmentFlag.AlignCenter)
-        main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        ph_label = QLabel("Escala de pH")
+        ph_label.setObjectName("sectionTitle")
+        main_layout.addWidget(ph_label, alignment=Qt.AlignmentFlag.AlignCenter)
         self.ph_card = QFrame()
         self.add_ph_scale()
         main_layout.addWidget(self.ph_card)
-        
-        # Establecer el layout principal en la ventana
-        central_widget = QFrame()
-        central_widget.setLayout(main_layout)
-        self.setCentralWidget(central_widget)
 
     def show_details_modal(self, nombre, texto_detalle):
         modal = QDialog(self)
@@ -116,7 +127,7 @@ class DatosView(QMainWindow):
         modal.setWindowModality(Qt.WindowModality.ApplicationModal)
         modal.setStyleSheet("""
             QDialog {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #f5f7fa, stop:1 #c3cfe2);
+                background: qlineargradient(x1:0, y1:0, x2:1, y2=1, stop:0 #f5f7fa, stop:1 #c3cfe2);
                 border: 2px solid #6a8caf;
                 box-shadow: 0px 8px 32px rgba(60, 60, 100, 0.18);
             }
@@ -160,7 +171,6 @@ class DatosView(QMainWindow):
         layout.addWidget(details_label)
 
         # Botón de cerrar estilizado
-        from PyQt6.QtWidgets import QPushButton
         close_btn = QPushButton("Cerrar")
         close_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         close_btn.setStyleSheet("""
@@ -225,8 +235,6 @@ class DatosView(QMainWindow):
 
         texto_detalle = detalles.get(nombre, "No hay detalles disponibles para este sensor.")
         self.show_details_modal(nombre, texto_detalle)
-
-    # Aquí puedes agregar más métodos o funcionalidades según sea necesario
 
     def add_ph_scale(self):
         ph_card = QFrame()
