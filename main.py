@@ -10,6 +10,10 @@ from PyQt6.uic import loadUi
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
 
+# Importar LoginForm en vez de LoginFormUI
+from Interfaz.login import LoginForm
+from Interfaz.register import RegisterForm
+
 
 class LoginDialog(QDialog):
     def __init__(self):
@@ -40,9 +44,7 @@ class AuthWindow(QMainWindow):
         self.setFixedSize(400, 400)
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
-        # Importaciones bajo demanda
-        from Interfaz.login import LoginForm
-        from Interfaz.register import RegisterForm
+        # Usar LoginForm (con diseño y lógica restaurados) en vez de LoginFormUI
         self.login_form = LoginForm(self)
         self.register_form = RegisterForm(self)
         self.stack.addWidget(self.login_form)  # índice 0
@@ -209,10 +211,10 @@ if __name__ == "__main__":
     # --- Fin Carga de Estilos ---
 
     # Mostrar ventana de login/registro y luego dashboard
-    # auth = AuthWindow()
-    # auth.show()
-    # app.exec()
-    # Para pruebas sin login, puedes iniciar el dashboard directamente:
-    main_window = MainWindow()
-    main_window.showMaximized()
+    auth = AuthWindow()
+    auth.show()
     app.exec()
+    # Para pruebas sin login, puedes iniciar el dashboard directamente:
+    # main_window = MainWindow()
+    # main_window.showMaximized()
+    # app.exec()
