@@ -31,8 +31,8 @@ class Sidebar(QWidget):
 
         self._items = menu_items or [
             ("Home", "home.png"),
-            ("Configuración", "config.png"),
-            ("Usuario", "Usuario.png"),
+            ("Datos", "data.png"),
+            ("Historial", "history.png"),
         ]
 
         self._w_exp, self._w_col = expanded_width, collapsed_width

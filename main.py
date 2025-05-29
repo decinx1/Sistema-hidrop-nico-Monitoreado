@@ -9,9 +9,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QFile, QIODevice, QTextStream
 from PyQt6.QtCore import Qt
 
-# Importar LoginForm en vez de LoginFormUI
+# Importar solo LoginForm
 from Interfaz.login import LoginForm
-from Interfaz.register import RegisterForm
 
 
 class LoginDialog(QDialog):
@@ -70,11 +69,9 @@ class AuthWindow(QMainWindow):
         self.setFixedSize(400, 400)
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
-        # Usar LoginForm (con diseño y lógica restaurados) en vez de LoginFormUI
+        # Usar solo LoginForm
         self.login_form = LoginForm(self)
-        self.register_form = RegisterForm(self)
         self.stack.addWidget(self.login_form)  # índice 0
-        self.stack.addWidget(self.register_form)  # índice 1
         self.stack.setCurrentIndex(0)
 
         self.main_app_window = None  # <--- AÑADIDO: Para guardar la ventana principal
@@ -82,8 +79,6 @@ class AuthWindow(QMainWindow):
     def cambiar_vista(self, vista):
         if vista == "login":
             self.stack.setCurrentIndex(0)
-        elif vista == "registro":
-            self.stack.setCurrentIndex(1)
 
     # <--- MÉTODO AÑADIDO --- >
     def login_exitoso(self):
@@ -125,10 +120,10 @@ class MainWindow(QMainWindow):
         self.botones_widget.btnHome.clicked.connect(lambda: self._load_view(0))
         self.botones_widget.btnDatos.clicked.connect(lambda: self._load_view(1))
         self.botones_widget.btnHistorial.clicked.connect(lambda: self._load_view(2))
-        # Conectar Sidebar a las vistas
+        # Conectar Sidebar a las vistas (solo Home, Datos, Historial)
         sidebar_widget._btns["Home"].clicked.connect(lambda: self._show_view_with_header(0))
-        sidebar_widget._btns["Configuración"].clicked.connect(lambda: self._show_view_without_header(3))
-        sidebar_widget._btns["Usuario"].clicked.connect(lambda: self._show_view_without_header(4))
+        sidebar_widget._btns["Datos"].clicked.connect(lambda: self._show_view_with_header(1))
+        sidebar_widget._btns["Historial"].clicked.connect(lambda: self._show_view_with_header(2))
         # Carga la vista inicial (Home) después de conectar los botones
         # Muestra un mensaje de carga bonito mientras se inicializa HomeWindow
         self.loading_widget = QWidget()
@@ -176,12 +171,6 @@ class MainWindow(QMainWindow):
                 elif index == 2:
                     from Interfaz.Calendar import CalendarWindow
                     view = CalendarWindow()
-                elif index == 3:
-                    from Interfaz.configuracion import ConfiguracionWindow
-                    view = ConfiguracionWindow()
-                elif index == 4:
-                    from Interfaz.usuario import UsuarioWindow
-                    view = UsuarioWindow()
                 else:
                     self._loading_view = False
                     return
@@ -204,8 +193,8 @@ class MainWindow(QMainWindow):
             self.stack.setCurrentIndex(0)  # Home
             print("Home")
         else:
-            self.stack.setCurrentIndex(2)  # Configuración
-            print("Configuración")
+            self.stack.setCurrentIndex(1)  # Datos
+            print("Datos")
 
     def _create_centered_page(self, html_text):
         page = QWidget()
